@@ -1,6 +1,6 @@
 from functools import wraps
 from typing import Callable, Mapping, Optional, Iterable
-
+from collections.abc import KeysView, ValuesView, ItemsView
 from py2store.base import KvReader, KvPersister
 
 from pymongo import MongoClient
@@ -84,20 +84,44 @@ class MongoCollectionReaderBase(KvReader):
         if r is not False:
             return True
 
+    def keys(self):
+        return KeysView(self)
+
     def items(self):
-        for doc in self._mgc.find(filter=self._filt, projection=dict(self._key_projection, **self._data_fields)):
-            key = {k: doc.pop(k) for k in self._key_fields}
-            yield key, doc
+        return MongoItemsView(self)
 
     def values(self):
-        yield from self._mgc.find(filter=self._filt, projection=self._data_fields)
+        return MongoValuesView(self)
 
-    def keys(self):
-        yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
 
-    def __length_hint__(self):  # TODO: Proper/common/canonical use of __length_hint__?
-        """Estimates the TOTAL number of documents in the collection (NOT filtered by any filt)."""
-        return self._mgc.estimated_document_count()
+end_of_cursor = object()
+
+
+class MongoValuesView(ValuesView):
+
+    def __contains__(self, v):
+        m = self._mapping
+        cursor = m._mgc.find(filter=m._filtered_key(v), projection={'_id': False})
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def __iter__(self):
+        m = self._mapping
+        yield from m._mgc.find(filter=m._filt, projection=m._data_fields)
+
+
+class MongoItemsView(ItemsView):
+
+    def __contains__(self, item):
+        m = self._mapping
+        k, v = item
+        cursor = m._mgc.find(filter=dict(v, **m._filtered_key(k)), projection={'_id': False})
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def __iter__(self):
+        m = self._mapping
+        for doc in m._mgc.find(filter=m._filt, projection=dict(m._key_projection, **m._data_fields)):
+            key = {k: doc.pop(k) for k in m._key_fields}
+            yield key, doc
 
 
 class MongoCollectionReader(MongoCollectionReaderBase):
@@ -109,6 +133,8 @@ class MongoCollectionReader(MongoCollectionReaderBase):
         cursor = super().__getitem__(k)
         doc = next(cursor, None)
         if doc is not None:
+            if next(cursor, None) is not None:
+                raise KeyNotUniqueError("")
             return doc
         else:
             raise KeyError(f"No document found for query: {k}")
