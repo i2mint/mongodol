@@ -8,6 +8,55 @@ from pymongo.collection import Collection
 
 
 class MongoCollectionReaderBase(KvReader):
+    """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
+
+    >>> from mongodol import MongoCollectionReaderBase
+    >>> from pymongo import MongoClient
+    >>> s = MongoCollectionReaderBase(MongoClient()['py2store']['test'])
+    >>> list_of_keys = list(s)
+    >>> fake_key = {'_id': 'this key does not exist'}
+    >>> fake_key in s
+    False
+
+    ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
+    (specialized for mongo).
+
+    >>> type(s.keys())
+    <class 'collections.abc.KeysView'>
+    >>> type(s.values())
+    <class 'mongodol.base.MongoValuesView'>
+    >>> type(s.items())
+    <class 'mongodol.base.MongoItemsView'>
+
+    Recall that ``collections.abc.MappingViews`` have many set-like functionalities:
+
+    >>> fake_key in s.keys()
+    False
+    >>> a_list_of_fake_keys = [{'_id': 'fake_key'}, {'_id': 'yet_another'}]
+    >>> s.keys().isdisjoint(a_list_of_fake_keys)
+    True
+    >>> s.keys() & a_list_of_fake_keys
+    set()
+    >>> fake_value = {'data': "this does not exist"}
+    >>> fake_value in s.values()
+    False
+    >>> fake_item = (fake_key, fake_value)
+    >>> fake_item in s.items()
+    False
+
+    Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities
+    might not work (complaints such as ``TypeError: unhashable type: 'dict'``),
+    such as:
+
+    >>> s.keys() | a_list_of_fake_keys
+    Traceback (most recent call last):
+        ...
+    TypeError: unhashable type: 'dict'
+
+    But you can take care of that in higher level wrappers that have hashable keys and/or values.
+
+    """
+
     def __init__(self,
                  mgc: Optional[Collection] = None,
                  key_fields=("_id",),
@@ -141,10 +190,13 @@ class MongoCollectionReader(MongoCollectionReaderBase):
 
 
 class MongoCollectionPersister(MongoCollectionReader):
-    """
-    >>> s = MongoCollectionPersister()  # just use defaults
-    >>> for _id in s:  # deleting all docs in tmp
-    ...     del s[_id]
+    """A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
+
+    >>> from pymongo import MongoClient
+    >>> mongo_collection_obj = MongoClient()['py2store']['test']
+    >>> s = MongoCollectionPersister(mongo_collection_obj)
+    >>> for k in s:  # deleting all docs in default collection
+    ...     del s[k]
     >>> k = {'_id': 'foo'}
     >>> v = {'val': 'bar'}
     >>> k in s  # see that key is not in store (and testing __contains__)
@@ -166,9 +218,12 @@ class MongoCollectionPersister(MongoCollectionReader):
     [{'val': 'bar'}]
     >>> k in s  # testing __contains__ again
     True
+    >>> k in s.keys()  # test the contains capability of s.keys() (a MongoKeysView instance)
+    True
     >>> del s[k]
     >>> len(s)
     0
+
     >>>
     >>> # Making a persister whose keys are 2-dimensional and values are 3-dimensional
     >>> s = MongoCollectionPersister.from_params(db_name='py2store', collection_name='tmp',
@@ -183,6 +238,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     ...     print(f"{key} --> {val}")
     {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
     {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
+
     """
 
     def __setitem__(self, k, v):
