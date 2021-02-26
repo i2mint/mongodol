@@ -250,13 +250,17 @@ class MongoCollectionPersister(MongoCollectionReader):
         if len(k) > 0:
             return self._mgc.delete_one(self._filtered_key(k))
         else:
-            raise KeyError(f"You can't removed that key: {k}")
+            raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
-        return self._mgc.insert_one(v)
+        assert isinstance(v, Mapping), \
+            f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        return self._mgc.insert_one(dict(v, self._filt))
 
     def extend(self, items):
-        return self._mgc.insert_many(items)
+        assert all([isinstance(v, Mapping) for v in items]), \
+            f" items must be mappings (often dictionaries)"
+        return self._mgc.insert_many([dict(x, self._filt) for x in items])
 
 
 # class MongoAppendablePersister(MongoCollectionPersister):
