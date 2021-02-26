@@ -1,7 +1,66 @@
-from functools import wraps
+from functools import wraps, partial
 
-from py2store.base import Store
+from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
+
+from mongodol.base import MongoCollectionReaderBase, MongoCollectionPersister
+from mongodol.trans import PostGet, ObjOfData
+
+
+@wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
+class MongoCollectionUniqueDocReader(MongoCollectionReaderBase):
+    """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
+    :raises KeyNotUniqueError if the k matches more than a single unique doc.
+    """
+
+
+@wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
+class MongoCollectionFirstDocReader(MongoCollectionReaderBase):
+    """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
+    Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
+
+    Typically, this should be used when you don't want the overhead of checking for uniqueness,
+    because it doesn't matter, you like risk, or you told the mongo collection indexing system itself to
+    ensure uniqueness for you.
+    """
+
+
+@wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
+                          doc_collector=list))  # list is default but explicit here to show that other choices possible
+class MongoCollectionMultipleDocsReader(MongoCollectionReaderBase):
+    """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
+    If no docs match, will return an empty list.
+    """
+
+
+# TODO: Use adapter pattern to generate below and above
+
+
+@wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
+class MongoCollectionUniqueDocPersister(MongoCollectionPersister):
+    """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
+    :raises KeyNotUniqueError if the k matches more than a single unique doc.
+    """
+
+
+@wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
+class MongoCollectionFirstDocPersister(MongoCollectionPersister):
+    """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
+    Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
+
+    Typically, this should be used when you don't want the overhead of checking for uniqueness,
+    because it doesn't matter, you like risk, or you told the mongo collection indexing system itself to
+    ensure uniqueness for you.
+    """
+
+
+@wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
+                          doc_collector=list))  # list is default but explicit here to show that other choices possible
+class MongoCollectionMultipleDocsPersister(MongoCollectionPersister):
+    """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
+    If no docs match, will return an empty list.
+    """
+
 
 from mongodol.base import OldMongoPersister
 

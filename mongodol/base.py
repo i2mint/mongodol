@@ -1,7 +1,8 @@
 from functools import wraps
 from typing import Callable, Mapping, Optional, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
-from py2store.base import KvReader, KvPersister
+
+from py2store import wrap_kvs, KvReader, KvPersister
 
 from pymongo import MongoClient
 from pymongo.collection import Collection
@@ -113,13 +114,13 @@ class MongoCollectionReaderBase(KvReader):
             filt=filt,
         )
 
-    def _filtered_key(self, k):
-        return dict(k, **self._filt)
+    def _merge_with_filt(self, obj: Mapping) -> dict:
+        return dict(obj, **self._filt)
 
     def __getitem__(self, k):
         assert isinstance(k, Mapping), \
             f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._filtered_key(k), projection=self._data_fields)
+        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
 
     def __iter__(self):
         yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
@@ -128,7 +129,7 @@ class MongoCollectionReaderBase(KvReader):
         return self._mgc.count_documents(self._filt)
 
     def __contains__(self, k):
-        cursor = self._mgc.find(filter=self._filtered_key(k), projection={'_id': False})
+        cursor = self._mgc.find(filter=self._merge_with_filt(k), projection={'_id': False})
         r = next(cursor, False)
         if r is not False:
             return True
@@ -150,7 +151,7 @@ class MongoValuesView(ValuesView):
 
     def __contains__(self, v):
         m = self._mapping
-        cursor = m._mgc.find(filter=m._filtered_key(v), projection={'_id': False})
+        cursor = m._mgc.find(filter=m._merge_with_filt(v), projection={'_id': False})
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
@@ -163,7 +164,7 @@ class MongoItemsView(ItemsView):
     def __contains__(self, item):
         m = self._mapping
         k, v = item
-        cursor = m._mgc.find(filter=dict(v, **m._filtered_key(k)), projection={'_id': False})
+        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection={'_id': False})
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
@@ -173,23 +174,23 @@ class MongoItemsView(ItemsView):
             yield key, doc
 
 
-class MongoCollectionReader(MongoCollectionReaderBase):
-    """
-    A mongo collection (kv-)reader where s[key] is the first key-matching value found.
-    """
+# class MongoCollectionReader(MongoCollectionReaderBase):
+#     """
+#     A mongo collection (kv-)reader where s[key] is the first key-matching value found.
+#     """
+#
+#     def __getitem__(self, k):
+#         cursor = super().__getitem__(k)
+#         doc = next(cursor, None)
+#         if doc is not None:
+#             if next(cursor, None) is not None:  # TODO: Fetches! Faster way to check if there's more than one hit?
+#                 raise KeyNotUniqueError.raise_error(k)
+#             return doc
+#         else:
+#             raise KeyError(f"No document found for query: {k}")
 
-    def __getitem__(self, k):
-        cursor = super().__getitem__(k)
-        doc = next(cursor, None)
-        if doc is not None:
-            if next(cursor, None) is not None:
-                raise KeyNotUniqueError("")
-            return doc
-        else:
-            raise KeyError(f"No document found for query: {k}")
 
-
-class MongoCollectionPersister(MongoCollectionReader):
+class MongoCollectionPersister(MongoCollectionReaderBase):
     """A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
 
     >>> from pymongo import MongoClient
@@ -208,11 +209,14 @@ class MongoCollectionPersister(MongoCollectionReader):
     1
     >>> list(s)
     [{'_id': 'foo'}]
-    >>> s[k]
+
+    Since this is a base mongo store, the values are cursors, so to get an actual value, you need to fetch the first doc
+
+    >>> next(s[k])
     {'val': 'bar'}
-    >>> s.get(k)
+    >>> next(s.get(k))
     {'val': 'bar'}
-    >>> s.get({'not': 'a key'}, {'default': 'val'})  # testing s.get with default
+    >>> next(s.get({'not': 'a key'}, {'default': 'val'}))  # testing s.get with default
     {'default': 'val'}
     >>> list(s.values())
     [{'val': 'bar'}]
@@ -244,23 +248,24 @@ class MongoCollectionPersister(MongoCollectionReader):
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(v, Mapping), \
             f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
-        return self._mgc.insert_one(dict(v, **self._filtered_key(k)))
+        return self._mgc.insert_one(dict(v, **self._merge_with_filt(k)))
 
     def __delitem__(self, k):
         if len(k) > 0:
-            return self._mgc.delete_one(self._filtered_key(k))
+            return self._mgc.delete_one(self._merge_with_filt(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
         assert isinstance(v, Mapping), \
             f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
-        return self._mgc.insert_one(dict(v, self._filt))
+        return self._mgc.insert_one(self._merge_with_filt(v))
 
-    def extend(self, items):
-        assert all([isinstance(v, Mapping) for v in items]), \
+    def extend(self, values):
+        assert all([isinstance(v, Mapping) for v in values]), \
             f" items must be mappings (often dictionaries)"
-        return self._mgc.insert_many([dict(x, self._filt) for x in items])
+        if values:
+            return self._mgc.insert_many([self._merge_with_filt(v) for v in values])
 
 
 # class MongoAppendablePersister(MongoCollectionPersister):
