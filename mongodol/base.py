@@ -128,10 +128,15 @@ class MongoCollectionReader(KvReader):
             )  # need to explicitly specify this since mongo includes _id by dflt
         if data_fields is None:
             data_fields = {k: False for k in key_fields}
+            self._items_projection = None
         elif not isinstance(data_fields, dict):
             data_fields = {k: True for k in data_fields}
             if "_id" not in data_fields:
                 data_fields["_id"] = False
+            self._items_projection = (
+                    {k for k, v in data_fields.items() if v}
+                    | {k for k, v in self._key_projection.items() if v}
+            )
         self._data_fields = data_fields
         self._key_fields = key_fields
 
@@ -178,9 +183,7 @@ class MongoCollectionReader(KvReader):
     def __contains__(self, k):
         # TODO: How do we have cursor return no data (here still has _id)
         cursor = self._mgc.find(filter=self._merge_with_filt(k), projection=())
-        r = next(cursor, False)
-        if r is not False:
-            return True
+        return next(cursor, end_of_cursor) is not end_of_cursor
 
     def keys(self):
         return KeysView(self)
@@ -216,9 +219,7 @@ class MongoItemsView(ItemsView):
 
     def __iter__(self):
         m = self._mapping
-        print(m._key_projection, m._data_fields)
-        return m._mgc.find(filter=m._filt, projection=dict(m._key_projection, **m._data_fields))
-        for doc in m._mgc.find(filter=m._filt, projection=dict(m._key_projection, **m._data_fields)):
+        for doc in m._mgc.find(filter=m._filt, projection=m._items_projection):
             key = {k: doc.pop(k) for k in m._key_fields}
             yield key, doc
 
