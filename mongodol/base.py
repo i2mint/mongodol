@@ -3,17 +3,64 @@ from typing import Callable, Mapping, Optional, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
 
 from py2store import wrap_kvs, KvReader, KvPersister
+from py2store import Collection as DolCollection
 
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
+from dataclasses import dataclass
 
-class MongoCollectionReaderBase(KvReader):
+
+def _mk_dflt_mgc():
+    return MongoClient()["py2store"]["test"]
+
+
+end_of_cursor = object()
+
+
+class MongoCollectionCollection(DolCollection):
+    def __init__(self,
+                 mgc: Optional[Collection] = None,
+                 filter: Optional[dict] = None,
+                 projection: Optional[dict] = None,
+                 **mgc_find_kwargs):
+        if mgc is None:
+            mgc = _mk_dflt_mgc()
+        elif hasattr(mgc, '_mgc') and isinstance(mgc._mgc, Collection):
+            mgc = mgc._mgc
+        self.mgc = mgc
+        self.filter = filter or {}
+        self.projection = projection
+        self._mgc_find_kwargs = dict(mgc_find_kwargs, filter=self.filter, projection=self.projection)
+        self._count_kwargs = {x: self._mgc_find_kwargs[x]
+                              for x in ['filter', 'skip', 'limit', 'hint']
+                              if x in self._mgc_find_kwargs}
+
+    def __repr__(self):
+        mgc_repr = f"<{self.mgc.database.name}/{self.mgc.name}>"
+        return f"{type(self).__name__}(mgc={mgc_repr}, {', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
+
+    def _merge_with_filt(self, obj: Mapping) -> dict:
+        return dict(obj, **self.filter)
+
+    def __iter__(self):
+        return self.mgc.find(**self._mgc_find_kwargs)
+
+    def __len__(self):
+        return self.mgc.count_documents(**self._count_kwargs)
+
+    def __contains__(self, k: dict):
+        cursor = self.mgc.find(self._merge_with_filt(k), projection=())
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+
+# TODO: Consider dataclass use
+class MongoCollectionReader(KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 
-    >>> from mongodol import MongoCollectionReaderBase
+    >>> from mongodol import MongoCollectionReader
     >>> from pymongo import MongoClient
-    >>> s = MongoCollectionReaderBase(MongoClient()['py2store']['test'])
+    >>> s = MongoCollectionReader(MongoClient()['py2store']['test'])
     >>> list_of_keys = list(s)
     >>> fake_key = {'_id': 'this key does not exist'}
     >>> fake_key in s
@@ -129,7 +176,8 @@ class MongoCollectionReaderBase(KvReader):
         return self._mgc.count_documents(self._filt)
 
     def __contains__(self, k):
-        cursor = self._mgc.find(filter=self._merge_with_filt(k), projection={'_id': False})
+        # TODO: How do we have cursor return no data (here still has _id)
+        cursor = self._mgc.find(filter=self._merge_with_filt(k), projection=())
         r = next(cursor, False)
         if r is not False:
             return True
@@ -144,14 +192,11 @@ class MongoCollectionReaderBase(KvReader):
         return MongoValuesView(self)
 
 
-end_of_cursor = object()
-
-
 class MongoValuesView(ValuesView):
 
     def __contains__(self, v):
         m = self._mapping
-        cursor = m._mgc.find(filter=m._merge_with_filt(v), projection={'_id': False})
+        cursor = m._mgc.find(filter=m._merge_with_filt(v), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
@@ -164,33 +209,21 @@ class MongoItemsView(ItemsView):
     def __contains__(self, item):
         m = self._mapping
         k, v = item
-        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection={'_id': False})
+        # TODO: How do we have cursor return no data (here still has _id)
+        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
+        # return cursor
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
         m = self._mapping
+        print(m._key_projection, m._data_fields)
+        return m._mgc.find(filter=m._filt, projection=dict(m._key_projection, **m._data_fields))
         for doc in m._mgc.find(filter=m._filt, projection=dict(m._key_projection, **m._data_fields)):
             key = {k: doc.pop(k) for k in m._key_fields}
             yield key, doc
 
 
-# class MongoCollectionReader(MongoCollectionReaderBase):
-#     """
-#     A mongo collection (kv-)reader where s[key] is the first key-matching value found.
-#     """
-#
-#     def __getitem__(self, k):
-#         cursor = super().__getitem__(k)
-#         doc = next(cursor, None)
-#         if doc is not None:
-#             if next(cursor, None) is not None:  # TODO: Fetches! Faster way to check if there's more than one hit?
-#                 raise KeyNotUniqueError.raise_error(k)
-#             return doc
-#         else:
-#             raise KeyError(f"No document found for query: {k}")
-
-
-class MongoCollectionPersister(MongoCollectionReaderBase):
+class MongoCollectionPersister(MongoCollectionReader):
     """A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
 
     >>> from pymongo import MongoClient
@@ -297,7 +330,7 @@ class MongoDbReader(KvReader):
     def __init__(
             self,
             db_name="py2store",
-            mk_collection_store=MongoCollectionReaderBase,
+            mk_collection_store=MongoCollectionReader,
             mongo_client=None,
             **mongo_client_kwargs,
     ):
@@ -327,10 +360,6 @@ class MongoDbReader(KvReader):
 
     def __getitem__(self, k):
         return self.collection_store_cls(self.db[k])
-
-
-def _mk_dflt_mgc():
-    return MongoClient()["py2store"]["test"]
 
 
 class OldMongoPersister(KvPersister):

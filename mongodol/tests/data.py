@@ -2,13 +2,25 @@
 
 number_docs = [
     {'_id': 1, 'en': 'one', 'fr': 'un', 'sp': 'uno', 'so_far': [1]},
-    {'_id': 2, 'en': 'two', 'fr': 'un', 'so_far': [1, 2]},  # sp missing
-    {'_id': 3, 'en': 'three', 'fr': 'un', 'sp': 'tre', 'so_far': [1, 2, 3]},
-    {'_id': 4, 'en': 'four', 'fr': 'un', 'sp': 'cuatro', 'so_far': [1, 2, 3, 4]},
-    {'_id': 4, 'en': 'five', 'sp': 'cinco', 'so_far': [1, 2, 3, 4, 5]},  # fr missing
+    {'_id': 2, 'en': 'two', 'fr': 'deux', 'so_far': [1, 2]},  # sp missing
+    {'_id': 3, 'en': 'three', 'fr': 'trois', 'sp': 'tre', 'so_far': [1, 2, 3]},
+    {'_id': 4, 'en': 'four', 'fr': 'quatre', 'sp': 'cuatro', 'so_far': [1, 2, 3, 4]},
+    {'_id': 5, 'en': 'five', 'sp': 'cinco', 'so_far': [1, 2, 3, 4, 5]},  # fr missing
 ]
 number_dict_kvs_1 = [({'_id': doc['_id']}, {k: doc[k] for k in doc.keys() - {'_id'}}) for doc in number_docs]
 number_tuple_kvs_1 = [(k['_id'], tuple(v.values())) for k, v in number_dict_kvs_1]
+
+feature_cube = [
+    {'_id': 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
+    {'_id': 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
+    {'_id': 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
+    {'_id': 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
+    {'_id': 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}},
+    {'_id': 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
+    {'_id': 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}},
+]
+feature_cube_dict_kvs_1 = [({'_id': doc['_id']}, {k: doc[k] for k in doc.keys() - {'_id'}}) for doc in feature_cube]
+feature_cube_tuple_kvs_1 = [(k['_id'], tuple(v.values())) for k, v in feature_cube_dict_kvs_1]
 
 ####### BDFLs ##########################################################################################################
 # ubtained with:

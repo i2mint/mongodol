@@ -1,6 +1,6 @@
 from functools import lru_cache
 from pymongo import MongoClient
-from mongodol.base import MongoCollectionPersister, MongoCollectionReaderBase
+from mongodol.base import MongoCollectionPersister, MongoCollectionReader
 from mongodol.stores import MongoStore
 
 DFLT_MONGO_CLIENT_ARGS = ()
@@ -26,3 +26,4 @@ def clear_all_and_populate(test_store, docs=()):
     for k in test_store:
         del test_store[k]
     test_store.extend(docs)
+

@@ -3,19 +3,19 @@ from functools import wraps, partial
 from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
 
-from mongodol.base import MongoCollectionReaderBase, MongoCollectionPersister
+from mongodol.base import MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
-class MongoCollectionUniqueDocReader(MongoCollectionReaderBase):
+class MongoCollectionUniqueDocReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
     :raises KeyNotUniqueError if the k matches more than a single unique doc.
     """
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
-class MongoCollectionFirstDocReader(MongoCollectionReaderBase):
+class MongoCollectionFirstDocReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
     Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
 
@@ -27,7 +27,7 @@ class MongoCollectionFirstDocReader(MongoCollectionReaderBase):
 
 @wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
                           doc_collector=list))  # list is default but explicit here to show that other choices possible
-class MongoCollectionMultipleDocsReader(MongoCollectionReaderBase):
+class MongoCollectionMultipleDocsReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
     """
