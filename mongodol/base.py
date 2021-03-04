@@ -1,6 +1,8 @@
 from functools import wraps
-from typing import Callable, Mapping, Optional, Iterable
+from mongodol.decorators import normalize_result
+from typing import Mapping, Optional, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
+from copy import deepcopy
 
 from py2store import wrap_kvs, KvReader, KvPersister
 from py2store import Collection as DolCollection
@@ -9,6 +11,8 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 
 from dataclasses import dataclass
+
+ID_KEY = '_id'
 
 
 def _mk_dflt_mgc():
@@ -107,7 +111,7 @@ class MongoCollectionReader(KvReader):
 
     def __init__(self,
                  mgc: Optional[Collection] = None,
-                 key_fields=("_id",),
+                 key_fields=(ID_KEY,),
                  data_fields: Optional[Iterable] = None,
                  filt: Optional[dict] = None):
         if mgc is None:
@@ -122,20 +126,19 @@ class MongoCollectionReader(KvReader):
             pass
 
         self._key_projection = {k: True for k in key_fields}
-        if "_id" not in key_fields:
+        if ID_KEY not in key_fields:
             self._key_projection.update(
-                _id=False
+                {ID_KEY: False}
             )  # need to explicitly specify this since mongo includes _id by dflt
         if data_fields is None:
             data_fields = {k: False for k in key_fields}
             self._items_projection = None
         elif not isinstance(data_fields, dict):
             data_fields = {k: True for k in data_fields}
-            if "_id" not in data_fields:
-                data_fields["_id"] = False
+            if ID_KEY not in data_fields:
+                data_fields[ID_KEY] = False
             self._items_projection = (
-                    {k for k, v in data_fields.items() if v}
-                    | {k for k, v in self._key_projection.items() if v}
+                {k for k, v in data_fields.items() if v} | {k for k, v in self._key_projection.items() if v}
             )
         self._data_fields = data_fields
         self._key_fields = key_fields
@@ -149,7 +152,7 @@ class MongoCollectionReader(KvReader):
             cls,
             db_name: str = "py2store",
             collection_name: str = "test",
-            key_fields: Iterable = ("_id",),
+            key_fields: Iterable = (ID_KEY,),
             data_fields: Optional[Iterable] = None,
             filt: Optional[dict] = None,
             mongo_client: Optional[dict] = None,
@@ -166,14 +169,6 @@ class MongoCollectionReader(KvReader):
             filt=filt,
         )
 
-    def _merge_with_filt(self, obj: Mapping) -> dict:
-        return dict(obj, **self._filt)
-
-    def __getitem__(self, k):
-        assert isinstance(k, Mapping), \
-            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
-
     def __iter__(self):
         yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
 
@@ -185,6 +180,11 @@ class MongoCollectionReader(KvReader):
         cursor = self._mgc.find(filter=self._merge_with_filt(k), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
 
+    def __getitem__(self, k):
+        assert isinstance(k, Mapping), \
+            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
+
     def keys(self):
         return KeysView(self)
 
@@ -193,6 +193,14 @@ class MongoCollectionReader(KvReader):
 
     def values(self):
         return MongoValuesView(self)
+
+    def _merge_with_filt(self, *args) -> dict:
+        d = deepcopy(self._filt)
+        for v in args:
+            assert isinstance(v, Mapping), \
+                f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+            d = dict(d, **v)
+        return d
 
 
 class MongoValuesView(ValuesView):
@@ -278,28 +286,41 @@ class MongoCollectionPersister(MongoCollectionReader):
     {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 
     """
-
+    @normalize_result
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(v, Mapping), \
             f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
-        return self._mgc.insert_one(dict(v, **self._merge_with_filt(k)))
+        return self._mgc.replace_one(
+            filter=self._merge_with_filt(k),
+            replacement=self._merge_with_filt(k, v),
+            upsert=True
+        )
 
+    @normalize_result
     def __delitem__(self, k):
         if len(k) > 0:
             return self._mgc.delete_one(self._merge_with_filt(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
+    @normalize_result
     def append(self, v):
         assert isinstance(v, Mapping), \
             f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
         return self._mgc.insert_one(self._merge_with_filt(v))
 
+    @normalize_result
     def extend(self, values):
         assert all([isinstance(v, Mapping) for v in values]), \
-            f" items must be mappings (often dictionaries)"
+            f" values must be mappings (often dictionaries)"
         if values:
             return self._mgc.insert_many([self._merge_with_filt(v) for v in values])
+
+    def persist_data(self, data):
+        return self.__setitem__({ID_KEY: data[ID_KEY]}, data)
+
+    # def update(self, __m: Mapping, **kwargs):
+    #     return super().update(__m, **kwargs)
 
 
 # class MongoAppendablePersister(MongoCollectionPersister):
@@ -416,7 +437,7 @@ class OldMongoPersister(KvPersister):
             self,
             db_name="py2store",
             collection_name="test",
-            key_fields=("_id",),
+            key_fields=(ID_KEY,),
             data_fields=None,
             mongo_client_kwargs=None,
     ):
@@ -432,16 +453,16 @@ class OldMongoPersister(KvPersister):
             pass
 
         self._key_projection = {k: True for k in key_fields}
-        if "_id" not in key_fields:
+        if ID_KEY not in key_fields:
             self._key_projection.update(
-                _id=False
+                {ID_KEY: False}
             )  # need to explicitly specify this since mongo includes _id by dflt
         if data_fields is None:
             data_fields = {k: False for k in key_fields}
         elif not isinstance(data_fields, dict):
             data_fields = {k: True for k in data_fields}
-            if "_id" not in data_fields:
-                data_fields["_id"] = False
+            if ID_KEY not in data_fields:
+                data_fields[ID_KEY] = False
         self._data_fields = data_fields
         self._key_fields = key_fields
 
@@ -480,7 +501,7 @@ class OldMongoInsertPersister(OldMongoPersister):
             db_name=db_name,
             collection_name=collection_name,
             data_fields=data_fields,
-            key_fields=("_id",),
+            key_fields=(ID_KEY,),
             mongo_client_kwargs=mongo_client_kwargs,
         )
 

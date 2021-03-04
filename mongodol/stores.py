@@ -1,4 +1,5 @@
 from functools import wraps, partial
+from typing import Collection, Mapping
 
 from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
@@ -60,6 +61,14 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersister):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
     """
+    def __setitem__(self, k, v):
+        assert isinstance(k, Mapping), \
+            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        assert isinstance(v, Mapping) or (isinstance(v, Collection) and all([isinstance(i, Mapping) for i in v])), \
+            f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
+        self._mgc.delete_many(self._merge_with_filt(k))
+        _v = v if isinstance(v, Collection) else [v]
+        return self._mgc.insert_many([self._merge_with_filt(k, i) for i in _v])
 
 
 from mongodol.base import OldMongoPersister

@@ -2,5 +2,13 @@ from mongodol.base import (
     MongoClientReader,
     MongoDbReader,
     MongoCollectionReader,
-    MongoCollectionPersister
+    MongoCollectionPersister,
+)
+from mongodol.stores import (
+    MongoCollectionUniqueDocReader,
+    MongoCollectionFirstDocReader,
+    MongoCollectionMultipleDocsReader,
+    MongoCollectionUniqueDocPersister,
+    MongoCollectionFirstDocPersister,
+    MongoCollectionMultipleDocsPersister
 )
