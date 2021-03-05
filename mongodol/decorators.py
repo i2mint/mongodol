@@ -1,4 +1,4 @@
-
+from functools import wraps
 from typing import Iterable, Optional, TypedDict
 from pymongo.results import BulkWriteResult, DeleteResult, InsertManyResult, InsertOneResult, UpdateResult
 
@@ -13,6 +13,8 @@ def normalize_result(func):
     :param func: [description]
     :type func: [type]
     """
+
+    @wraps(func)
     def result_mapper(*args, **kwargs):
         raw_result = func(*args, **kwargs)
         result: WriteOpResult = {'n': 0}
@@ -20,8 +22,8 @@ def normalize_result(func):
             result['n'] = 1
             result['ids'] = [str(raw_result.inserted_id)]
         elif (
-            isinstance(raw_result, InsertManyResult)
-            and raw_result.inserted_ids
+                isinstance(raw_result, InsertManyResult)
+                and raw_result.inserted_ids
         ):
             result['n'] = len(raw_result.inserted_ids)
             result['ids'] = raw_result.inserted_ids
@@ -29,10 +31,10 @@ def normalize_result(func):
             result['n'] = raw_result.raw_result['n']
         elif isinstance(raw_result, BulkWriteResult):
             result['n'] = (
-                raw_result.inserted_count
-                + raw_result.upserted_count
-                + raw_result.modified_count
-                + raw_result.deleted_count
+                    raw_result.inserted_count
+                    + raw_result.upserted_count
+                    + raw_result.modified_count
+                    + raw_result.deleted_count
             )
         else:
             raise NotImplementedError(

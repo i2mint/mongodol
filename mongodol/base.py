@@ -5,9 +5,11 @@ from copy import deepcopy
 
 from py2store import wrap_kvs, KvReader, KvPersister
 from py2store import Collection as DolCollection
-
+ 
 from pymongo import MongoClient
 from pymongo.collection import Collection as PyMongoCollection
+
+from mongodol.decorators import normalize_result
 
 from dataclasses import dataclass
 
