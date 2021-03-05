@@ -1,6 +1,5 @@
-from functools import wraps
-from mongodol.decorators import normalize_result
-from typing import Mapping, Optional, Iterable
+from functools import wraps, cached_property
+from typing import Callable, Mapping, Optional, Iterable, Union
 from collections.abc import KeysView, ValuesView, ItemsView
 from copy import deepcopy
 
@@ -8,7 +7,7 @@ from py2store import wrap_kvs, KvReader, KvPersister
 from py2store import Collection as DolCollection
 
 from pymongo import MongoClient
-from pymongo.collection import Collection
+from pymongo.collection import Collection as PyMongoCollection
 
 from dataclasses import dataclass
 
@@ -19,30 +18,50 @@ def _mk_dflt_mgc():
     return MongoClient()["py2store"]["test"]
 
 
+PyMongoCollectionSpec = Union[None, PyMongoCollection, str]
+
+
+def get_mongo_collection_pymongo_obj(obj=None):
+    """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
+
+    ```
+    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection (py2store/test)
+    get_mongo_collection_pymongo_obj('database_name/collection_name')  # does the obvious (with default host)
+    get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute
+    get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it
+    ```
+    """
+    if obj is None:
+        obj = _mk_dflt_mgc()
+    elif isinstance(obj, str):
+        if obj.startswith('mongodb://'):
+            raise ValueError(
+                "No support (yet) for URI access. "
+                "If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html")
+        database_name, collection_name = obj.split('/')
+        return PyMongoCollection()[database_name][collection_name]
+    elif hasattr(obj, '_mgc') and isinstance(obj._mgc, PyMongoCollection):
+        obj = obj._mgc
+    if not isinstance(obj, PyMongoCollection):
+        raise TypeError(f"Unknown pymongo collection specification: {obj}")
+    return obj
+
+
 end_of_cursor = object()
 
 
+# TODO: mgc type annotation
+#  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
     def __init__(self,
-                 mgc: Optional[Collection] = None,
+                 mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
                  filter: Optional[dict] = None,
                  projection: Optional[dict] = None,
                  **mgc_find_kwargs):
-        if mgc is None:
-            mgc = _mk_dflt_mgc()
-        elif hasattr(mgc, '_mgc') and isinstance(mgc._mgc, Collection):
-            mgc = mgc._mgc
-        self.mgc = mgc
+        self.mgc = get_mongo_collection_pymongo_obj(mgc)
         self.filter = filter or {}
         self.projection = projection
         self._mgc_find_kwargs = dict(mgc_find_kwargs, filter=self.filter, projection=self.projection)
-        self._count_kwargs = {x: self._mgc_find_kwargs[x]
-                              for x in ['filter', 'skip', 'limit', 'hint']
-                              if x in self._mgc_find_kwargs}
-
-    def __repr__(self):
-        mgc_repr = f"<{self.mgc.database.name}/{self.mgc.name}>"
-        return f"{type(self).__name__}(mgc={mgc_repr}, {', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
 
     def _merge_with_filt(self, obj: Mapping) -> dict:
         return dict(obj, **self.filter)
@@ -56,6 +75,20 @@ class MongoCollectionCollection(DolCollection):
     def __contains__(self, k: dict):
         cursor = self.mgc.find(self._merge_with_filt(k), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
+
+    @cached_property
+    def _count_kwargs(self):
+        return {x: self._mgc_find_kwargs[x]
+                for x in ['filter', 'skip', 'limit', 'hint']
+                if x in self._mgc_find_kwargs}
+
+    @cached_property
+    def mgc_repr(self):
+        return f"<{self.mgc.database.name}/{self.mgc.name}>"
+
+    def __repr__(self):
+        return f"{type(self).__name__}(mgc={self.mgc_repr}, " \
+               f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
 
 
 # TODO: Consider dataclass use
@@ -110,16 +143,12 @@ class MongoCollectionReader(KvReader):
     """
 
     def __init__(self,
-                 mgc: Optional[Collection] = None,
-                 key_fields=(ID_KEY,),
+                 mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
+                 key_fields=("_id",),
                  data_fields: Optional[Iterable] = None,
                  filt: Optional[dict] = None):
-        if mgc is None:
-            mgc = _mk_dflt_mgc()
-        elif hasattr(mgc, '_mgc') and isinstance(mgc._mgc, Collection):
-            mgc = mgc._mgc
 
-        self._mgc = mgc
+        self._mgc = get_mongo_collection_pymongo_obj(mgc)
         if isinstance(key_fields, str):
             key_fields = (key_fields,)
         if data_fields is None:
@@ -169,6 +198,11 @@ class MongoCollectionReader(KvReader):
             filt=filt,
         )
 
+    def __getitem__(self, k):
+        assert isinstance(k, Mapping), \
+            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
+
     def __iter__(self):
         yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
 
@@ -179,11 +213,6 @@ class MongoCollectionReader(KvReader):
         # TODO: How do we have cursor return no data (here still has _id)
         cursor = self._mgc.find(filter=self._merge_with_filt(k), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def __getitem__(self, k):
-        assert isinstance(k, Mapping), \
-            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
 
     def keys(self):
         return KeysView(self)
