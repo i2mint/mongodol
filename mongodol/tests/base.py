@@ -44,3 +44,11 @@ def test_mongo_collection_collection():
 
     s = MongoCollectionCollection(mgc=mgc, skip=2, limit=3)
     assert len(s) == 3
+    assert list(s) == [
+        {'_id': 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
+        {'_id': 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
+        {'_id': 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}}]
+    assert s.head() == next(iter(list(s)))
+
+
+

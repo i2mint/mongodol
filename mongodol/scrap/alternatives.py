@@ -1,14 +1,20 @@
 from collections.abc import KeysView, ValuesView, ItemsView
 from typing import Mapping, Union, Iterable, Optional
-from functools import cached_property
+from functools import cached_property, partial
+from operator import or_
 
 from py2store import KvReader
+from linkup import key_aligned_val_op_with_forced_defaults
+
 from mongodol.base import (
+    ID_KEY,
     MongoCollectionCollection,
     end_of_cursor,
     PyMongoCollectionSpec,
     get_mongo_collection_pymongo_obj
 )
+
+ProjectionDict = dict  # TODO: Specify that keys are strings and values are boolean
 
 
 def get_key_value_specs(key_fields, data_fields):
@@ -35,53 +41,72 @@ def get_key_value_specs(key_fields, data_fields):
     return key_fields, data_fields, key_projection, items_projection
 
 
-class MongoCollectionReader(MongoCollectionCollection, KvReader):
+def flatten_dict_items(d, prefix=''):
+    """
+    Computes a "flat" dict from a nested one. A flat dict's keys are the dot-paths of the input dict.
+
+    :param d: a nested dict
+    :param prefix: A string to prepend on all the paths
+    :return: A flat dict
+
+    >>> d = {'a': {
+    ...         'a': '2a',
+    ...         'c': {'a': 'aca', 'u': 4}
+    ...         },
+    ...      'c': 3
+    ...     }
+    >>> dict(flatten_dict_items(d))
+    {'a.a': '2a', 'a.c.a': 'aca', 'a.c.u': 4, 'c': 3}
+    """
+    for k, v in d.items():
+        if not isinstance(v, dict):
+            yield prefix + k, v
+        else:
+            yield from flatten_dict_items(v, prefix + k + '.')
+
+
+merge_projection_dicts = partial(key_aligned_val_op_with_forced_defaults,
+                                 op=or_, dflt_val_for_x=True, dflt_val_for_y=True)
+
+
+def normalize_projection(projection):
+    if not isinstance(projection, dict):
+        if isinstance(projection, str):
+            projection = (projection,)
+        elif isinstance(projection, Iterable) and len(projection) == 0:
+            return projection  # it's probably the empty projection
+        elif projection is None:
+            projection = None
+        projection = dict({field: True for field in projection})  # TODO: , **{ID_KEY: True}) ?
+
+    return dict(flatten_dict_items(projection))
+
+
+def projection_union(projection_1: ProjectionDict,
+                     projection_2: ProjectionDict,
+                     already_flattened=False):
+    """
+
+    >>> d = {'a': {
+    ...         'a': True,
+    ...         'c': {'a': True, 'u': True}
+    ...         },
+    ...      'b': True,
+    ...      'c': False
+    ...     }
+    >>> dd = {'b': True, 'c': True, 'x': True, 'y': False}
+    >>> projection_union(d, dd)
+    {'a.a': True, 'a.c.a': True, 'a.c.u': True, 'b': True, 'c': True, 'x': True, 'y': True}
+
+    """
+    if not already_flattened:
+        projection_1 = dict(flatten_dict_items(projection_1))
+        projection_2 = dict(flatten_dict_items(projection_2))
+    return merge_projection_dicts(projection_1, projection_2)
+
+
+class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
-
-    >>> from mongodol import MongoCollectionReader
-    >>> from pymongo import MongoClient
-    >>> s = MongoCollectionReader(MongoClient()['py2store']['test'])
-    >>> list_of_keys = list(s)
-    >>> fake_key = {'_id': 'this key does not exist'}
-    >>> fake_key in s
-    False
-
-    ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
-    (specialized for mongo).
-
-    >>> type(s.keys())
-    <class 'collections.abc.KeysView'>
-    >>> type(s.values())
-    <class 'mongodol.base.MongoValuesView'>
-    >>> type(s.items())
-    <class 'mongodol.base.MongoItemsView'>
-
-    Recall that ``collections.abc.MappingViews`` have many set-like functionalities:
-
-    >>> fake_key in s.keys()
-    False
-    >>> a_list_of_fake_keys = [{'_id': 'fake_key'}, {'_id': 'yet_another'}]
-    >>> s.keys().isdisjoint(a_list_of_fake_keys)
-    True
-    >>> s.keys() & a_list_of_fake_keys
-    set()
-    >>> fake_value = {'data': "this does not exist"}
-    >>> fake_value in s.values()
-    False
-    >>> fake_item = (fake_key, fake_value)
-    >>> fake_item in s.items()
-    False
-
-    Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities
-    might not work (complaints such as ``TypeError: unhashable type: 'dict'``),
-    such as:
-
-    >>> s.keys() | a_list_of_fake_keys
-    Traceback (most recent call last):
-        ...
-    TypeError: unhashable type: 'dict'
-
-    But you can take care of that in higher level wrappers that have hashable keys and/or values.
 
     """
 
@@ -89,13 +114,11 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
                  mgc: Union[PyMongoCollectionSpec, KvReader] = None,
                  filter: Optional[dict] = None,
                  key_fields=("_id",),
-                 data_fields: Optional[Iterable] = None):
+                 val_fields: Optional[Iterable] = None):
         self._mgc = get_mongo_collection_pymongo_obj(mgc)
-        key_fields, data_fields, key_projection, items_projection = get_key_value_specs(key_fields, data_fields)
-        self._data_fields = data_fields
-        self._key_fields = key_fields
-        self._key_projection = key_projection
-        self._items_projection = items_projection
+        # key_fields, data_fields, key_projection, items_projection = get_key_value_specs(key_fields, data_fields)
+        self._key_fields = normalize_projection(key_fields)
+        self._val_fields = normalize_projection(val_fields)
 
         self.filter = filter or {}
 
@@ -103,17 +126,17 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     # def _key_projection(self):
     #     return {}
     #
-    # @cached_property
-    # def _items_projection(self):
-    #     return {}
+    @cached_property
+    def _items_projection(self):
+        return projection_union(self._key_fields, self._val_fields, already_flattened=True)
 
     def __getitem__(self, k):
         assert isinstance(k, Mapping), \
             f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
+        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._val_fields)
 
     def __iter__(self):
-        yield from self._mgc.find(filter=self.filter, projection=self._key_projection)
+        yield from self._mgc.find(filter=self.filter, projection=self._key_fields)
 
     def keys(self):
         return KeysView(self)

@@ -5,13 +5,9 @@ from copy import deepcopy
 
 from py2store import wrap_kvs, KvReader, KvPersister
 from py2store import Collection as DolCollection
- 
+
 from pymongo import MongoClient
 from pymongo.collection import Collection as PyMongoCollection
-
-from mongodol.decorators import normalize_result
-
-from dataclasses import dataclass
 
 ID_KEY = '_id'
 
@@ -169,7 +165,7 @@ class MongoCollectionReader(KvReader):
             if ID_KEY not in data_fields:
                 data_fields[ID_KEY] = False
             self._items_projection = (
-                {k for k, v in data_fields.items() if v} | {k for k, v in self._key_projection.items() if v}
+                    {k for k, v in data_fields.items() if v} | {k for k, v in self._key_projection.items() if v}
             )
         self._data_fields = data_fields
         self._key_fields = key_fields
@@ -317,7 +313,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 
     """
-    @normalize_result
+
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(v, Mapping), \
             f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
@@ -327,20 +323,17 @@ class MongoCollectionPersister(MongoCollectionReader):
             upsert=True
         )
 
-    @normalize_result
     def __delitem__(self, k):
         if len(k) > 0:
             return self._mgc.delete_one(self._merge_with_filt(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
-    @normalize_result
     def append(self, v):
         assert isinstance(v, Mapping), \
             f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
         return self._mgc.insert_one(self._merge_with_filt(v))
 
-    @normalize_result
     def extend(self, values):
         assert all([isinstance(v, Mapping) for v in values]), \
             f" values must be mappings (often dictionaries)"

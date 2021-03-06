@@ -5,7 +5,12 @@ from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
 
 from mongodol.base import MongoCollectionReader, MongoCollectionPersister
-from mongodol.trans import PostGet, ObjOfData
+from mongodol.trans import PostGet, ObjOfData, normalize_result
+
+
+@normalize_result
+class MongoCollectionPersisterWithResultMapping(MongoCollectionPersister):
+    """MongoCollectionPersister with result mapping"""
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
@@ -61,6 +66,7 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersister):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
     """
+
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping), \
             f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
