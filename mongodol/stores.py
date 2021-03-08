@@ -4,12 +4,13 @@ from typing import Collection, Mapping
 from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
 
-from mongodol.base import MongoCollectionReader, MongoCollectionPersister
+from mongodol.base import MongoCollectionReader
 from mongodol.trans import PostGet, ObjOfData, normalize_result
+from mongodol.scrap.alternatives import MongoCollectionPersisterBase
 
 
 @normalize_result
-class MongoCollectionPersisterWithResultMapping(MongoCollectionPersister):
+class MongoCollectionPersisterWithResultMapping(MongoCollectionPersisterBase):
     """MongoCollectionPersister with result mapping"""
 
 
@@ -43,14 +44,14 @@ class MongoCollectionMultipleDocsReader(MongoCollectionReader):
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
-class MongoCollectionUniqueDocPersister(MongoCollectionPersister):
+class MongoCollectionUniqueDocPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
     :raises KeyNotUniqueError if the k matches more than a single unique doc.
     """
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
-class MongoCollectionFirstDocPersister(MongoCollectionPersister):
+class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
     Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
 
@@ -62,7 +63,7 @@ class MongoCollectionFirstDocPersister(MongoCollectionPersister):
 
 @wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
                           doc_collector=list))  # list is default but explicit here to show that other choices possible
-class MongoCollectionMultipleDocsPersister(MongoCollectionPersister):
+class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
     """

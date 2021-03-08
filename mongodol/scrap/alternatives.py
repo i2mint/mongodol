@@ -103,6 +103,10 @@ def projection_union(projection_1: ProjectionDict,
     {'a.a': True, 'a.c.a': True, 'a.c.u': True, 'b': True, 'c': True, 'x': True, 'y': True}
 
     """
+    if projection_1 is None:
+        projection_1 = {}
+    if projection_2 is None:
+        projection_2 = {}
     if not already_flattened:
         projection_1 = dict(flatten_dict_items(projection_1))
         projection_2 = dict(flatten_dict_items(projection_2))
@@ -180,3 +184,34 @@ class MongoItemsView(ItemsView):
         for doc in m._mgc.find(filter=m.filter, projection=m._items_projection):
             key = {k: doc.pop(k) for k in m._key_fields}
             yield key, doc
+
+
+class MongoCollectionPersisterBase(MongoCollectionReaderBase):
+    def __setitem__(self, k, v):
+        assert isinstance(k, Mapping) and isinstance(v, Mapping), \
+            f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        return self.mgc.replace_one(
+            filter=self._merge_with_filt(k),
+            replacement=self._merge_with_filt(k, v),
+            upsert=True
+        )
+
+    def __delitem__(self, k):
+        if len(k) > 0:
+            return self.mgc.delete_one(self._merge_with_filt(k))
+        else:
+            raise KeyError(f"You can't remove that key: {k}")
+
+    def append(self, v):
+        assert isinstance(v, Mapping), \
+            f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        return self.mgc.insert_one(self._merge_with_filt(v))
+
+    def extend(self, values):
+        assert all([isinstance(v, Mapping) for v in values]), \
+            f" values must be mappings (often dictionaries)"
+        if values:
+            return self.mgc.insert_many([self._merge_with_filt(v) for v in values])
+
+    def persist_data(self, data):
+        return self.__setitem__({ID_KEY: data[ID_KEY]}, data)

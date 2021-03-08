@@ -61,8 +61,13 @@ class MongoCollectionCollection(DolCollection):
         self.projection = projection
         self._mgc_find_kwargs = dict(mgc_find_kwargs, filter=self.filter, projection=self.projection)
 
-    def _merge_with_filt(self, obj: Mapping) -> dict:
-        return dict(obj, **self.filter)
+    def _merge_with_filt(self, *args) -> dict:
+        d = self.filter
+        for v in args:
+            assert isinstance(v, Mapping), \
+                f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+            d = dict(d, **v)
+        return d
 
     def __iter__(self):
         return self.mgc.find(**self._mgc_find_kwargs)
@@ -222,7 +227,7 @@ class MongoCollectionReader(KvReader):
         return MongoValuesView(self)
 
     def _merge_with_filt(self, *args) -> dict:
-        d = deepcopy(self._filt)
+        d = self._filt
         for v in args:
             assert isinstance(v, Mapping), \
                 f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
