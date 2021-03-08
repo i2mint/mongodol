@@ -99,6 +99,10 @@ def projection_union(projection_1: ProjectionDict,
     {'a.a': True, 'a.c.a': True, 'a.c.u': True, 'b': True, 'c': True, 'x': True, 'y': True}
 
     """
+    if projection_1 is None:
+        projection_1 = {}
+    if projection_2 is None:
+        projection_2 = {}
     if not already_flattened:
         projection_1 = dict(flatten_dict_items(projection_1))
         projection_2 = dict(flatten_dict_items(projection_2))
@@ -115,17 +119,10 @@ class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
                  filter: Optional[dict] = None,
                  key_fields=("_id",),
                  val_fields: Optional[Iterable] = None):
-        self._mgc = get_mongo_collection_pymongo_obj(mgc)
-        # key_fields, data_fields, key_projection, items_projection = get_key_value_specs(key_fields, data_fields)
         self._key_fields = normalize_projection(key_fields)
-        self._val_fields = normalize_projection(val_fields)
+        self._val_fields = normalize_projection(val_fields) if val_fields is not None else None
+        MongoCollectionCollection.__init__(self, mgc, filter, projection=self._items_projection)
 
-        self.filter = filter or {}
-
-    # @cached_property
-    # def _key_projection(self):
-    #     return {}
-    #
     @cached_property
     def _items_projection(self):
         return projection_union(self._key_fields, self._val_fields, already_flattened=True)
@@ -133,10 +130,7 @@ class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
     def __getitem__(self, k):
         assert isinstance(k, Mapping), \
             f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._val_fields)
-
-    def __iter__(self):
-        yield from self._mgc.find(filter=self.filter, projection=self._key_fields)
+        return self.mgc.find(filter=self._merge_with_filt(k), projection=self._val_fields)
 
     def keys(self):
         return KeysView(self)
@@ -175,3 +169,34 @@ class MongoItemsView(ItemsView):
         for doc in m._mgc.find(filter=m.filter, projection=m._items_projection):
             key = {k: doc.pop(k) for k in m._key_fields}
             yield key, doc
+
+
+class MongoCollectionPersisterBase(MongoCollectionReaderBase):
+    def __setitem__(self, k, v):
+        assert isinstance(k, Mapping) and isinstance(v, Mapping), \
+            f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        return self.mgc.replace_one(
+            filter=self._merge_with_filt(k),
+            replacement=self._merge_with_filt(k, v),
+            upsert=True
+        )
+
+    def __delitem__(self, k):
+        if len(k) > 0:
+            return self.mgc.delete_one(self._merge_with_filt(k))
+        else:
+            raise KeyError(f"You can't remove that key: {k}")
+
+    def append(self, v):
+        assert isinstance(v, Mapping), \
+            f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        return self.mgc.insert_one(self._merge_with_filt(v))
+
+    def extend(self, values):
+        assert all([isinstance(v, Mapping) for v in values]), \
+            f" values must be mappings (often dictionaries)"
+        if values:
+            return self.mgc.insert_many([self._merge_with_filt(v) for v in values])
+
+    def persist_data(self, data):
+        return self.__setitem__({ID_KEY: data[ID_KEY]}, data)
