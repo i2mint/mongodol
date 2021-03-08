@@ -70,7 +70,11 @@ merge_projection_dicts = partial(key_aligned_val_op_with_forced_defaults,
 
 
 def normalize_projection(projection):
-    if not isinstance(projection, dict):
+    """Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,...
+    (or None if projection is None to start with)"""
+    if projection is None:
+        return None
+    elif not isinstance(projection, dict):
         if isinstance(projection, str):
             projection = (projection,)
         elif isinstance(projection, Iterable) and len(projection) == 0:
@@ -115,12 +119,13 @@ class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
                  filter: Optional[dict] = None,
                  key_fields=("_id",),
                  val_fields: Optional[Iterable] = None):
-        self._mgc = get_mongo_collection_pymongo_obj(mgc)
+        super().__init__(mgc=mgc, filter=filter)
+        # self._mgc = get_mongo_collection_pymongo_obj(mgc)
         # key_fields, data_fields, key_projection, items_projection = get_key_value_specs(key_fields, data_fields)
         self._key_fields = normalize_projection(key_fields)
         self._val_fields = normalize_projection(val_fields)
 
-        self.filter = filter or {}
+        # self.filter = filter or {}
 
     # @cached_property
     # def _key_projection(self):
