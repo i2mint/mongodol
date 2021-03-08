@@ -1,29 +1,29 @@
 """A module containing datas that will be used for tests"""
 
-from mongodol.base import ID_KEY
+from mongodol.base import ID
 
 
 number_docs = [
-    {ID_KEY: 1, 'en': 'one', 'fr': 'un', 'sp': 'uno', 'so_far': [1]},
-    {ID_KEY: 2, 'en': 'two', 'fr': 'deux', 'so_far': [1, 2]},  # sp missing
-    {ID_KEY: 3, 'en': 'three', 'fr': 'trois', 'sp': 'tre', 'so_far': [1, 2, 3]},
-    {ID_KEY: 4, 'en': 'four', 'fr': 'quatre', 'sp': 'cuatro', 'so_far': [1, 2, 3, 4]},
-    {ID_KEY: 5, 'en': 'five', 'sp': 'cinco', 'so_far': [1, 2, 3, 4, 5]},  # fr missing
+    {ID: 1, 'en': 'one', 'fr': 'un', 'sp': 'uno', 'so_far': [1]},
+    {ID: 2, 'en': 'two', 'fr': 'deux', 'so_far': [1, 2]},  # sp missing
+    {ID: 3, 'en': 'three', 'fr': 'trois', 'sp': 'tre', 'so_far': [1, 2, 3]},
+    {ID: 4, 'en': 'four', 'fr': 'quatre', 'sp': 'cuatro', 'so_far': [1, 2, 3, 4]},
+    {ID: 5, 'en': 'five', 'sp': 'cinco', 'so_far': [1, 2, 3, 4, 5]},  # fr missing
 ]
-number_dict_kvs_1 = [({ID_KEY: doc[ID_KEY]}, {k: doc[k] for k in doc.keys() - {ID_KEY}}) for doc in number_docs]
-number_tuple_kvs_1 = [(k[ID_KEY], tuple(v.values())) for k, v in number_dict_kvs_1]
+number_dict_kvs_1 = [({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}}) for doc in number_docs]
+number_tuple_kvs_1 = [(k[ID], tuple(v.values())) for k, v in number_dict_kvs_1]
 
 feature_cube = [
-    {ID_KEY: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
-    {ID_KEY: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
-    {ID_KEY: 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
-    {ID_KEY: 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
-    {ID_KEY: 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}},
-    {ID_KEY: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
-    {ID_KEY: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}},
+    {ID: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
+    {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
+    {ID: 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
+    {ID: 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
+    {ID: 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}},
+    {ID: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
+    {ID: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}},
 ]
-feature_cube_dict_kvs_1 = [({ID_KEY: doc[ID_KEY]}, {k: doc[k] for k in doc.keys() - {ID_KEY}}) for doc in feature_cube]
-feature_cube_tuple_kvs_1 = [(k[ID_KEY], tuple(v.values())) for k, v in feature_cube_dict_kvs_1]
+feature_cube_dict_kvs_1 = [({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}}) for doc in feature_cube]
+feature_cube_tuple_kvs_1 = [(k[ID], tuple(v.values())) for k, v in feature_cube_dict_kvs_1]
 
 ####### BDFLs ##########################################################################################################
 # ubtained with:
@@ -115,5 +115,5 @@ bdfl_docs = [{'Name': 'Sylvain Benner',
               'Type': 'Open-source graph database for knowledge graph representation'}
              ]
 
-bdfl_dict_kvs = [({ID_KEY: doc['Name']}, {'Project': doc['Project'], 'Type': doc['Type']}) for doc in bdfl_docs]
-bdfl_tuple_kvs = [(k[ID_KEY], (v['Project'], v['Type'])) for k, v in bdfl_dict_kvs]
+bdfl_dict_kvs = [({ID: doc['Name']}, {'Project': doc['Project'], 'Type': doc['Type']}) for doc in bdfl_docs]
+bdfl_tuple_kvs = [(k[ID], (v['Project'], v['Type'])) for k, v in bdfl_dict_kvs]

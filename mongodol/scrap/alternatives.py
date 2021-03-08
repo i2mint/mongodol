@@ -7,7 +7,7 @@ from py2store import KvReader
 from linkup import key_aligned_val_op_with_forced_defaults
 
 from mongodol.base import (
-    ID_KEY,
+    ID,
     MongoCollectionCollection,
     end_of_cursor,
     PyMongoCollectionSpec,
@@ -214,4 +214,4 @@ class MongoCollectionPersisterBase(MongoCollectionReaderBase):
             return self.mgc.insert_many([self._merge_with_filt(v) for v in values])
 
     def persist_data(self, data):
-        return self.__setitem__({ID_KEY: data[ID_KEY]}, data)
+        return self.__setitem__({ID: data[ID]}, data)

@@ -1,4 +1,4 @@
-from mongodol.base import ID_KEY, MongoCollectionCollection
+from mongodol.base import ID, MongoCollectionCollection
 from mongodol.tests.util import clear_all_and_populate, get_test_collection_persister
 from mongodol.tests.data import feature_cube
 
@@ -11,29 +11,29 @@ def test_mongo_collection_collection(mongo_collection_collection_cls=MongoCollec
     s = mongo_collection_collection_cls(mgc=mgc)
     assert len(s) == 7
     assert list(s) == [
-        {ID_KEY: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
-        {ID_KEY: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
-        {ID_KEY: 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
-        {ID_KEY: 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
-        {ID_KEY: 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}},
-        {ID_KEY: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
-        {ID_KEY: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}}
+        {ID: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
+        {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
+        {ID: 3, 'number': 10, 'color': 'red', 'dims': {'x': 2, 'y': 5}},
+        {ID: 4, 'number': 10, 'color': 'red', 'dims': {'x': 5, 'y': 2}},
+        {ID: 5, 'number': 15, 'color': 'red', 'dims': {'x': 3, 'y': 5}},
+        {ID: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
+        {ID: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}}
     ]
-    assert s.head() == {ID_KEY: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}}
+    assert s.head() == {ID: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}}
 
     # Test filter
 
     s = mongo_collection_collection_cls(mgc=mgc, filter={'color': 'blue'})
     assert len(s) == 3
     assert list(s) == [
-        {ID_KEY: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
-        {ID_KEY: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
-        {ID_KEY: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}}
+        {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},
+        {ID: 6, 'number': 15, 'color': 'blue', 'dims': {'x': 3, 'y': 5}},
+        {ID: 7, 'number': 15, 'color': 'blue', 'dims': {'x': 5, 'y': 3}}
     ]
-    assert s.head() == {ID_KEY: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}}
+    assert s.head() == {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}}
 
-    assert {ID_KEY: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}} in s
-    assert {ID_KEY: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}} not in s
+    assert {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}} in s
+    assert {ID: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}} not in s
     assert {'this': 'is', 'complete': 'nonsense'} not in s
 
     # Test the __repr__/__str__

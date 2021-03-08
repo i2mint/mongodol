@@ -9,7 +9,7 @@ from py2store import Collection as DolCollection
 from pymongo import MongoClient
 from pymongo.collection import Collection as PyMongoCollection
 
-ID_KEY = '_id'
+ID = '_id'
 
 
 def _mk_dflt_mgc():
@@ -158,17 +158,17 @@ class MongoCollectionReader(KvReader):
             pass
 
         self._key_projection = {k: True for k in key_fields}
-        if ID_KEY not in key_fields:
+        if ID not in key_fields:
             self._key_projection.update(
-                {ID_KEY: False}
+                {ID: False}
             )  # need to explicitly specify this since mongo includes _id by dflt
         if data_fields is None:
             data_fields = {k: False for k in key_fields}
             self._items_projection = None
         elif not isinstance(data_fields, dict):
             data_fields = {k: True for k in data_fields}
-            if ID_KEY not in data_fields:
-                data_fields[ID_KEY] = False
+            if ID not in data_fields:
+                data_fields[ID] = False
             self._items_projection = (
                     {k for k, v in data_fields.items() if v} | {k for k, v in self._key_projection.items() if v}
             )
@@ -184,7 +184,7 @@ class MongoCollectionReader(KvReader):
             cls,
             db_name: str = "py2store",
             collection_name: str = "test",
-            key_fields: Iterable = (ID_KEY,),
+            key_fields: Iterable = (ID,),
             data_fields: Optional[Iterable] = None,
             filt: Optional[dict] = None,
             mongo_client: Optional[dict] = None,
@@ -346,7 +346,7 @@ class MongoCollectionPersister(MongoCollectionReader):
             return self._mgc.insert_many([self._merge_with_filt(v) for v in values])
 
     def persist_data(self, data):
-        return self.__setitem__({ID_KEY: data[ID_KEY]}, data)
+        return self.__setitem__({ID: data[ID]}, data)
 
     # def update(self, __m: Mapping, **kwargs):
     #     return super().update(__m, **kwargs)
@@ -466,7 +466,7 @@ class OldMongoPersister(KvPersister):
             self,
             db_name="py2store",
             collection_name="test",
-            key_fields=(ID_KEY,),
+            key_fields=(ID,),
             data_fields=None,
             mongo_client_kwargs=None,
     ):
@@ -482,16 +482,16 @@ class OldMongoPersister(KvPersister):
             pass
 
         self._key_projection = {k: True for k in key_fields}
-        if ID_KEY not in key_fields:
+        if ID not in key_fields:
             self._key_projection.update(
-                {ID_KEY: False}
+                {ID: False}
             )  # need to explicitly specify this since mongo includes _id by dflt
         if data_fields is None:
             data_fields = {k: False for k in key_fields}
         elif not isinstance(data_fields, dict):
             data_fields = {k: True for k in data_fields}
-            if ID_KEY not in data_fields:
-                data_fields[ID_KEY] = False
+            if ID not in data_fields:
+                data_fields[ID] = False
         self._data_fields = data_fields
         self._key_fields = key_fields
 
@@ -530,7 +530,7 @@ class OldMongoInsertPersister(OldMongoPersister):
             db_name=db_name,
             collection_name=collection_name,
             data_fields=data_fields,
-            key_fields=(ID_KEY,),
+            key_fields=(ID,),
             mongo_client_kwargs=mongo_client_kwargs,
         )
 
