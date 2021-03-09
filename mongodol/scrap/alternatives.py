@@ -15,6 +15,7 @@ from mongodol.base import (
 )
 
 ProjectionDict = dict  # TODO: Specify that keys are strings and values are boolean
+ProjectionSpec = Union[ProjectionDict, Iterable[str], None]
 
 
 def get_key_value_specs(key_fields, data_fields):
@@ -103,10 +104,6 @@ def projection_union(projection_1: ProjectionDict,
     {'a.a': True, 'a.c.a': True, 'a.c.u': True, 'b': True, 'c': True, 'x': True, 'y': True}
 
     """
-    if projection_1 is None:
-        projection_1 = {}
-    if projection_2 is None:
-        projection_2 = {}
     if not already_flattened:
         projection_1 = dict(flatten_dict_items(projection_1))
         projection_2 = dict(flatten_dict_items(projection_2))
@@ -117,56 +114,67 @@ class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 
     """
+    _projections_are_flattened = False
 
     def __init__(self,
                  mgc: Union[PyMongoCollectionSpec, KvReader] = None,
                  filter: Optional[dict] = None,
-                 key_fields=("_id",),
-                 val_fields: Optional[Iterable] = None):
-        super().__init__(mgc=mgc, filter=filter)
-        # self._mgc = get_mongo_collection_pymongo_obj(mgc)
-        # key_fields, data_fields, key_projection, items_projection = get_key_value_specs(key_fields, data_fields)
-        self._key_fields = normalize_projection(key_fields)
-        self._val_fields = normalize_projection(val_fields)
-
-        # self.filter = filter or {}
-
-    # @cached_property
-    # def _key_projection(self):
-    #     return {}
-    #
-    @cached_property
-    def _items_projection(self):
-        return projection_union(self._key_fields, self._val_fields, already_flattened=True)
+                 iter_projection: ProjectionSpec = (ID,),
+                 getitem_projection: ProjectionSpec = None):
+        super().__init__(mgc=mgc, filter=filter, iter_projection=iter_projection)
+        self._getitem_projection = getitem_projection
 
     def __getitem__(self, k):
         assert isinstance(k, Mapping), \
             f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._val_fields)
-
-    def __iter__(self):
-        yield from self._mgc.find(filter=self.filter, projection=self._key_fields)
+        return self.mgc.find(filter=self._merge_with_filt(k), projection=self._getitem_projection)
 
     def keys(self):
         return KeysView(self)
 
+    def values(self):
+        return MongoValuesView(self)
+
+    @cached_property
+    def _items_projection(self):
+        return projection_union(
+            self._iter_projection,
+            self._getitem_projection,
+            already_flattened=self._projections_are_flattened
+        )
+
     def items(self):
         return MongoItemsView(self)
 
-    def values(self):
-        return MongoValuesView(self)
+
+class MongoCollectionReaderBaseWithFields(MongoCollectionReaderBase):
+    """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
+    """
+    _projections_are_flattened = True
+
+    def __init__(self,
+                 mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+                 filter: Optional[dict] = None,
+                 key_fields: ProjectionSpec = (ID,),
+                 val_fields: ProjectionSpec = None):
+        super().__init__(
+            mgc=mgc,
+            filter=filter,
+            iter_projection=normalize_projection(key_fields),
+            getitem_projection=normalize_projection(val_fields)
+        )
 
 
 class MongoValuesView(ValuesView):
 
     def __contains__(self, v):
         m = self._mapping
-        cursor = m._mgc.find(filter=m._merge_with_filt(v), projection=())
+        cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
         m = self._mapping
-        yield from m._mgc.find(filter=m.filter, projection=m._data_fields)
+        yield from m.mgc.find(filter=m.filter, projection=m._getitem_projection)
 
 
 class MongoItemsView(ItemsView):
@@ -175,13 +183,13 @@ class MongoItemsView(ItemsView):
         m = self._mapping
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
+        cursor = m.mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
         # return cursor
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
         m = self._mapping
-        for doc in m._mgc.find(filter=m.filter, projection=m._items_projection):
+        for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
             key = {k: doc.pop(k) for k in m._key_fields}
             yield key, doc
 

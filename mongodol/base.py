@@ -1,6 +1,7 @@
 from functools import wraps, cached_property
 from typing import Callable, Mapping, Optional, Iterable, Union
 from collections.abc import KeysView, ValuesView, ItemsView
+from collections import ChainMap
 from copy import deepcopy
 
 from py2store import wrap_kvs, KvReader, KvPersister
@@ -54,12 +55,12 @@ class MongoCollectionCollection(DolCollection):
     def __init__(self,
                  mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
                  filter: Optional[dict] = None,
-                 projection: Optional[dict] = None,
+                 iter_projection: Optional[dict] = None,
                  **mgc_find_kwargs):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
         self.filter = filter or {}
-        self.projection = projection
-        self._mgc_find_kwargs = dict(mgc_find_kwargs, filter=self.filter, projection=self.projection)
+        self._iter_projection = iter_projection
+        self._mgc_find_kwargs = mgc_find_kwargs
 
     def _merge_with_filt(self, *args) -> dict:
         d = self.filter
@@ -70,7 +71,11 @@ class MongoCollectionCollection(DolCollection):
         return d
 
     def __iter__(self):
-        return self.mgc.find(**self._mgc_find_kwargs)
+        return self.mgc.find(
+            filter=self.filter,
+            projection=self._iter_projection,
+            **self._mgc_find_kwargs
+        )
 
     def __len__(self):
         return self.mgc.count_documents(**self._count_kwargs)
@@ -81,9 +86,10 @@ class MongoCollectionCollection(DolCollection):
 
     @cached_property
     def _count_kwargs(self):
-        return {x: self._mgc_find_kwargs[x]
+        search_map = ChainMap(self._mgc_find_kwargs, dict(filter=self.filter))
+        return {x: search_map[x]
                 for x in ['filter', 'skip', 'limit', 'hint']
-                if x in self._mgc_find_kwargs}
+                if x in search_map}
 
     @cached_property
     def mgc_repr(self):

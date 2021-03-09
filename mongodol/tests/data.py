@@ -2,7 +2,8 @@
 
 from mongodol.base import ID
 
-
+# Schema not "perfect": Some missing fields here and there.
+# Good to test no-sql cases
 number_docs = [
     {ID: 1, 'en': 'one', 'fr': 'un', 'sp': 'uno', 'so_far': [1]},
     {ID: 2, 'en': 'two', 'fr': 'deux', 'so_far': [1, 2]},  # sp missing
@@ -13,6 +14,8 @@ number_docs = [
 number_dict_kvs_1 = [({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}}) for doc in number_docs]
 number_tuple_kvs_1 = [(k[ID], tuple(v.values())) for k, v in number_dict_kvs_1]
 
+# Stable schema
+# Groupby possibilities (see number: Several unique values) -- this allows to test filtering more naturally
 feature_cube = [
     {ID: 1, 'number': 6, 'color': 'red', 'dims': {'x': 2, 'y': 3}},
     {ID: 2, 'number': 6, 'color': 'blue', 'dims': {'x': 3, 'y': 2}},

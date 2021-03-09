@@ -22,6 +22,7 @@ def get_test_collection_persister(mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
     return MongoCollectionPersister(mgc)
 
 
+# TODO: Add some protection to clearing all store?
 def clear_all_and_populate(test_store, docs=()):
     for k in test_store:
         del test_store[k]
