@@ -7,7 +7,7 @@ from mongodol.base import ID
 number_docs = [
     {ID: 1, 'en': 'one', 'fr': 'un', 'sp': 'uno', 'so_far': [1]},
     {ID: 2, 'en': 'two', 'fr': 'deux', 'so_far': [1, 2]},  # sp missing
-    {ID: 3, 'en': 'three', 'fr': 'trois', 'sp': 'tre', 'so_far': [1, 2, 3]},
+    {ID: 3, 'en': 'three', 'fr': 'trois', 'sp': 'tres', 'so_far': [1, 2, 3]},
     {ID: 4, 'en': 'four', 'fr': 'quatre', 'sp': 'cuatro', 'so_far': [1, 2, 3, 4]},
     {ID: 5, 'en': 'five', 'sp': 'cinco', 'so_far': [1, 2, 3, 4, 5]},  # fr missing
 ]
