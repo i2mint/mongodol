@@ -120,8 +120,9 @@ class MongoCollectionReaderBase(MongoCollectionCollection, KvReader):
                  mgc: Union[PyMongoCollectionSpec, KvReader] = None,
                  filter: Optional[dict] = None,
                  iter_projection: ProjectionSpec = (ID,),
-                 getitem_projection: ProjectionSpec = None):
-        super().__init__(mgc=mgc, filter=filter, iter_projection=iter_projection)
+                 getitem_projection: ProjectionSpec = None,
+                 **mgc_find_kwargs):
+        super().__init__(mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs)
         self._getitem_projection = getitem_projection
 
     def __getitem__(self, k):
