@@ -8,13 +8,8 @@ from mongodol.constants import (
 from pymongo import MongoClient
 
 from mongodol.base import MongoCollectionPersister
+from mongodol.util import mk_dflt_mgc
 from mongodol.tests.data import number_docs, feature_cube, bdfl_docs
-
-
-def mk_dflt_mgc():
-    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)[DFLT_TEST_DB][
-        DFLT_TEST_COLLECTION
-    ]
 
 
 @lru_cache(maxsize=1)

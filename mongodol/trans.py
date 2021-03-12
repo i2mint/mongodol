@@ -9,7 +9,21 @@ from pymongo.results import (
     InsertOneResult,
     UpdateResult,
 )
+
+from py2store.trans import (
+    condition_function_call,
+    double_up_as_factory,
+    store_decorator,
+)
 from mongodol.util import KeyNotUniqueError
+
+#
+# def _key_does_not_exist(store, k, v):
+#     """Condition function for use in condition_function_call. Returns true iff the k is not in store"""
+#     return k in not store
+#
+# @store_decorator
+# def only_allow_keys
 
 
 class PersistentDict(dict):

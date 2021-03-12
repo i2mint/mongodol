@@ -13,5 +13,7 @@ from mongodol.stores import (
     MongoCollectionMultipleDocsPersister,
 )
 from mongodol.util import (
+    mk_dflt_mgc,
     normalize_projection,
 )
+from mongodol.tests.util import get_test_collection_persister

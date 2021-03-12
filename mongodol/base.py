@@ -24,7 +24,7 @@ class MongoCollectionCollection(DolCollection):
         self,
         mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
         filter: Optional[dict] = None,
-        iter_projection: Optional[dict] = None,
+        iter_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
@@ -253,12 +253,16 @@ class MongoValuesView(ValuesView):
         m = self._mapping
         return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
 
-    def distinct(self, key, filter=None, **kwargs):
+    def distinct(self, field, filter=None, **kwargs):
         m = self._mapping
         # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
+        return m.mgc.distinct(
+            field, filter=m._merge_with_filt(filter), **kwargs
+        )
 
-    unique = distinct
+    unique = (
+        distinct  # alias to make data scientists happy (numpy, dataframes...)
+    )
 
 
 class MongoItemsView(ItemsView):
@@ -388,6 +392,7 @@ class MongoCollectionPersister(MongoCollectionReader):
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
+    # TODO: Append and extend need to be setup so that kv_wraps know how to transform v and values
     def append(self, v):
         assert isinstance(
             v, Mapping

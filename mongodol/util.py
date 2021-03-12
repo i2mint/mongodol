@@ -7,11 +7,18 @@ from pymongo import MongoClient
 
 from linkup import key_aligned_val_op_with_forced_defaults
 
-from mongodol.constants import ID
+from mongodol.constants import (
+    ID,
+    DFLT_MONGO_CLIENT_ARGS,
+    DFLT_TEST_DB,
+    DFLT_TEST_COLLECTION,
+)
 
 
 def mk_dflt_mgc():
-    return MongoClient()["mongodol"]["mongodol_test"]
+    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)[DFLT_TEST_DB][
+        DFLT_TEST_COLLECTION
+    ]
 
 
 class KeyNotUniqueError(RuntimeError):
