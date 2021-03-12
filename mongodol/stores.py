@@ -4,13 +4,12 @@ from typing import Collection, Mapping
 from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
 
-from mongodol.base import MongoCollectionReader
+from mongodol.base import MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData, normalize_result
-from mongodol.scrap.alternatives import MongoCollectionPersisterBase
 
 
 @normalize_result
-class MongoCollectionPersisterWithResultMapping(MongoCollectionPersisterBase):
+class MongoCollectionPersisterWithResultMapping(MongoCollectionPersister):
     """MongoCollectionPersister with result mapping"""
 
 
@@ -32,8 +31,9 @@ class MongoCollectionFirstDocReader(MongoCollectionReader):
     """
 
 
-@wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
-                          doc_collector=list))  # list is default but explicit here to show that other choices possible
+@wrap_kvs(
+    postget=partial(ObjOfData.all_docs_fetch, doc_collector=list)
+)  # list is default but explicit here to show that other choices possible
 class MongoCollectionMultipleDocsReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
@@ -44,14 +44,18 @@ class MongoCollectionMultipleDocsReader(MongoCollectionReader):
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
-class MongoCollectionUniqueDocPersister(MongoCollectionPersisterWithResultMapping):
+class MongoCollectionUniqueDocPersister(
+    MongoCollectionPersisterWithResultMapping
+):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
     :raises KeyNotUniqueError if the k matches more than a single unique doc.
     """
 
 
 @wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
-class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping):
+class MongoCollectionFirstDocPersister(
+    MongoCollectionPersisterWithResultMapping
+):
     """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
     Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
 
@@ -61,24 +65,30 @@ class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping
     """
 
 
-@wrap_kvs(postget=partial(ObjOfData.all_docs_fetch,
-                          doc_collector=list))  # list is default but explicit here to show that other choices possible
-class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMapping):
+@wrap_kvs(
+    postget=partial(ObjOfData.all_docs_fetch, doc_collector=list)
+)  # list is default but explicit here to show that other choices possible
+class MongoCollectionMultipleDocsPersister(
+    MongoCollectionPersisterWithResultMapping
+):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
     """
 
     def __setitem__(self, k, v):
-        assert isinstance(k, Mapping), \
-            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        assert isinstance(v, Mapping) or (isinstance(v, Collection) and all([isinstance(i, Mapping) for i in v])), \
-            f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
+        assert isinstance(
+            k, Mapping
+        ), f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        assert isinstance(v, Mapping) or (
+            isinstance(v, Collection)
+            and all([isinstance(i, Mapping) for i in v])
+        ), f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         self._mgc.delete_many(self._merge_with_filt(k))
         _v = v if isinstance(v, Collection) else [v]
         return self._mgc.insert_many([self._merge_with_filt(k, i) for i in _v])
 
 
-from mongodol.base import OldMongoPersister
+from mongodol.scrap.old01 import OldMongoPersister
 
 
 class MongoStore(Store):
@@ -153,7 +163,7 @@ class MongoAnyKeyStore(MongoStore):
             self._key_fields, tuple
         ), "key_fields should be a tuple or a string"
         assert (
-                len(self._key_fields) == 1
+            len(self._key_fields) == 1
         ), "key_fields must have one and only one element (a string)"
         self._key_field = self._key_fields[0]
 

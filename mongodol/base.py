@@ -1,62 +1,32 @@
 from functools import wraps, cached_property
-from typing import Callable, Mapping, Optional, Iterable, Union
+from typing import Mapping, Optional, Union, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
 from collections import ChainMap
-from copy import deepcopy
-
-from py2store import wrap_kvs, KvReader, KvPersister
-from py2store import Collection as DolCollection
 
 from pymongo import MongoClient
-from pymongo.collection import Collection as PyMongoCollection
 
-ID = '_id'
+from py2store import KvReader
+from py2store import Collection as DolCollection
 
-
-def _mk_dflt_mgc():
-    return MongoClient()["py2store"]["test"]
-
-
-PyMongoCollectionSpec = Union[None, PyMongoCollection, str]
-
-
-def get_mongo_collection_pymongo_obj(obj=None):
-    """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
-
-    ```
-    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection (py2store/test)
-    get_mongo_collection_pymongo_obj('database_name/collection_name')  # does the obvious (with default host)
-    get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute
-    get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it
-    ```
-    """
-    if obj is None:
-        obj = _mk_dflt_mgc()
-    elif isinstance(obj, str):
-        if obj.startswith('mongodb://'):
-            raise ValueError(
-                "No support (yet) for URI access. "
-                "If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html")
-        database_name, collection_name = obj.split('/')
-        return PyMongoCollection()[database_name][collection_name]
-    elif hasattr(obj, '_mgc') and isinstance(obj._mgc, PyMongoCollection):
-        obj = obj._mgc
-    if not isinstance(obj, PyMongoCollection):
-        raise TypeError(f"Unknown pymongo collection specification: {obj}")
-    return obj
-
-
-end_of_cursor = object()
+from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor
+from mongodol.util import (
+    ProjectionSpec,
+    normalize_projection,
+    projection_union,
+    get_mongo_collection_pymongo_obj,
+)
 
 
 # TODO: mgc type annotation
 #  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
-    def __init__(self,
-                 mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-                 filter: Optional[dict] = None,
-                 iter_projection: Optional[dict] = None,
-                 **mgc_find_kwargs):
+    def __init__(
+        self,
+        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
+        filter: Optional[dict] = None,
+        iter_projection: Optional[dict] = None,
+        **mgc_find_kwargs,
+    ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
         self.filter = filter or {}
         self._iter_projection = iter_projection
@@ -65,8 +35,9 @@ class MongoCollectionCollection(DolCollection):
     def _merge_with_filt(self, *args) -> dict:
         d = self.filter
         for v in args:
-            assert isinstance(v, Mapping), \
-                f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+            assert isinstance(
+                v, Mapping
+            ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
             d = dict(d, **v)
         return d
 
@@ -74,7 +45,7 @@ class MongoCollectionCollection(DolCollection):
         return self.mgc.find(
             filter=self.filter,
             projection=self._iter_projection,
-            **self._mgc_find_kwargs
+            **self._mgc_find_kwargs,
         )
 
     def __len__(self):
@@ -87,40 +58,66 @@ class MongoCollectionCollection(DolCollection):
     @cached_property
     def _count_kwargs(self):
         search_map = ChainMap(self._mgc_find_kwargs, dict(filter=self.filter))
-        return {x: search_map[x]
-                for x in ['filter', 'skip', 'limit', 'hint']
-                if x in search_map}
+        return {
+            x: search_map[x]
+            for x in ["filter", "skip", "limit", "hint"]
+            if x in search_map
+        }
 
     @cached_property
     def mgc_repr(self):
         return f"<{self.mgc.database.name}/{self.mgc.name}>"
 
     def __repr__(self):
-        return f"{type(self).__name__}(mgc={self.mgc_repr}, " \
-               f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
+        return (
+            f"{type(self).__name__}(mgc={self.mgc_repr}, "
+            f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
+        )
 
 
-# TODO: Consider dataclass use
-class MongoCollectionReader(KvReader):
+class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 
-    >>> from mongodol import MongoCollectionReader
+    Some examples below. For examples using actual data (with setup and tear down) see the tests/ folder.
+
     >>> from pymongo import MongoClient
-    >>> s = MongoCollectionReader(MongoClient()['py2store']['test'])
+    >>> s = MongoCollectionReader(MongoClient()['mongodol']['mongodol_test'])
     >>> list_of_keys = list(s)
     >>> fake_key = {'_id': 'this key does not exist'}
     >>> fake_key in s
     False
 
+    It's important to note that ``s[k]`` (for any base MongoCollectionReader instance ``s``) returns a Cursor,
+    and will always return a Cursor, no matter what key ``k`` you ask for
+    -- as long as the key is a valid mapping (dict usually).
+    This cursor is a (pymongo) object that is used to iterate over the results of the ``k`` lookup.
+    It may yield no results what-so-ever, or one, or many.
+
+    >>> v = s[fake_key]
+    >>> type(v).__name__
+    'Cursor'
+    >>> len(list(v))  # but the cursor yields no results
+    0
+
+    Indeed, ``MongoCollectionReader`` is really meant to provide a low level key-value interface to a mongo collection
+    that is really meant to be wrapped in order to produce the actual key-value interfaces one needs.
+    You shouldn't think of it's instances as a normal dict where any request for the value under a key,
+    for a key that doesn't exist, will result in a ``KeyError``.
+    Note that this means that `s.get(k, default)` will never result in the default being returned,
+    since there are no missing keys here; only empty results (cursors that don't yield anything).
+
+    >>> v = s.get(fake_key, {'the': 'default'})
+    >>> assert v != {'the': 'default'}
+
     ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
     (specialized for mongo).
 
-    >>> type(s.keys())
-    <class 'collections.abc.KeysView'>
-    >>> type(s.values())
-    <class 'mongodol.base.MongoValuesView'>
-    >>> type(s.items())
-    <class 'mongodol.base.MongoItemsView'>
+    >>> type(s.keys()).__name__
+    'KeysView'
+    >>> type(s.values()).__name__
+    'MongoValuesView'
+    >>> type(s.items()).__name__
+    'MongoItemsView'
 
     Recall that ``collections.abc.MappingViews`` have many set-like functionalities:
 
@@ -151,49 +148,84 @@ class MongoCollectionReader(KvReader):
 
     """
 
-    def __init__(self,
-                 mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-                 key_fields=("_id",),
-                 data_fields: Optional[Iterable] = None,
-                 filt: Optional[dict] = None):
+    _projections_are_flattened = False
 
-        self._mgc = get_mongo_collection_pymongo_obj(mgc)
-        if isinstance(key_fields, str):
-            key_fields = (key_fields,)
-        if data_fields is None:
-            pass
+    def __init__(
+        self,
+        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+        filter: Optional[dict] = None,
+        iter_projection: ProjectionSpec = (ID,),
+        getitem_projection: ProjectionSpec = None,
+        **mgc_find_kwargs,
+    ):
+        assert iter_projection is not None, "iter_projection cannot be None"
+        super().__init__(
+            mgc=mgc,
+            filter=filter,
+            iter_projection=iter_projection,
+            **mgc_find_kwargs,
+        )
+        self._getitem_projection = getitem_projection
 
-        self._key_projection = {k: True for k in key_fields}
-        if ID not in key_fields:
-            self._key_projection.update(
-                {ID: False}
-            )  # need to explicitly specify this since mongo includes _id by dflt
-        if data_fields is None:
-            data_fields = {k: False for k in key_fields}
-            self._items_projection = None
-        elif not isinstance(data_fields, dict):
-            data_fields = {k: True for k in data_fields}
-            if ID not in data_fields:
-                data_fields[ID] = False
-            self._items_projection = (
-                    {k for k, v in data_fields.items() if v} | {k for k, v in self._key_projection.items() if v}
+    def __getitem__(self, k):
+        assert isinstance(
+            k, Mapping
+        ), f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        return self.mgc.find(
+            filter=self._merge_with_filt(k),
+            projection=self._getitem_projection,
+        )
+
+    def keys(self):
+        return KeysView(self)
+
+    def values(self):
+        return MongoValuesView(self)
+
+    @cached_property
+    def _items_projection(self):
+        return projection_union(
+            self._iter_projection,
+            self._getitem_projection,
+            already_flattened=self._projections_are_flattened,
+        )
+
+    @cached_property
+    def key_fields(self):
+        _iter_projection = normalize_projection(self._iter_projection)
+        return tuple(
+            field
+            for field in _iter_projection
+            if _iter_projection[field] is True
+        )
+
+    @cached_property
+    def val_fields(self):
+        if self._getitem_projection is None:
+            return None
+        else:
+            _getitem_projection = normalize_projection(
+                self._getitem_projection
             )
-        self._data_fields = data_fields
-        self._key_fields = key_fields
+            return tuple(
+                field
+                for field in _getitem_projection
+                if _getitem_projection[field] is True
+            )
 
-        if filt is None:
-            filt = {}
-        self._filt = filt
+    def items(self):
+        return MongoItemsView(self)
 
     @classmethod
     def from_params(
-            cls,
-            db_name: str = "py2store",
-            collection_name: str = "test",
-            key_fields: Iterable = (ID,),
-            data_fields: Optional[Iterable] = None,
-            filt: Optional[dict] = None,
-            mongo_client: Optional[dict] = None,
+        cls,
+        db_name: str = "py2store",
+        collection_name: str = "test",
+        mongo_client: Optional[dict] = None,
+        filter: Optional[dict] = None,
+        iter_projection: ProjectionSpec = (ID,),
+        getitem_projection: ProjectionSpec = None,
+        **mgc_find_kwargs,
     ):
         if mongo_client is None:
             mongo_client = MongoClient()
@@ -202,80 +234,77 @@ class MongoCollectionReader(KvReader):
 
         return cls(
             mgc=mongo_client[db_name][collection_name],
-            key_fields=key_fields,
-            data_fields=data_fields,
-            filt=filt,
+            filter=filter,
+            iter_projection=iter_projection,
+            getitem_projection=getitem_projection,
+            **mgc_find_kwargs,
         )
-
-    def __getitem__(self, k):
-        assert isinstance(k, Mapping), \
-            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
-        return self._mgc.find(filter=self._merge_with_filt(k), projection=self._data_fields)
-
-    def __iter__(self):
-        yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
-
-    def __len__(self):
-        return self._mgc.count_documents(self._filt)
-
-    def __contains__(self, k):
-        # TODO: How do we have cursor return no data (here still has _id)
-        cursor = self._mgc.find(filter=self._merge_with_filt(k), projection=())
-        return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def keys(self):
-        return KeysView(self)
-
-    def items(self):
-        return MongoItemsView(self)
-
-    def values(self):
-        return MongoValuesView(self)
-
-    def _merge_with_filt(self, *args) -> dict:
-        d = self._filt
-        for v in args:
-            assert isinstance(v, Mapping), \
-                f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
-            d = dict(d, **v)
-        return d
 
 
 class MongoValuesView(ValuesView):
-
     def __contains__(self, v):
         m = self._mapping
-        cursor = m._mgc.find(filter=m._merge_with_filt(v), projection=())
+        cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
         m = self._mapping
-        yield from m._mgc.find(filter=m._filt, projection=m._data_fields)
+        yield from m.mgc.find(
+            filter=m.filter, projection=m._getitem_projection
+        )
 
 
 class MongoItemsView(ItemsView):
-
     def __contains__(self, item):
         m = self._mapping
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
+        cursor = m.mgc.find(
+            filter=dict(v, **m._merge_with_filt(k)), projection=()
+        )
         # return cursor
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def __iter__(self):
         m = self._mapping
-        for doc in m._mgc.find(filter=m._filt, projection=m._items_projection):
-            key = {k: doc.pop(k) for k in m._key_fields}
+        for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
+            key = {k: doc.pop(k) for k in m.key_fields}
             yield key, doc
 
 
-class MongoCollectionPersister(MongoCollectionReader):
-    """A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
+class MongoCollectionFieldsReader(MongoCollectionReader):
+    """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 
-    >>> from pymongo import MongoClient
-    >>> mongo_collection_obj = MongoClient()['py2store']['test']
-    >>> s = MongoCollectionPersister(mongo_collection_obj)
+    An "easier" interface for the common case where we just want to specify fixed fields for keys and vals.
+
+    """
+
+    _projections_are_flattened = True
+
+    def __init__(
+        self,
+        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+        filter: Optional[dict] = None,
+        key_fields: ProjectionSpec = (ID,),
+        val_fields: ProjectionSpec = None,
+    ):
+        iter_projection = normalize_projection(key_fields)
+        super().__init__(
+            mgc=mgc,
+            filter=filter,
+            iter_projection=normalize_projection(key_fields),
+            getitem_projection=normalize_projection(val_fields),
+        )
+        self.key_fields = key_fields
+        self.val_fields = val_fields
+
+
+class MongoCollectionPersister(MongoCollectionReader):
+    """base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
+
+    >>> from mongodol.util import mk_dflt_mgc
+    >>> mongo_collection_obj = mk_dflt_mgc()
+    >>> s = MongoCollectionPersister(mongo_collection_obj, getitem_projection={'_id': False})
     >>> for k in s:  # deleting all docs in default collection
     ...     del s[k]
     >>> k = {'_id': 'foo'}
@@ -296,8 +325,15 @@ class MongoCollectionPersister(MongoCollectionReader):
     {'val': 'bar'}
     >>> next(s.get(k))
     {'val': 'bar'}
-    >>> next(s.get({'not': 'a key'}, {'default': 'val'}))  # testing s.get with default
-    {'default': 'val'}
+
+    Remember (see ``MongoCollectionReader`` docs) that ``s.get`` will never reach its default since
+    the reader will always return a cursor (possibly empty).
+    So in the following case, we should get an empty cursor (not a default value)
+
+    >>> list(s.get({'not': 'a key'}, {'default': 'val'}))  # testing s.get with default
+    []
+
+
     >>> list(s.values())
     [{'val': 'bar'}]
     >>> k in s  # testing __contains__ again
@@ -308,10 +344,11 @@ class MongoCollectionPersister(MongoCollectionReader):
     >>> len(s)
     0
 
-    >>>
     >>> # Making a persister whose keys are 2-dimensional and values are 3-dimensional
-    >>> s = MongoCollectionPersister.from_params(db_name='py2store', collection_name='tmp',
-    ...                     key_fields=('first', 'last'), data_fields=('yob', 'proj', 'bdfl'))
+    >>> from mongodol.util import normalize_projection
+    >>> s = MongoCollectionPersister(mongo_collection_obj,
+    ...                     iter_projection={'first': True, 'last': True, '_id': False},
+    ...                     getitem_projection=normalize_projection(('yob', 'proj', 'bdfl')))
     >>> for _id in s:  # deleting all docs in tmp
     ...     del s[_id]
     >>> # writing two items
@@ -326,33 +363,38 @@ class MongoCollectionPersister(MongoCollectionReader):
     """
 
     def __setitem__(self, k, v):
-        assert isinstance(k, Mapping) and isinstance(v, Mapping), \
-            f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
-        return self._mgc.replace_one(
+        assert isinstance(k, Mapping) and isinstance(
+            v, Mapping
+        ), f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        return self.mgc.replace_one(
             filter=self._merge_with_filt(k),
             replacement=self._merge_with_filt(k, v),
-            upsert=True
+            upsert=True,
         )
 
     def __delitem__(self, k):
+        assert isinstance(
+            k, Mapping
+        ), f"k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}"
         if len(k) > 0:
-            return self._mgc.delete_one(self._merge_with_filt(k))
+            return self.mgc.delete_one(self._merge_with_filt(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
-        assert isinstance(v, Mapping), \
-            f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
-        return self._mgc.insert_one(self._merge_with_filt(v))
+        assert isinstance(
+            v, Mapping
+        ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        return self.mgc.insert_one(self._merge_with_filt(v))
 
     def extend(self, values):
-        assert all([isinstance(v, Mapping) for v in values]), \
-            f" values must be mappings (often dictionaries)"
+        assert all(
+            [isinstance(v, Mapping) for v in values]
+        ), f" values must be mappings (often dictionaries)"
         if values:
-            return self._mgc.insert_many([self._merge_with_filt(v) for v in values])
-
-    def persist_data(self, data):
-        return self.__setitem__({ID: data[ID]}, data)
+            return self.mgc.insert_many(
+                [self._merge_with_filt(v) for v in values]
+            )
 
     # def update(self, __m: Mapping, **kwargs):
     #     return super().update(__m, **kwargs)
@@ -385,11 +427,11 @@ class MongoClientReader(KvReader):
 
 class MongoDbReader(KvReader):
     def __init__(
-            self,
-            db_name="py2store",
-            mk_collection_store=MongoCollectionReader,
-            mongo_client=None,
-            **mongo_client_kwargs,
+        self,
+        db_name="py2store",
+        mk_collection_store=MongoCollectionReader,
+        mongo_client=None,
+        **mongo_client_kwargs,
     ):
         """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
 
@@ -417,131 +459,3 @@ class MongoDbReader(KvReader):
 
     def __getitem__(self, k):
         return self.collection_store_cls(self.db[k])
-
-
-class OldMongoPersister(KvPersister):
-    """
-    A basic mongo persister.
-    Note that the mongo persister is designed not to overwrite the value of a key if the key already exists.
-    You can subclass it and use update_one instead of insert_one if you want to be able to overwrite data.
-
-    >>> s = OldMongoPersister()  # just use defaults
-    >>> for _id in s:  # deleting all docs in tmp
-    ...     del s[_id]
-    >>> k = {'_id': 'foo'}
-    >>> v = {'val': 'bar'}
-    >>> k in s  # see that key is not in store (and testing __contains__)
-    False
-    >>> len(s)
-    0
-    >>> s[k] = v
-    >>> len(s)
-    1
-    >>> list(s)
-    [{'_id': 'foo'}]
-    >>> s[k]
-    {'val': 'bar'}
-    >>> s.get(k)
-    {'val': 'bar'}
-    >>> s.get({'not': 'a key'}, {'default': 'val'})  # testing s.get with default
-    {'default': 'val'}
-    >>> list(s.values())
-    [{'val': 'bar'}]
-    >>> k in s  # testing __contains__ again
-    True
-    >>> del s[k]
-    >>> len(s)
-    0
-    >>>
-    >>> # Making a persister whose keys are 2-dimensional and values are 3-dimensional
-    >>> s = OldMongoPersister(db_name='py2store', collection_name='tmp',
-    ...                     key_fields=('first', 'last'), data_fields=('yob', 'proj', 'bdfl'))
-    >>> for _id in s:  # deleting all docs in tmp
-    ...     del s[_id]
-    >>> # writing two items
-    >>> s[{'first': 'Guido', 'last': 'van Rossum'}] = {'yob': 1956, 'proj': 'python', 'bdfl': False}
-    >>> s[{'first': 'Vitalik', 'last': 'Buterin'}] = {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
-    >>> # Seeing that those two items are there
-    >>> for key, val in s.items():
-    ...     print(f"{key} --> {val}")
-    {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
-    {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
-    """
-
-    def __init__(
-            self,
-            db_name="py2store",
-            collection_name="test",
-            key_fields=(ID,),
-            data_fields=None,
-            mongo_client_kwargs=None,
-    ):
-        if mongo_client_kwargs is None:
-            mongo_client_kwargs = {}
-        self._mongo_client = MongoClient(**mongo_client_kwargs)
-        self._db_name = db_name
-        self._collection_name = collection_name
-        self._mgc = self._mongo_client[db_name][collection_name]
-        if isinstance(key_fields, str):
-            key_fields = (key_fields,)
-        if data_fields is None:
-            pass
-
-        self._key_projection = {k: True for k in key_fields}
-        if ID not in key_fields:
-            self._key_projection.update(
-                {ID: False}
-            )  # need to explicitly specify this since mongo includes _id by dflt
-        if data_fields is None:
-            data_fields = {k: False for k in key_fields}
-        elif not isinstance(data_fields, dict):
-            data_fields = {k: True for k in data_fields}
-            if ID not in data_fields:
-                data_fields[ID] = False
-        self._data_fields = data_fields
-        self._key_fields = key_fields
-
-    def __getitem__(self, k):
-        doc = self._mgc.find_one(k, projection=self._data_fields)
-        if doc is not None:
-            return doc
-        else:
-            raise KeyError(f"No document found for query: {k}")
-
-    def __setitem__(self, k, v):
-        return self._mgc.insert_one(dict(k, **v))
-
-    def __delitem__(self, k):
-        if len(k) > 0:
-            return self._mgc.delete_one(k)
-        else:
-            raise KeyError(f"You can't removed that key: {k}")
-
-    def __iter__(self):
-        yield from self._mgc.find(projection=self._key_projection)
-
-    def __len__(self):
-        return self._mgc.count_documents({})
-
-
-class OldMongoInsertPersister(OldMongoPersister):
-    def __init__(
-            self,
-            db_name="py2store",
-            collection_name="test",
-            data_fields=None,
-            mongo_client_kwargs=None,
-    ):
-        super().__init__(
-            db_name=db_name,
-            collection_name=collection_name,
-            data_fields=data_fields,
-            key_fields=(ID,),
-            mongo_client_kwargs=mongo_client_kwargs,
-        )
-
-    def append(self, v):
-        return self._mgc.insert_one(v)
-
-    def extend(self, items):
-        return self._mgc.insert_many(items)

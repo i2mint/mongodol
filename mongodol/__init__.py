@@ -10,5 +10,8 @@ from mongodol.stores import (
     MongoCollectionMultipleDocsReader,
     MongoCollectionUniqueDocPersister,
     MongoCollectionFirstDocPersister,
-    MongoCollectionMultipleDocsPersister
+    MongoCollectionMultipleDocsPersister,
+)
+from mongodol.util import (
+    normalize_projection,
 )

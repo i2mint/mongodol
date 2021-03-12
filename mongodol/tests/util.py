@@ -1,32 +1,47 @@
 from functools import lru_cache
+
+from mongodol.constants import (
+    DFLT_MONGO_CLIENT_ARGS,
+    DFLT_TEST_DB,
+    DFLT_TEST_COLLECTION,
+)
 from pymongo import MongoClient
 
-from mongodol.base import MongoCollectionPersister, MongoCollectionReader
+from mongodol.base import MongoCollectionPersister
 from mongodol.tests.data import number_docs, feature_cube, bdfl_docs
 
-DFLT_MONGO_CLIENT_ARGS = ()
-DFLT_TEST_DB = 'mongodol'
-DFLT_TEST_COLLECTION = 'mongodol_test'
+
+def mk_dflt_mgc():
+    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)[DFLT_TEST_DB][
+        DFLT_TEST_COLLECTION
+    ]
 
 
 @lru_cache(maxsize=1)
-def get_test_database(mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
-                      db_name=DFLT_TEST_DB):
+def get_test_database(
+    mongo_client_args=DFLT_MONGO_CLIENT_ARGS, db_name=DFLT_TEST_DB
+):
     return MongoClient(*mongo_client_args)[db_name]
 
 
 @lru_cache()
-def get_test_collection_object(mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
-                               db_name=DFLT_TEST_DB,
-                               collection_name=DFLT_TEST_COLLECTION):
+def get_test_collection_object(
+    mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
+    db_name=DFLT_TEST_DB,
+    collection_name=DFLT_TEST_COLLECTION,
+):
     db = get_test_database(mongo_client_args, db_name)
     return db[collection_name]
 
 
-def get_test_collection_persister(mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
-                                  db_name=DFLT_TEST_DB,
-                                  collection_name=DFLT_TEST_COLLECTION):
-    mgc = get_test_collection_object(mongo_client_args, db_name, collection_name)
+def get_test_collection_persister(
+    mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
+    db_name=DFLT_TEST_DB,
+    collection_name=DFLT_TEST_COLLECTION,
+):
+    mgc = get_test_collection_object(
+        mongo_client_args, db_name, collection_name
+    )
     return MongoCollectionPersister(mgc)
 
 
@@ -46,4 +61,3 @@ def init_db():
     db.number.insert_many(number_docs)
     db.feature_cube.insert_many(feature_cube)
     db.bdfl.insert_many(bdfl_docs)
-

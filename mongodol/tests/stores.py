@@ -9,8 +9,8 @@ def test_mongo_store(s=MongoStore(), k=None, v=None):
     if k in s:  # deleting all docs in tmp
         del s[k]
     assert (
-                   k in s
-           ) == False  # see that key is not in store (and testing __contains__)
+        k in s
+    ) == False  # see that key is not in store (and testing __contains__)
     orig_length = len(s)
     s[k] = v
     assert len(s) == orig_length + 1
