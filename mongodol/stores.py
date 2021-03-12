@@ -3,6 +3,7 @@ from typing import Collection, Mapping
 
 from py2store import Store, wrap_kvs
 from py2store.util import lazyprop
+from py2store.trans import condition_function_call, double_up_as_factory
 
 from mongodol.base import MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData, normalize_result

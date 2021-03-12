@@ -35,6 +35,8 @@ class MongoCollectionCollection(DolCollection):
     def _merge_with_filt(self, *args) -> dict:
         d = self.filter
         for v in args:
+            if v is None:
+                v = {}
             assert isinstance(
                 v, Mapping
             ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
@@ -249,9 +251,14 @@ class MongoValuesView(ValuesView):
 
     def __iter__(self):
         m = self._mapping
-        yield from m.mgc.find(
-            filter=m.filter, projection=m._getitem_projection
-        )
+        return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
+
+    def distinct(self, key, filter=None, **kwargs):
+        m = self._mapping
+        # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
+        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
+
+    unique = distinct
 
 
 class MongoItemsView(ItemsView):

@@ -137,7 +137,7 @@ def test_basic_mongo_kvreader_functionality(
 ):
     test_persister = get_test_collection_persister()
     clear_all_and_populate(test_persister, feature_cube[:4])
-    test_mgc = test_persister._mgc
+    test_mgc = test_persister.mgc
 
     # By default, we get ``{"_id":...}`` as keys, and the full contents of the mongo docs as values
 
@@ -155,6 +155,9 @@ def test_basic_mongo_kvreader_functionality(
         {"_id": 3, "color": "red", "dims": {"x": 2, "y": 5}, "number": 10},
         {"_id": 4, "color": "red", "dims": {"x": 5, "y": 2}, "number": 10},
     ]
+
+    assert s.values().distinct("color") == ["blue", "red"]
+    assert s.values().distinct("dims.x") == [2, 3, 5]
 
     # This default behavior is equivalent to the following settings:
 
