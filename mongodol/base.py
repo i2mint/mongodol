@@ -2,6 +2,7 @@ from functools import wraps, cached_property
 from typing import Mapping, Optional, Union, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
 from collections import ChainMap
+from i2.signatures import Sig
 
 from pymongo import MongoClient
 
@@ -379,7 +380,7 @@ class MongoCollectionPersister(MongoCollectionReader):
         ), f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
         return self.mgc.replace_one(
             filter=self._merge_with_filt(k),
-            replacement=self._merge_with_filt(k, v),
+            replacement=self._build_doc(k, v),
             upsert=True,
         )
 
@@ -397,7 +398,7 @@ class MongoCollectionPersister(MongoCollectionReader):
         assert isinstance(
             v, Mapping
         ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
-        return self.mgc.insert_one(self._merge_with_filt(v))
+        return self.mgc.insert_one(self._build_doc(v))
 
     def extend(self, values):
         assert all(
@@ -405,8 +406,18 @@ class MongoCollectionPersister(MongoCollectionReader):
         ), f" values must be mappings (often dictionaries)"
         if values:
             return self.mgc.insert_many(
-                [self._merge_with_filt(v) for v in values]
+                [self._build_doc(v) for v in values]
             )
+
+    def _build_doc(self, *args):
+        doc = self._merge_with_filt(*args)
+        is_invalid = len([
+            x for x in doc.values()
+            if isinstance(x, Mapping) and len([k for k in x.keys() if '$' in k]) > 0
+        ]) > 0
+        if is_invalid:
+            raise ValueError('The doc contains some query-specific values.')
+        return doc
 
     # def update(self, __m: Mapping, **kwargs):
     #     return super().update(__m, **kwargs)
@@ -443,7 +454,7 @@ class MongoDbReader(KvReader):
         db_name="py2store",
         mk_collection_store=MongoCollectionReader,
         mongo_client=None,
-        **mongo_client_kwargs,
+        **kwargs,
     ):
         """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
 
@@ -454,8 +465,9 @@ class MongoDbReader(KvReader):
             Will be called with only one unnamed argument; the collection name.
             Use custom classes here, and/or partials (curried functions) thereof, to fix any parameters you want to fix.
         :param mongo_client: MongoClient instance, kwargs to make it (MongoClient(**kwargs)), or callable to make it
-        :param mongo_client_kwargs: **kwargs to make a MongoClient, that is used if mongo_client is callable
+        :param kwargs: **kwargs to make a MongoClient that is used if mongo_client is callable, and a collection store instance.
         """
+        mongo_client_kwargs = Sig(MongoClient).source_kwargs(**kwargs)
         if mongo_client is None:
             self._mongo_client = MongoClient(**mongo_client_kwargs)
         elif isinstance(mongo_client, dict):
@@ -465,9 +477,10 @@ class MongoDbReader(KvReader):
         self._db_name = db_name
         self.db = self._mongo_client[db_name]
         self.collection_store_cls = mk_collection_store
+        self._collection_store_kwargs = Sig(self.collection_store_cls).source_kwargs(**kwargs)
 
     def __iter__(self):
         yield from self.db.list_collection_names()
 
     def __getitem__(self, k):
-        return self.collection_store_cls(self.db[k])
+        return self.collection_store_cls(self.db[k], **self._collection_store_kwargs)
