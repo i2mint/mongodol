@@ -2,7 +2,6 @@ from functools import wraps, cached_property
 from typing import Mapping, Optional, Union, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
 from collections import ChainMap
-from i2.signatures import Sig
 
 from pymongo import MongoClient
 
@@ -25,7 +24,7 @@ class MongoCollectionCollection(DolCollection):
         self,
         mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
         filter: Optional[dict] = None,
-        iter_projection: ProjectionSpec = None,
+        iter_projection: Optional[dict] = None,
         **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
@@ -254,16 +253,12 @@ class MongoValuesView(ValuesView):
         m = self._mapping
         return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
 
-    def distinct(self, field, filter=None, **kwargs):
+    def distinct(self, key, filter=None, **kwargs):
         m = self._mapping
         # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return m.mgc.distinct(
-            field, filter=m._merge_with_filt(filter), **kwargs
-        )
+        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
 
-    unique = (
-        distinct  # alias to make data scientists happy (numpy, dataframes...)
-    )
+    unique = distinct
 
 
 class MongoItemsView(ItemsView):
@@ -393,7 +388,6 @@ class MongoCollectionPersister(MongoCollectionReader):
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
-    # TODO: Append and extend need to be setup so that kv_wraps know how to transform v and values
     def append(self, v):
         assert isinstance(
             v, Mapping
@@ -454,7 +448,7 @@ class MongoDbReader(KvReader):
         db_name="py2store",
         mk_collection_store=MongoCollectionReader,
         mongo_client=None,
-        **kwargs,
+        **mongo_client_kwargs,
     ):
         """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
 
@@ -465,9 +459,8 @@ class MongoDbReader(KvReader):
             Will be called with only one unnamed argument; the collection name.
             Use custom classes here, and/or partials (curried functions) thereof, to fix any parameters you want to fix.
         :param mongo_client: MongoClient instance, kwargs to make it (MongoClient(**kwargs)), or callable to make it
-        :param kwargs: **kwargs to make a MongoClient that is used if mongo_client is callable, and a collection store instance.
+        :param mongo_client_kwargs: **kwargs to make a MongoClient, that is used if mongo_client is callable
         """
-        mongo_client_kwargs = Sig(MongoClient).source_kwargs(**kwargs)
         if mongo_client is None:
             self._mongo_client = MongoClient(**mongo_client_kwargs)
         elif isinstance(mongo_client, dict):
@@ -477,10 +470,9 @@ class MongoDbReader(KvReader):
         self._db_name = db_name
         self.db = self._mongo_client[db_name]
         self.collection_store_cls = mk_collection_store
-        self._collection_store_kwargs = Sig(self.collection_store_cls).source_kwargs(**kwargs)
 
     def __iter__(self):
         yield from self.db.list_collection_names()
 
     def __getitem__(self, k):
-        return self.collection_store_cls(self.db[k], **self._collection_store_kwargs)
+        return self.collection_store_cls(self.db[k])
