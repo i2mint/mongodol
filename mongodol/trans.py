@@ -35,6 +35,10 @@ class PersistentDict(dict):
         }
         super().__init__(**persistent_kwargs)
 
+    def update(self, __m, **kwargs):
+        super().update(__m, **kwargs)
+        return self.persist_data()
+
     def __setitem__(self, k, v):
         super().__setitem__(k, v)
         return self.persist_data()

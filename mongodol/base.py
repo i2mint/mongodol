@@ -413,8 +413,8 @@ class MongoCollectionPersister(MongoCollectionReader):
             raise ValueError('The doc contains some query-specific values.')
         return doc
 
-    # def update(self, __m: Mapping, **kwargs):
-    #     return super().update(__m, **kwargs)
+    def persist_data(self, data):
+        return self.__setitem__({ID: data[ID]}, data)
 
 
 # class MongoAppendablePersister(MongoCollectionPersister):
