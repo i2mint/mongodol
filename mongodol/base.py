@@ -21,11 +21,11 @@ from mongodol.util import (
 #  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
     def __init__(
-        self,
-        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-        filter: Optional[dict] = None,
-        iter_projection: Optional[dict] = None,
-        **mgc_find_kwargs,
+            self,
+            mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
+            filter: Optional[dict] = None,
+            iter_projection: Optional[dict] = None,
+            **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
         self.filter = filter or {}
@@ -75,6 +75,42 @@ class MongoCollectionCollection(DolCollection):
             f"{type(self).__name__}(mgc={self.mgc_repr}, "
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
+
+
+class MongoValuesView(ValuesView):
+    def __contains__(self, v):
+        m = self._mapping
+        cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def __iter__(self):
+        m = self._mapping
+        return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
+
+    def distinct(self, key, filter=None, **kwargs):
+        m = self._mapping
+        # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
+        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
+
+    unique = distinct
+
+
+class MongoItemsView(ItemsView):
+    def __contains__(self, item):
+        m = self._mapping
+        k, v = item
+        # TODO: How do we have cursor return no data (here still has _id)
+        cursor = m.mgc.find(
+            filter=dict(v, **m._merge_with_filt(k)), projection=()
+        )
+        # return cursor
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def __iter__(self):
+        m = self._mapping
+        for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
+            key = {k: doc.pop(k) for k in m.key_fields}
+            yield key, doc
 
 
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
@@ -151,14 +187,18 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """
 
     _projections_are_flattened = False
+    _wrap_for_method = {
+        'values': MongoValuesView,
+        'items': MongoItemsView,
+    }
 
     def __init__(
-        self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
-        iter_projection: ProjectionSpec = (ID,),
-        getitem_projection: ProjectionSpec = None,
-        **mgc_find_kwargs,
+            self,
+            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+            filter: Optional[dict] = None,
+            iter_projection: ProjectionSpec = (ID,),
+            getitem_projection: ProjectionSpec = None,
+            **mgc_find_kwargs,
     ):
         assert iter_projection is not None, "iter_projection cannot be None"
         super().__init__(
@@ -181,7 +221,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     def keys(self):
         return KeysView(self)
 
-    def values(self):
+    def values(self) -> MongoValuesView:
         return MongoValuesView(self)
 
     @cached_property
@@ -215,19 +255,19 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
                 if _getitem_projection[field] is True
             )
 
-    def items(self):
+    def items(self) -> MongoItemsView:
         return MongoItemsView(self)
 
     @classmethod
     def from_params(
-        cls,
-        db_name: str = "py2store",
-        collection_name: str = "test",
-        mongo_client: Optional[dict] = None,
-        filter: Optional[dict] = None,
-        iter_projection: ProjectionSpec = (ID,),
-        getitem_projection: ProjectionSpec = None,
-        **mgc_find_kwargs,
+            cls,
+            db_name: str = "py2store",
+            collection_name: str = "test",
+            mongo_client: Optional[dict] = None,
+            filter: Optional[dict] = None,
+            iter_projection: ProjectionSpec = (ID,),
+            getitem_projection: ProjectionSpec = None,
+            **mgc_find_kwargs,
     ):
         if mongo_client is None:
             mongo_client = MongoClient()
@@ -243,42 +283,6 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         )
 
 
-class MongoValuesView(ValuesView):
-    def __contains__(self, v):
-        m = self._mapping
-        cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
-        return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def __iter__(self):
-        m = self._mapping
-        return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
-
-    def distinct(self, key, filter=None, **kwargs):
-        m = self._mapping
-        # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
-
-    unique = distinct
-
-
-class MongoItemsView(ItemsView):
-    def __contains__(self, item):
-        m = self._mapping
-        k, v = item
-        # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m.mgc.find(
-            filter=dict(v, **m._merge_with_filt(k)), projection=()
-        )
-        # return cursor
-        return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def __iter__(self):
-        m = self._mapping
-        for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
-            key = {k: doc.pop(k) for k in m.key_fields}
-            yield key, doc
-
-
 class MongoCollectionFieldsReader(MongoCollectionReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 
@@ -289,11 +293,11 @@ class MongoCollectionFieldsReader(MongoCollectionReader):
     _projections_are_flattened = True
 
     def __init__(
-        self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
-        key_fields: ProjectionSpec = (ID,),
-        val_fields: ProjectionSpec = None,
+            self,
+            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+            filter: Optional[dict] = None,
+            key_fields: ProjectionSpec = (ID,),
+            val_fields: ProjectionSpec = None,
     ):
         iter_projection = normalize_projection(key_fields)
         super().__init__(
@@ -444,11 +448,11 @@ class MongoClientReader(KvReader):
 
 class MongoDbReader(KvReader):
     def __init__(
-        self,
-        db_name="py2store",
-        mk_collection_store=MongoCollectionReader,
-        mongo_client=None,
-        **mongo_client_kwargs,
+            self,
+            db_name="py2store",
+            mk_collection_store=MongoCollectionReader,
+            mongo_client=None,
+            **mongo_client_kwargs,
     ):
         """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
 

@@ -54,7 +54,7 @@ def disallow_sourced_interval_overlaps(store):
     >>>
     >>>
     >>> s = get_test_collection_persister()  # Make a persister
-    >>> clear_all_and_populate(s, data)  # empty it and populate it with the two data docs
+    >>> clear_all_and_populate(data,s)  # empty it and populate it with the two data docs
     >>> assert len(s) == 2  # yep, two docs
     >>> assert s.values().distinct('annot') == ['dog']  # and only has a dog
     >>>
@@ -70,7 +70,7 @@ def disallow_sourced_interval_overlaps(store):
     >>> # Let's start over, usingour disallow_sourced_interval_overlaps decorator this time
     >>>
     >>> protected_s = disallow_sourced_interval_overlaps(get_test_collection_persister())
-    >>> clear_all_and_populate(protected_s, data)  # empty it and populate it with the two data docs
+    >>> clear_all_and_populate(data,protected_s)  # empty it and populate it with the two data docs
     >>>
     >>> s[k1] = v1
     >>> # No problem! And see that you have a cat annot now!

@@ -2,7 +2,7 @@ import pytest
 from itertools import islice
 
 from mongodol.base import MongoCollectionCollection
-from mongodol.tests.data import number_docs, feature_cube, bdfl_docs
+from mongodol.tests.data import nums_and_lans, feature_cube, bdfl
 from mongodol.tests.util import get_test_collection_object
 from mongodol.tests import (
     NUMBER_MGC_NAME,
@@ -16,18 +16,18 @@ from mongodol.tests import (
     [
         # NUMBER COLLECTION
         (
-            NUMBER_MGC_NAME,  # mgc_name
-            None,  # filter
-            None,  # iter_projection
-            None,  # mgc_find_kwargs
-            number_docs,  # expected_result
+                NUMBER_MGC_NAME,  # mgc_name
+                None,  # filter
+                None,  # iter_projection
+                None,  # mgc_find_kwargs
+                nums_and_lans,  # expected_result
         ),
         (
             NUMBER_MGC_NAME,
             {"sp": {"$exists": True}},
             None,
             None,
-            [x for x in number_docs if "sp" in x],
+            [x for x in nums_and_lans if "sp" in x],
         ),
         (
             NUMBER_MGC_NAME,
@@ -36,7 +36,7 @@ from mongodol.tests import (
             None,
             [
                 {k: v for k, v in x.items() if k != "so_far"}
-                for x in number_docs
+                for x in nums_and_lans
             ],
         ),
         (
@@ -44,7 +44,7 @@ from mongodol.tests import (
             None,
             None,
             {"skip": 1, "limit": 2},
-            list(islice(islice(number_docs, 1, None), 2)),
+            list(islice(islice(nums_and_lans, 1, None), 2)),
         ),
         # FEATURE CUBE COLLECTION
         (FEATURE_CUBE_MGC_NAME, None, None, None, feature_cube),
@@ -73,27 +73,27 @@ from mongodol.tests import (
             list(islice(islice(feature_cube, 3, None), 2)),
         ),
         # BDFL COLLECTION
-        (BDFL_MGC_NAME, None, None, None, bdfl_docs),
+        (BDFL_MGC_NAME, None, None, None, bdfl),
         (
             BDFL_MGC_NAME,
             {"Type": "Web framework"},
             None,
             None,
-            [x for x in bdfl_docs if x["Type"] == "Web framework"],
+            [x for x in bdfl if x["Type"] == "Web framework"],
         ),
         (
             BDFL_MGC_NAME,
             None,
             {"_id": False, "Name": True},
             None,
-            [{"Name": x["Name"]} for x in bdfl_docs],
+            [{"Name": x["Name"]} for x in bdfl],
         ),
         (
             BDFL_MGC_NAME,
             None,
             None,
             {"skip": 2, "limit": 2},
-            list(islice(islice(bdfl_docs, 2, None), 2)),
+            list(islice(islice(bdfl, 2, None), 2)),
         ),
     ],
 )

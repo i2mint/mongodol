@@ -2,9 +2,34 @@
 
 from mongodol.base import ID
 
+
+def mk_kvs_versions(name):
+    global_vars = globals()
+    seed_docs = global_vars[name]
+
+    dict_kvs_1_docs = [
+        ({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}})
+        for doc in seed_docs
+    ]
+    global_vars[f"{name}_dict_kvs_1"] = dict_kvs_1_docs
+
+    dict_tuple_kvs_1 = [
+        (k[ID], tuple(v.values())) for k, v in dict_kvs_1_docs
+    ]
+    global_vars[f"{name}_tuple_kvs_1"] = dict_tuple_kvs_1
+
+
+# Simple with one field having a repeated value
+three_simple_docs = [
+    {ID: 0, 's': 'a', 'n': 1},
+    {ID: 1, 's': 'b', 'n': 2},
+    {ID: 2, 's': 'b', 'n': 3},
+]
+mk_kvs_versions('three_simple_docs')
+
 # Schema not "perfect": Some missing fields here and there.
 # Good to test no-sql cases
-number_docs = [
+nums_and_lans = [
     {ID: 1, "en": "one", "fr": "un", "sp": "uno", "so_far": [1]},
     {ID: 2, "en": "two", "fr": "deux", "so_far": [1, 2]},  # sp missing
     {ID: 3, "en": "three", "fr": "trois", "sp": "tres", "so_far": [1, 2, 3]},
@@ -22,11 +47,7 @@ number_docs = [
         "so_far": [1, 2, 3, 4, 5],
     },  # fr missing
 ]
-number_dict_kvs_1 = [
-    ({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}})
-    for doc in number_docs
-]
-number_tuple_kvs_1 = [(k[ID], tuple(v.values())) for k, v in number_dict_kvs_1]
+mk_kvs_versions('nums_and_lans')
 
 # Stable schema
 # Groupby possibilities (see number: Several unique values) -- this allows to test filtering more naturally
@@ -39,13 +60,7 @@ feature_cube = [
     {ID: 6, "number": 15, "color": "blue", "dims": {"x": 3, "y": 5}},
     {ID: 7, "number": 15, "color": "blue", "dims": {"x": 5, "y": 3}},
 ]
-feature_cube_dict_kvs_1 = [
-    ({ID: doc[ID]}, {k: doc[k] for k in doc.keys() - {ID}})
-    for doc in feature_cube
-]
-feature_cube_tuple_kvs_1 = [
-    (k[ID], tuple(v.values())) for k, v in feature_cube_dict_kvs_1
-]
+mk_kvs_versions('feature_cube')
 
 # Sequence Annotations
 # Demoing stream annotations with source and time interval
@@ -68,14 +83,13 @@ sequence_annots = [
     },
 ]
 
-
 ####### BDFLs ##########################################################################################################
 # ubtained with:
 # from scrapyng.tables import get_tables_from_url (if no scrapyng, use ut.webscrape.tables)
 # t = get_tables_from_url('https://en.wikipedia.org/wiki/Benevolent_dictator_for_life')[0]
 # t = t[['Name', 'Project', 'Type']].to_dict(orient='records')
 
-bdfl_docs = [
+bdfl = [
     {
         "Name": "Sylvain Benner",
         "Project": "Spacemacs",
@@ -120,7 +134,7 @@ bdfl_docs = [
         "Name": "Laurent Destailleur",
         "Project": "Dolibarr ERP CRM",
         "Type": "Software suite for Enterprise Resource Planning and Customer "
-        "Relationship Management",
+                "Relationship Management",
     },
     {
         "Name": "Francois Chollet",
@@ -227,9 +241,9 @@ bdfl_docs = [
         "Type": "Open-source graph database for knowledge graph representation",
     },
 ]
-
-bdfl_dict_kvs = [
+bdfl_dict_kvs_3 = [
     ({ID: doc["Name"]}, {"Project": doc["Project"], "Type": doc["Type"]})
-    for doc in bdfl_docs
+    for doc in bdfl
 ]
-bdfl_tuple_kvs = [(k[ID], (v["Project"], v["Type"])) for k, v in bdfl_dict_kvs]
+bdfl_tuple_kvs_3 = [(k[ID], (v["Project"], v["Type"])) for k, v in bdfl_dict_kvs_3]
+

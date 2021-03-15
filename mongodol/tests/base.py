@@ -14,7 +14,7 @@ def test_mongo_collection_collection(
     mongo_collection_collection_cls=MongoCollectionCollection,
 ):
     persister = get_test_collection_persister()
-    clear_all_and_populate(persister, feature_cube)
+    clear_all_and_populate(feature_cube, persister)
 
     mgc = persister._mgc
     s = mongo_collection_collection_cls(mgc=mgc)
@@ -136,7 +136,7 @@ def test_basic_mongo_kvreader_functionality(
     mongo_reader_cls=MongoCollectionReader,
 ):
     test_persister = get_test_collection_persister()
-    clear_all_and_populate(test_persister, feature_cube[:4])
+    clear_all_and_populate(feature_cube[:4], test_persister)
     test_mgc = test_persister.mgc
 
     # By default, we get ``{"_id":...}`` as keys, and the full contents of the mongo docs as values

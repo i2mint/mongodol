@@ -6,3 +6,6 @@ from mongodol.tests.util import (
     get_test_collection_persister,
     clear_all_and_populate,
 )
+
+from mongodol.tests import data as test_data
+
