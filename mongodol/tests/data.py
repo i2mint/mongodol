@@ -4,6 +4,13 @@ from mongodol.base import ID
 
 
 def mk_kvs_versions(name):
+    """Makes dict_kvs and tuple_kvs versions of the data referenced by name
+    By kvs we mean "key value expressions", i.e. (key, value) pairs.
+    A dict_kvs is one where the key and value are both dicts (e.g. ({'_id': 2}, {'name': "yoda", 'age': 800}))
+    A tuple_kvs is one where the key is a tuple (e.g. ((2,), {'name': "yoda", 'age': 800}))
+
+    mk_kvs_versions reads and writes in the globals()
+    """
     global_vars = globals()
     seed_docs = global_vars[name]
 
@@ -82,6 +89,35 @@ sequence_annots = [
         "comments": "dog remains in view after bark ceases",
     },
 ]
+
+
+
+####### Rock bands #####################################################################################################
+
+rock_bands = [
+    {
+        '_id': 'pink_floyd_id',
+        'name': 'Pink Floyd',
+        'members': [
+            {'_id': '1', 'firstname': 'Roger', 'lastname': 'Waters'},
+            {'_id': '2', 'firstname': 'Nick', 'lastname': 'Mason'},
+            {'_id': '3', 'firstname': 'Syd', 'lastname': 'Barrett'},
+            {'_id': '4', 'firstname': 'Richard', 'lastname': 'Write'},
+        ]
+    },
+    {
+        '_id': 'the_doors_id',
+        'name': 'The Doors',
+        'members': [
+            {'_id': '1', 'firstname': 'Jim', 'lastname': 'Morrison'},
+            {'_id': '2', 'firstname': 'Ray', 'lastname': 'Manzarek'},
+            {'_id': '3', 'firstname': 'Robby', 'lastname': 'Krieger'},
+            {'_id': '4', 'firstname': 'John', 'lastname': 'Densmore'},
+        ]
+    }
+]
+mk_kvs_versions('rock_bands')
+
 
 ####### BDFLs ##########################################################################################################
 # ubtained with:
