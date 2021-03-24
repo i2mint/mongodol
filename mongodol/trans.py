@@ -27,10 +27,40 @@ from mongodol.util import KeyNotUniqueError
 
 
 class PersistentDict(dict):
+    '''
+    Extension of a dict wich trigger an event to notify the object that contains the dict that a modification
+    as been made.
+    Requirement: The container object need to implement the method "persist_data(self, data: Mapping)".
+    >>> d = {
+    ...     'a': 1,
+    ...     'b': {'ba': 2, 'bb': 3},
+    ...     'c': [
+    ...         {'c1a': 4, 'c1b': 5},
+    ...         {'c2a': 6, 'c2b': 7}
+    ...     ]
+    ... }
+    >>> class Container:
+    ...     def persist_data(self, data):
+    ...         print(data)
+    >>> pd = PersistentDict(Container(), **d)
+    >>> pd['a'] = 8
+    {'a': 8, 'b': {'ba': 2, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> pd['b']['ba'] = 8
+    {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> pd['c'][0]['c1a'] = 8
+    {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    '''
     def __init__(self, container, **kwargs):
+        def get_value(v):
+            if isinstance(v, Mapping):
+                return PersistentDict(self, **v)
+            if isinstance(v, Iterable):
+                return [get_value(x) for x in v]
+            return v
+
         self._container = container
         persistent_kwargs = {
-            k: PersistentDict(self, **v) if isinstance(v, Mapping) else v
+            k: get_value(v)
             for k, v in kwargs.items()
         }
         super().__init__(**persistent_kwargs)

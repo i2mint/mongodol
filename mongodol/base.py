@@ -95,14 +95,6 @@ class MongoValuesView(ValuesView):
     unique = distinct
 
 
-def distinct(mongo_reader, key, filter=None, **kwargs):
-    # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-    return mongo_reader.mgc.distinct(key, filter=mongo_reader._merge_with_filt(filter), **kwargs)
-
-
-unique = distinct
-
-
 class MongoItemsView(ItemsView):
     def __contains__(self, item):
         m = self._mapping
@@ -289,6 +281,12 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
             getitem_projection=getitem_projection,
             **mgc_find_kwargs,
         )
+
+    def distinct(self, key, filter=None, **kwargs):
+        # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
+        return self.mgc.distinct(key, filter=self._merge_with_filt(filter), **kwargs)
+
+    unique = distinct
 
 
 class MongoCollectionFieldsReader(MongoCollectionReader):
