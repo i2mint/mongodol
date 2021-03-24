@@ -43,7 +43,9 @@ class PersistentDict(dict, PersistentObjectBase):
     '''
     Extension of a dict wich triggers an event to notify the object that contains the dict that a modification
     has been made.
+
     Requirement: The container object needs to implement the method "persist_data(self, data: Mapping)".
+
     >>> d = {
     ...     'a': 1,
     ...     'b': {'ba': 2, 'bb': 3},
@@ -54,32 +56,45 @@ class PersistentDict(dict, PersistentObjectBase):
     ... }
     >>> class Container:
     ...     def persist_data(self, data):
-    ...         print(data)
+    ...         """Here, you'd normally put code to ACTUALLY persist the data"""
+    ...         print(f"persisting {data}")
     >>> pd = PersistentDict(Container(), **d)
     >>> pd['a'] = 8
-    {'a': 8, 'b': {'ba': 2, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 2, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['a'] == 8  # and indeed pd['a'] is 8 now!
     >>> pd['b']['ba'] = 8
-    {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['b']['ba'] == 8  # and indeed pd['b']['ba'] is 8 now!
     >>> pd['c'][0]['c1a'] = 8
-    {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['c'][0]['c1a'] == 8  # and indeed pd['c'][0]['c1a'] is 8 now!
     >>> pd.update({'a': 9})
-    {'a': 9, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['a'] == 9
     >>> pd['b'].update({'ba': 9})
-    {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['b']['ba'] == 9
     >>> pd['c'][0].update({'c1a': 9})
-    {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['c'][0]['c1a'] == 9
     >>> pd.update([('a', 10)])
-    {'a': 10, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['a'] == 10
     >>> pd['b'].update([('ba', 10)])
-    {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['b']['ba'] == 10
     >>> pd['c'][0].update([('c1a', 10)])
-    {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert pd['c'][0]['c1a'] == 10
     >>> del pd['a']
-    {'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert 'a' not in pd  # indeed, 'a' no longer in pd
     >>> del pd['b']['ba']
-    {'b': {'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert 'ba' not in pd['b']
     >>> del pd['c'][0]['c1a']
-    {'b': {'bb': 3}, 'c': [{'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'bb': 3}, 'c': [{'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    >>> assert 'c1a' not in pd['c'][0]
     '''
     def __init__(self, container, **kwargs):
         PersistentObjectBase.__init__(self, container)
@@ -106,26 +121,37 @@ class PersistentList(list, PersistentObjectBase):
     '''
     Extension of a list wich triggers an event to notify the object that contains the list that a modification
     has been made.
+
     Requirement: The container object needs to implement the method "persist_data(self, data: Mapping)".
+
     >>> l = [1, 2, 3]
     >>> class Container:
     ...     def persist_data(self, data):
-    ...         print(data)
+    ...         """Here, you'd normally put code to ACTUALLY persist the data"""
+    ...         print(f"persisting {data}")
     >>> pl = PersistentList(Container(), l)
+    >>> assert pl == [1, 2, 3]  # pl is equal to [1, 2, 3]
     >>> pl.append(4)
-    [1, 2, 3, 4]
+    persisting [1, 2, 3, 4]
+    >>> assert pl == [1, 2, 3, 4]  # indeed pl is now [1, 2, 3, 4]
     >>> pl.extend([5, 6])
-    [1, 2, 3, 4, 5, 6]
+    persisting [1, 2, 3, 4, 5, 6]
+    >>> assert pl == [1, 2, 3, 4, 5, 6]
     >>> pl += [7, 8]
-    [1, 2, 3, 4, 5, 6, 7, 8]
+    persisting [1, 2, 3, 4, 5, 6, 7, 8]
+    >>> assert pl == [1, 2, 3, 4, 5, 6, 7, 8]
     >>> pl[0] = 9
-    [9, 2, 3, 4, 5, 6, 7, 8]
+    persisting [9, 2, 3, 4, 5, 6, 7, 8]
+    >>> assert pl == [9, 2, 3, 4, 5, 6, 7, 8]
     >>> n = pl.pop(0)
-    [2, 3, 4, 5, 6, 7, 8]
+    persisting [2, 3, 4, 5, 6, 7, 8]
+    >>> assert pl == [2, 3, 4, 5, 6, 7, 8]
     >>> pl.remove(2)
-    [3, 4, 5, 6, 7, 8]
+    persisting [3, 4, 5, 6, 7, 8]
+    >>> assert pl == [3, 4, 5, 6, 7, 8]
     >>> del pl[0]
-    [4, 5, 6, 7, 8]
+    persisting [4, 5, 6, 7, 8]
+    >>> assert pl == [4, 5, 6, 7, 8]
     '''
     def __init__(self, container, iterable: Iterable):
         PersistentObjectBase.__init__(self, container)
