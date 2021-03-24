@@ -3,6 +3,7 @@ from mongodol.tests.util import populated_pymongo_collection
 from mongodol.base import MongoCollectionReader
 
 
+@pytest.xfail("TDD")
 def test_mongo_values_view_when_wrapping():
     s = MongoCollectionReader(mgc=populated_pymongo_collection())
 
@@ -23,4 +24,3 @@ def test_mongo_values_view_when_wrapping():
         list(ss.values())  # BOOM
 
     assert "'ValuesView' object has no attribute 'mgc'" in str(excinfo.value)
-

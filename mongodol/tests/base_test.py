@@ -16,7 +16,7 @@ def test_mongo_collection_collection(
     persister = get_test_collection_persister()
     clear_all_and_populate(feature_cube, persister)
 
-    mgc = persister._mgc
+    mgc = persister.mgc
     s = mongo_collection_collection_cls(mgc=mgc)
     assert len(s) == 7
     assert list(s) == [
@@ -63,7 +63,7 @@ def test_mongo_collection_collection(
     # Test the __repr__/__str__
     assert (
         str(s)
-        == "MongoCollectionCollection(mgc=<py2store/mongodol_test>, filter={'color': 'blue'}, projection=None)"
+        == "MongoCollectionCollection(mgc=<mongodol/mongodol_test>, filter={'color': 'blue'}, iter_projection=None)"
     )
 
     # Test skip and limit
@@ -156,8 +156,8 @@ def test_basic_mongo_kvreader_functionality(
         {"_id": 4, "color": "red", "dims": {"x": 5, "y": 2}, "number": 10},
     ]
 
-    assert s.values().distinct("color") == ["blue", "red"]
-    assert s.values().distinct("dims.x") == [2, 3, 5]
+    assert s.distinct("color") == ["blue", "red"]
+    assert s.distinct("dims.x") == [2, 3, 5]
 
     # This default behavior is equivalent to the following settings:
 

@@ -111,7 +111,7 @@ class MongoCollectionMultipleDocsPersister(
         ), f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         self._mgc.delete_many(self._merge_with_filt(k))
         _v = v if isinstance(v, Collection) else [v]
-        return self._mgc.insert_many([self._merge_with_filt(k, i) for i in _v])
+        return self._mgc.insert_many([self._build_doc(k, vi) for vi in _v])
 
 
 from mongodol.scrap.old01 import OldMongoPersister

@@ -32,16 +32,23 @@ class MongoCollectionCollection(DolCollection):
         self._iter_projection = iter_projection
         self._mgc_find_kwargs = mgc_find_kwargs
 
-    def _merge_with_filt(self, *args) -> dict:
-        d = self.filter
-        for v in args:
-            if v is None:
-                v = {}
-            assert isinstance(
-                v, Mapping
-            ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
-            d = dict(d, **v)
-        return d
+    def _merge_with_filt(self, m: Mapping) -> dict:
+        """
+
+        :param args: dictionaries that are valid mongo queries
+        :return:
+
+        >>> class Mock(MongoCollectionCollection):
+        ...     def __init__(self, filter):
+        ...         self.filter = filter
+        >>> s = Mock(filter={'a': 3, 'b': {'$in': [1, 2, 3]}})
+        >>> s._merge_with_filt({'c': 'me'})
+        {'$and': [{'a': 3, 'b': {'$in': [1, 2, 3]}}, {'c': 'me'}]}
+        >>> s._merge_with_filt({'b': 4})
+        {'$and': [{'a': 3, 'b': {'$in': [1, 2, 3]}}, {'b': 4}]}
+        """
+        # return {"$and": [self.filter, *args]}  # in case we want to move to handling several elements to merge
+        return {"$and": [self.filter, m]}
 
     def __iter__(self):
         return self.mgc.find(
@@ -72,7 +79,7 @@ class MongoCollectionCollection(DolCollection):
 
     def __repr__(self):
         return (
-            f"{type(self).__name__}(mgc={self.mgc_repr}, "
+            f"{type(self).__name__}(mgc={self.mgc_repr}, filter={self.filter}, iter_projection={self._iter_projection}"
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
 
@@ -87,12 +94,12 @@ class MongoValuesView(ValuesView):
         m = self._mapping
         return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
 
-    def distinct(self, key, filter=None, **kwargs):
-        m = self._mapping
-        # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
-
-    unique = distinct
+    # def distinct(self, key, filter=None, **kwargs):
+    #     m = self._mapping
+    #     # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
+    #     return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
+    #
+    # unique = distinct
 
 
 class MongoItemsView(ItemsView):
@@ -284,7 +291,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def distinct(self, key, filter=None, **kwargs):
         # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return self.mgc.distinct(key, filter=self._merge_with_filt(filter), **kwargs)
+        return self.mgc.distinct(key, filter=self._merge_with_filt(filter or {}), **kwargs)
 
     unique = distinct
 
@@ -414,7 +421,19 @@ class MongoCollectionPersister(MongoCollectionReader):
             )
 
     def _build_doc(self, *args):
-        doc = self._merge_with_filt(*args)
+
+        def merge_doc_elements_with_filter():
+            d = self.filter
+            for v in args:
+                if v is None:
+                    v = {}
+                assert isinstance(
+                    v, Mapping
+                ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+                d = dict(d, **v)
+            return d
+
+        doc = merge_doc_elements_with_filter()
         is_invalid = len([
             x for x in doc.values()
             if isinstance(x, Mapping) and len([k for k in x.keys() if '$' in k]) > 0
