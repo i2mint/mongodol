@@ -17,6 +17,7 @@ from py2store.trans import (
 )
 from mongodol.util import KeyNotUniqueError
 
+
 #
 # def _key_does_not_exist(store, k, v):
 #     """Condition function for use in condition_function_call. Returns true iff the k is not in store"""
@@ -54,7 +55,7 @@ class PostGet:
         doc = next(cursor, None)
         if doc is not None:
             if (
-                next(cursor, None) is not None
+                    next(cursor, None) is not None
             ):  # TODO: Fetches! Faster way to check if there's more than one hit?
                 raise KeyNotUniqueError.raise_error(k)
             return PersistentDict(store, **doc)
@@ -76,6 +77,7 @@ class ObjOfData:
         return doc_collector(map(lambda x: PersistentDict(x), cursor))
 
 
+
 WriteOpResult = TypedDict(
     "WriteOpResult", ok=bool, n=int, ids=Optional[Iterable[str]]
 )
@@ -89,7 +91,7 @@ DFLT_METHOD_NAMES_TO_NORMALIZE = (
 
 
 def normalize_result(
-    obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORMALIZE
+        obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORMALIZE
 ):
     """Decorator to transform a pymongo result object to a WriteOpResult object.
 
@@ -106,14 +108,14 @@ def normalize_result(
             raw_result = func(*args, **kwargs)
             result: WriteOpResult = {"n": 0}
             if (
-                isinstance(raw_result, InsertOneResult)
-                and raw_result.inserted_id
+                    isinstance(raw_result, InsertOneResult)
+                    and raw_result.inserted_id
             ):
                 result["n"] = 1
                 result["ids"] = [str(raw_result.inserted_id)]
             elif (
-                isinstance(raw_result, InsertManyResult)
-                and raw_result.inserted_ids
+                    isinstance(raw_result, InsertManyResult)
+                    and raw_result.inserted_ids
             ):
                 result["n"] = len(raw_result.inserted_ids)
                 result["ids"] = raw_result.inserted_ids
@@ -121,10 +123,10 @@ def normalize_result(
                 result["n"] = raw_result.raw_result["n"]
             elif isinstance(raw_result, BulkWriteResult):
                 result["n"] = (
-                    raw_result.inserted_count
-                    + raw_result.upserted_count
-                    + raw_result.modified_count
-                    + raw_result.deleted_count
+                        raw_result.inserted_count
+                        + raw_result.upserted_count
+                        + raw_result.modified_count
+                        + raw_result.deleted_count
                 )
             else:
                 raise NotImplementedError(

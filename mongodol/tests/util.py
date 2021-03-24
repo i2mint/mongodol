@@ -8,8 +8,8 @@ from mongodol.constants import (
 from pymongo import MongoClient
 
 from mongodol.base import MongoCollectionPersister
-from mongodol.util import mk_dflt_mgc
-from mongodol.tests.data import nums_and_lans, feature_cube, bdfl
+# from mongodol.util import mk_dflt_mgc
+from mongodol.tests import data as test_data
 
 
 @lru_cache(maxsize=1)
@@ -54,6 +54,13 @@ def init_db():
     for collection in db.list_collection_names():
         db[collection].delete_many({})
 
-    db.number.insert_many(nums_and_lans)
-    db.feature_cube.insert_many(feature_cube)
-    db.bdfl.insert_many(bdfl)
+    db.number.insert_many(test_data.nums_and_lans)
+    db.feature_cube.insert_many(test_data.feature_cube)
+    db.bdfl.insert_many(test_data.bdfl)
+
+
+def populated_pymongo_collection(docs=test_data.nums_and_lans):
+    """Get a pymongo collection that has been populated with docs."""
+    test_store = get_test_collection_persister()
+    clear_all_and_populate(docs, test_store)
+    return test_store.mgc

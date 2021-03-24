@@ -8,20 +8,45 @@ from py2store.trans import condition_function_call, double_up_as_factory
 from mongodol.base import MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData, normalize_result
 
+single_value_fetch_with_unicity_validation = partial(wrap_kvs,
+                                                     postget=PostGet.single_value_fetch_with_unicity_validation)
+single_value_fetch_without_unicity_validation = partial(wrap_kvs,
+                                                        postget=PostGet.single_value_fetch_without_unicity_validation)
+
 
 @normalize_result
 class MongoCollectionPersisterWithResultMapping(MongoCollectionPersister):
     """MongoCollectionPersister with result mapping"""
 
 
-@wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
+@single_value_fetch_with_unicity_validation
 class MongoCollectionUniqueDocReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
     :raises KeyNotUniqueError if the k matches more than a single unique doc.
+
+    >>> from mongodol.stores import MongoCollectionUniqueDocReader
+    >>> from mongodol.tests import data, util
+    >>> test_mgc = util.populated_pymongo_collection(data.three_simple_docs)
+    >>> s = MongoCollectionUniqueDocReader(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection=['n'])
+    >>> assert list(s) == [{'s': 'a'}, {'s': 'b'}, {'s': 'b'}]
+
+    And you see where the problem will be: There's two {'s': 'b'} in that listing,
+    so though getting the value for {'s': 'a'} won't be a problem:
+
+    >>> assert s[{'s': 'a'}] == {'_id': 0, 'n': 1}  # there's only one doc matching {'s': 'a'}
+
+    ... but there's more than one doc matching {'s': 'b'}
+
+    >>> s[{'s': 'b'}]
+    Traceback (most recent call last):
+      ...
+    mongodol.util.KeyNotUniqueError: Key was not unique (i.e. cursor has more than one match): {'s': 'b'}
+
     """
 
 
-@wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
+@single_value_fetch_without_unicity_validation
 class MongoCollectionFirstDocReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] is the first key-matching value found.
     Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn't check for uniqueness.
@@ -44,7 +69,7 @@ class MongoCollectionMultipleDocsReader(MongoCollectionReader):
 # TODO: Use adapter pattern to generate below and above
 
 
-@wrap_kvs(postget=PostGet.single_value_fetch_with_unicity_validation)
+@single_value_fetch_with_unicity_validation
 class MongoCollectionUniqueDocPersister(
     MongoCollectionPersisterWithResultMapping
 ):
@@ -53,7 +78,7 @@ class MongoCollectionUniqueDocPersister(
     """
 
 
-@wrap_kvs(postget=PostGet.single_value_fetch_without_unicity_validation)
+@single_value_fetch_without_unicity_validation
 class MongoCollectionFirstDocPersister(
     MongoCollectionPersisterWithResultMapping
 ):
@@ -81,8 +106,8 @@ class MongoCollectionMultipleDocsPersister(
             k, Mapping
         ), f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
         assert isinstance(v, Mapping) or (
-            isinstance(v, Collection)
-            and all([isinstance(i, Mapping) for i in v])
+                isinstance(v, Collection)
+                and all([isinstance(i, Mapping) for i in v])
         ), f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         self._mgc.delete_many(self._merge_with_filt(k))
         _v = v if isinstance(v, Collection) else [v]
@@ -164,7 +189,7 @@ class MongoAnyKeyStore(MongoStore):
             self._key_fields, tuple
         ), "key_fields should be a tuple or a string"
         assert (
-            len(self._key_fields) == 1
+                len(self._key_fields) == 1
         ), "key_fields must have one and only one element (a string)"
         self._key_field = self._key_fields[0]
 
