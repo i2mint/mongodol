@@ -32,6 +32,7 @@ class PersistentObjectBase(ABC):
     '''
     Base class to propagate a modification event through a parent-child chain structure.
     '''
+
     def __init__(self, container):
         self._container = container
 
@@ -51,58 +52,59 @@ class PersistentDict(dict, PersistentObjectBase):
     ...     'b': {'ba': 2, 'bb': 3},
     ...     'c': [
     ...         {'c1a': 4, 'c1b': 5},
-    ...         {'c2a': 6, 'c2b': 7}
+    ...         {'c2a': 6, 'c2b': '7'}
     ...     ]
     ... }
     >>> class Container:
     ...     def persist_data(self, data):
     ...         """Here, you'd normally put code to ACTUALLY persist the data"""
     ...         print(f"persisting {data}")
-    >>> pd = PersistentDict(Container(), **d)
+    >>> pd = PersistentDict(Container(), d)
     >>> pd['a'] = 8
-    persisting {'a': 8, 'b': {'ba': 2, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 2, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['a'] == 8  # and indeed pd['a'] is 8 now!
     >>> pd['b']['ba'] = 8
-    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 4, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['b']['ba'] == 8  # and indeed pd['b']['ba'] is 8 now!
     >>> pd['c'][0]['c1a'] = 8
-    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 8, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['c'][0]['c1a'] == 8  # and indeed pd['c'][0]['c1a'] is 8 now!
     >>> pd.update({'a': 9})
-    persisting {'a': 9, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 8, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['a'] == 9
     >>> pd['b'].update({'ba': 9})
-    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 8, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['b']['ba'] == 9
     >>> pd['c'][0].update({'c1a': 9})
-    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 9, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['c'][0]['c1a'] == 9
     >>> pd.update([('a', 10)])
-    persisting {'a': 10, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 9, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['a'] == 10
     >>> pd['b'].update([('ba', 10)])
-    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 9, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['b']['ba'] == 10
     >>> pd['c'][0].update([('c1a', 10)])
-    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'a': 10, 'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert pd['c'][0]['c1a'] == 10
     >>> del pd['a']
-    persisting {'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'ba': 10, 'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert 'a' not in pd  # indeed, 'a' no longer in pd
     >>> del pd['b']['ba']
-    persisting {'b': {'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'bb': 3}, 'c': [{'c1a': 10, 'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert 'ba' not in pd['b']
     >>> del pd['c'][0]['c1a']
-    persisting {'b': {'bb': 3}, 'c': [{'c1b': 5}, {'c2a': 6, 'c2b': 7}]}
+    persisting {'b': {'bb': 3}, 'c': [{'c1b': 5}, {'c2a': 6, 'c2b': '7'}]}
     >>> assert 'c1a' not in pd['c'][0]
     '''
-    def __init__(self, container, **kwargs):
+
+    def __init__(self, container, wrapped_dict: Mapping):
         PersistentObjectBase.__init__(self, container)
         persistent_kwargs = {
             k: get_persistent_obj(self, v)
-            for k, v in kwargs.items()
+            for k, v in wrapped_dict.items()
         }
-        dict.__init__(self, **persistent_kwargs)
+        dict.__init__(self, persistent_kwargs)
 
     def __setitem__(self, k, v):
         super().__setitem__(k, v)
@@ -153,6 +155,7 @@ class PersistentList(list, PersistentObjectBase):
     persisting [4, 5, 6, 7, 8]
     >>> assert pl == [4, 5, 6, 7, 8]
     '''
+
     def __init__(self, container, iterable: Iterable):
         PersistentObjectBase.__init__(self, container)
         persistent_iterable = [get_persistent_obj(self, x) for x in iterable]
@@ -191,10 +194,11 @@ class PersistentList(list, PersistentObjectBase):
 
 def get_persistent_obj(container, v):
     if isinstance(v, Mapping):
-        return PersistentDict(container, **v)
-    if isinstance(v, Iterable):
+        return PersistentDict(container, v)
+    elif isinstance(v, Iterable) and not isinstance(v, str):
         return PersistentList(container, v)
-    return v
+    else:
+        return v
 
 
 # TODO: Make trans funcs/method carry their role and find their place in wrap_kvs automatically
@@ -224,7 +228,6 @@ class ObjOfData:
     @staticmethod
     def all_docs_fetch(cursor, doc_collector=list):
         return doc_collector(map(lambda x: PersistentDict(x), cursor))
-
 
 
 WriteOpResult = TypedDict(
