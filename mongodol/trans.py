@@ -211,7 +211,7 @@ class PostGet:
                     next(cursor, None) is not None
             ):  # TODO: Fetches! Faster way to check if there's more than one hit?
                 raise KeyNotUniqueError.raise_error(k)
-            return PersistentDict(store, **doc)
+            return PersistentDict(store, doc)
         else:
             raise KeyError(f"No document found for query: {k}")
 
@@ -219,7 +219,7 @@ class PostGet:
     def single_value_fetch_without_unicity_validation(store, k, cursor):
         doc = next(cursor, None)
         if doc is not None:
-            return PersistentDict(store, **doc)
+            return PersistentDict(store, doc)
         else:
             raise KeyError(f"No document found for query: {k}")
 
