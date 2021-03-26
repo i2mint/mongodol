@@ -1,3 +1,4 @@
+from copy import deepcopy
 from abc import ABC
 from typing import Mapping
 from functools import wraps
@@ -157,6 +158,7 @@ class PersistentList(list, PersistentObjectBase):
     '''
 
     def __init__(self, container, iterable: Iterable):
+        self._initial_iterable = iterable
         PersistentObjectBase.__init__(self, container)
         persistent_iterable = [get_persistent_obj(self, x) for x in iterable]
         list.__init__(self, persistent_iterable)
@@ -191,6 +193,9 @@ class PersistentList(list, PersistentObjectBase):
         super().__delitem__(i)
         return self.persist_data()
 
+    def deepcopy(self):
+        return deepcopy(self._initial_iterable)
+
 
 def get_persistent_obj(container, v):
     if isinstance(v, Mapping):
@@ -211,7 +216,8 @@ class PostGet:
                     next(cursor, None) is not None
             ):  # TODO: Fetches! Faster way to check if there's more than one hit?
                 raise KeyNotUniqueError.raise_error(k)
-            return PersistentDict(store, doc)
+            # return PersistentDict(store, doc)
+            return doc
         else:
             raise KeyError(f"No document found for query: {k}")
 
@@ -219,7 +225,8 @@ class PostGet:
     def single_value_fetch_without_unicity_validation(store, k, cursor):
         doc = next(cursor, None)
         if doc is not None:
-            return PersistentDict(store, doc)
+            # return PersistentDict(store, doc)
+            return doc
         else:
             raise KeyError(f"No document found for query: {k}")
 
@@ -227,7 +234,8 @@ class PostGet:
 class ObjOfData:
     @staticmethod
     def all_docs_fetch(cursor, doc_collector=list):
-        return doc_collector(map(lambda x: PersistentDict(x), cursor))
+        # return doc_collector(map(lambda x: PersistentDict(x), cursor))
+        return doc_collector(cursor)
 
 
 WriteOpResult = TypedDict(

@@ -34,7 +34,6 @@ def disallow_sourced_interval_overlaps(store):
     :return: The same store, but where `s[dict(source=source, bt=bt, tt=tt}] = v`` writes are not permitted if
         there is another doc, with the same source, and an overlapping (bt, tt) interval.
 
-    >>> from mongodol.tests.util import clear_all_and_populate, mk_dflt_mgc
     >>> from mongodol.tests import get_test_collection_persister, clear_all_and_populate
     >>>
     >>> # We're going to take (make really) a store s with the two follwing documents:
@@ -56,12 +55,12 @@ def disallow_sourced_interval_overlaps(store):
     >>> s = get_test_collection_persister()  # Make a persister
     >>> clear_all_and_populate(data,s)  # empty it and populate it with the two data docs
     >>> assert len(s) == 2  # yep, two docs
-    >>> assert s.values().distinct('annot') == ['dog']  # and only has a dog
+    >>> assert s.distinct('annot') == ['dog']  # and only has a dog
     >>>
     >>>
     >>> s[k1] = v1
     >>> assert len(s) == 3  # Now has three docs
-    >>> assert 'cat' in s.values().distinct('annot')  # has a cat now
+    >>> assert 'cat' in s.distinct('annot')  # has a cat now
     >>>
     >>> s[k2] = v2
     >>> assert len(s) == 4  # v2 was written, indeed
@@ -74,7 +73,7 @@ def disallow_sourced_interval_overlaps(store):
     >>>
     >>> s[k1] = v1
     >>> # No problem! And see that you have a cat annot now!
-    >>> assert 'cat' in s.values().distinct('annot')
+    >>> assert 'cat' in s.distinct('annot')
     >>> # But this next one will not work since the (7, 10) overlaps with (6, 9) (in source=audio)
     >>> try:
     ...     protected_s[k2] = v2

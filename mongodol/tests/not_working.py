@@ -3,7 +3,7 @@ from mongodol.tests.util import populated_pymongo_collection
 from mongodol.base import MongoCollectionReader
 
 
-@pytest.xfail("TDD")
+@pytest.mark.xfail(reason="TDD")
 def test_mongo_values_view_when_wrapping():
     s = MongoCollectionReader(mgc=populated_pymongo_collection())
 
