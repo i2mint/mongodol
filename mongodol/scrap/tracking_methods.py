@@ -21,6 +21,14 @@ def track_calls_of_method(method: Callable, execute_call=True, tracks_factory=li
     return tracked_method
 
 
+def track_calls_without_executing(method: Callable):
+    @wraps(method)
+    def tracked_method(self, *args, **kwargs):
+        self._tracks.append((method, args, kwargs))
+
+    return tracked_method
+
+
 def forward_method_calls(method):
     @wraps(method)
     def forwarded_method(self, *args, **kwargs):
@@ -36,6 +44,24 @@ class TrackableMixin:
     def _tracks(self):
         return self.tracks_factory()
 
+    def __enter__(self):  # TODO: Should we clear tracks on entry?
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return self.execute_and_clear_tracks()
+
+    def execute_and_clear_tracks(self):
+        call_results = self.execute_tracks()
+        self.clear_tracks()
+        return call_results
+
+    def execute_tracks(self):
+        def gen():
+            for func, args, kwargs in self._tracks:
+                yield func(self, *args, **kwargs)
+
+        return list(gen())
+
     def clear_tracks(self):
         self._tracks.clear()
 
@@ -50,7 +76,7 @@ def track_method_calls(obj=None,
                        *,
                        tracked_methods: Iterable[str] = frozenset(),
                        tracking_mixin: type = TrackableMixin,
-                       execute_call: bool = True,
+                       calls_tracker: Callable = track_calls_of_method,
                        forwarded_methods: Iterable[str] = frozenset()
                        ):
     """Wrapping objects (classes or instances) so that specific method calls are tracked 
@@ -66,37 +92,63 @@ def track_method_calls(obj=None,
     >>> @track_method_calls(tracked_methods='__setitem__')
     ... class D(dict):
     ...     pass
-    >>> dd = D(a=1, b=[1, 2], c={'hello': 'world'})
-    >>> assert repr(dd) == "{'a': 1, 'b': [1, 2], 'c': {'hello': 'world'}}"
-    >>> assert dd._tracks == []
-    >>> assert dd['a'] == 1
-    >>> assert dd._tracks == []  # accessing 'a' didn't make any tracks
-    >>> dd['a'] = 42
-    >>> assert dd['a'] == 42  # verifying that dd['a'] is now 42
-    >>> assert len(dd._tracks) > 0  # see that dd._tracks is now non-empty
-    >>> assert str(dd._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
+    >>> d = D(a=1, b=[1, 2], c={'hello': 'world'})
+    >>> assert repr(d) == "{'a': 1, 'b': [1, 2], 'c': {'hello': 'world'}}"
+    >>> assert d._tracks == []
+    >>> d['a']
+    1
+    >>> d._tracks  # accessing 'a' didn't make any tracks
+    []
+    >>> d['a'] = 42
+    >>> d['a']  # verifying that dd['a'] is now 42
+    42
+    >>> len(d._tracks)  # see that dd._tracks is now non-empty
+    1
+    >>> d._tracks
+    [(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]
 
     A common use of ``track_method_calls`` is to accumulate method calls without executing them,
     so as to be able to change the way they're called. For example, making the calls differently
     (e.g. in a parallel process) or aggregating several operations and running them in bulk
     (e.g. data base writes).
 
-    >>> @track_method_calls(tracked_methods='__setitem__', execute_call=False)
+    If you want to reuse your tracker decorator, it's a good idea of use partial to make a
+    decorator with the settings you want, like this:
+
+    >>> from functools import partial
+    >>> my_write_tracker = partial(
+    ...     track_method_calls,
+    ...     tracked_methods='__setitem__',
+    ...     calls_tracker=track_calls_without_executing
+    ...     )
+
+    Now let's decorate a dict type with it.
+
+    >>> @my_write_tracker
     ... class D(dict):
     ...     pass
-    >>> dd = D(a=1, b=[1, 2], c={'hello': 'world'})
-    >>> assert dd._tracks == []  # accessing 'a' didn't make any tracks
-    >>> dd['a'] = 42
-    >>> assert dd['a'] == 1  # verifying that dd['a'] is STILL 1
-    >>> assert len(dd._tracks) > 0  # but dd._tracks is now non-empty
-    >>> assert str(dd._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
-    >>> # loop through tracks, execute, and clear all tracks
-    >>> for func, args, kwargs in dd._tracks:
-    ...     func(dd, *args, **kwargs)
-    >>> dd.clear_tracks()
+    >>> d = D(a=1, b=[1, 2], c={'hello': 'world'})
+
+    The suggested use is to do write operations in a with block. This will have the effect of
+    automatically executing the calls accumulated in tracks and clearing the tracks when you exit the with
+    block.
+
+    >>> with d:
+    ...     d['a'] = 21
+    ...     assert d['a'] == 1  # still in the with block, so the operation hasn't executed yet
+    >>> d['a']  # but now that we exited the block, we have d['a'] == 21
+    21
+
+    But if you really need/want to, you can perform these operations manually.
+    >>> assert d._tracks == []  # see that we have no _tracks (these are deleted when we exit the with block
+    >>> d['a'] = 42
+    >>> assert d['a'] == 21  # verifying that dd['a'] is STILL 21
+    >>> assert len(d._tracks) > 0  # but dd._tracks is now non-empty
+    >>> assert str(d._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
+    >>> _ = d.execute_and_clear_tracks()
     >>> # See that the setitem call was indeed made
-    >>> assert dd['a'] == 42
-    >>> assert len(dd._tracks) == 0 
+    >>> assert d['a'] == 42
+    >>> assert len(d._tracks) == 0
     
     """
     if isinstance(tracked_methods, str):
@@ -106,11 +158,6 @@ def track_method_calls(obj=None,
 
     # TODO: Include this logic in a wrap_first_arg_if_not_a_type decorator instead.
     if isinstance(obj, type):
-        call_tracker = partial(
-            track_calls_of_method,
-            execute_call=execute_call,
-            tracks_factory=tracking_mixin.tracks_factory
-        )
 
         tracked_and_forwarded = set(forwarded_methods).intersection(tracked_methods)
         assert not tracked_and_forwarded, f"tracked_methods and forwarded_methods intersected on some method names: {', '.join(tracked_and_forwarded)}"
@@ -120,7 +167,7 @@ def track_method_calls(obj=None,
 
         for method_name in tracked_methods:
             method_to_track = getattr(TrackedObj, method_name)
-            setattr(TrackedObj, method_name, call_tracker(method_to_track))
+            setattr(TrackedObj, method_name, calls_tracker(method_to_track))
 
         for method_name in forwarded_methods:
             forwarded_method = getattr(TrackedObj, method_name)
@@ -171,6 +218,7 @@ def consume(gen):
 
 
 class DifferedExecutionTrackableMixin(TrackableMixin):
+
     def __enter__(self):
         self.tracked_self = track_method_calls(self, ...)
         # return self.tracked_self
