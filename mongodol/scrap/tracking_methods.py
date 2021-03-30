@@ -212,20 +212,14 @@ def consume(gen):
         pass
 
 
-class BulkWritesMixin(TrackableMixin):
-
-    def execute_and_clear_tracks(self):
-        return_values = list(self.execute_tracks_and_yield_results())
-        self.clear_tracks()
-        return return_values
-
-    def execute_tracks_and_yield_results(self):
-        for func, args, kwargs in self._tracks:
-            yield func(self, *args, **kwargs)
+class MongoBulkWritesMixin(TrackableMixin):
+    """Used to accumulate write operations and execute them in bulk, efficiently"""
+    def execute_tracks(self):
+        raise NotImplementedError("Need to implement this using mongo bulk_write")
 
 
 with_bulk_writes = partial(
     track_method_calls,
-    tracking_mixin=BulkWritesMixin,
+    tracking_mixin=MongoBulkWritesMixin,
     calls_tracker=track_calls_without_executing
 )
