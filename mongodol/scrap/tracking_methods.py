@@ -38,11 +38,28 @@ def forward_method_calls(method):
 
 
 class TrackableMixin:
+    """Mixin that provides a container for method call tracking, execution,
+    and a context manager that will execute tracks and empty them.
+
+    TrackableMixin is used as the default tracking_mixin in track_method_calls.
+
+    It uses list as the collection for tracks, and implements a basic execute_tracks
+    (which loops through tracks, executes them, and accumulates results in a list which it returns).
+
+    TrackableMixin is meant to be subclassed and execute_tracks overwritten by a custom handler.
+    """
     tracks_factory = list
 
     @cached_property
     def _tracks(self):
         return self.tracks_factory()
+
+    def execute_tracks(self):
+        def gen():
+            for func, args, kwargs in self._tracks:
+                yield func(self, *args, **kwargs)
+
+        return list(gen())
 
     def __enter__(self):  # TODO: Should we clear tracks on entry?
         return self
@@ -55,20 +72,8 @@ class TrackableMixin:
         self.clear_tracks()
         return call_results
 
-    def execute_tracks(self):
-        def gen():
-            for func, args, kwargs in self._tracks:
-                yield func(self, *args, **kwargs)
-
-        return list(gen())
-
     def clear_tracks(self):
         self._tracks.clear()
-
-    # def _execute_and_clear_tracks(self):
-    #     for func, args, kwargs in self._tracks:
-    #         func(self, *args, **kwargs)
-    #     self._clear_tracks()
 
 
 @double_up_as_factory
@@ -77,7 +82,7 @@ def track_method_calls(obj=None,
                        tracked_methods: Iterable[str] = frozenset(),
                        tracking_mixin: type = TrackableMixin,
                        calls_tracker: Callable = track_calls_of_method,
-                       forwarded_methods: Iterable[str] = frozenset()
+                       # forwarded_methods: Iterable[str] = frozenset()
                        ):
     """Wrapping objects (classes or instances) so that specific method calls are tracked 
     (i.e. a list of (method_func, args, kwargs) is maintained) 
@@ -153,25 +158,15 @@ def track_method_calls(obj=None,
     """
     if isinstance(tracked_methods, str):
         tracked_methods = {tracked_methods}
-    if isinstance(forwarded_methods, str):
-        forwarded_methods = {forwarded_methods}
 
     # TODO: Include this logic in a wrap_first_arg_if_not_a_type decorator instead.
     if isinstance(obj, type):
-
-        tracked_and_forwarded = set(forwarded_methods).intersection(tracked_methods)
-        assert not tracked_and_forwarded, f"tracked_methods and forwarded_methods intersected on some method names: {', '.join(tracked_and_forwarded)}"
-
         class TrackedObj(tracking_mixin, obj):
             pass
 
         for method_name in tracked_methods:
             method_to_track = getattr(TrackedObj, method_name)
             setattr(TrackedObj, method_name, calls_tracker(method_to_track))
-
-        for method_name in forwarded_methods:
-            forwarded_method = getattr(TrackedObj, method_name)
-            setattr(TrackedObj, method_name, forward_method_calls(forwarded_method))
 
         return TrackedObj
 
@@ -185,31 +180,31 @@ def track_method_calls(obj=None,
         """
 
         raise NotImplementedError("Wrapping instances hasn't been implemented yet.")
-        tracked_or_forwarded = set(forwarded_methods).union(tracked_methods)
-
-        #         print(f"instance: {obj=}: {tracked_or_forwarded=}")
-
-        class WrappedInstance:
-            _instance = None
-
-            def __getattr__(self, a):
-                return getattr(self._instance, a)
-
-        WrappedInstance._instance = obj
-
-        for method_name in tracked_or_forwarded:
-            forwarded_method = getattr(obj, method_name)
-            setattr(WrappedInstance, method_name, forward_method_calls(forwarded_method))
-
-        wrapped_cls = track_method_calls(
-            WrappedInstance,
-            tracked_methods=tracked_methods,
-            tracking_mixin=tracking_mixin,
-            execute_call=execute_call,
-            forwarded_methods=forwarded_methods)
-        #         print(wrapped_cls)
-
-        return wrapped_cls()
+        # tracked_or_forwarded = set(forwarded_methods).union(tracked_methods)
+        #
+        # #         print(f"instance: {obj=}: {tracked_or_forwarded=}")
+        #
+        # class WrappedInstance:
+        #     _instance = None
+        #
+        #     def __getattr__(self, a):
+        #         return getattr(self._instance, a)
+        #
+        # WrappedInstance._instance = obj
+        #
+        # for method_name in tracked_or_forwarded:
+        #     forwarded_method = getattr(obj, method_name)
+        #     setattr(WrappedInstance, method_name, forward_method_calls(forwarded_method))
+        #
+        # wrapped_cls = track_method_calls(
+        #     WrappedInstance,
+        #     tracked_methods=tracked_methods,
+        #     tracking_mixin=tracking_mixin,
+        #     execute_call=execute_call,
+        #     forwarded_methods=forwarded_methods)
+        # #         print(wrapped_cls)
+        #
+        # return wrapped_cls()
 
 
 def consume(gen):
@@ -217,17 +212,7 @@ def consume(gen):
         pass
 
 
-class DifferedExecutionTrackableMixin(TrackableMixin):
-
-    def __enter__(self):
-        self.tracked_self = track_method_calls(self, ...)
-        # return self.tracked_self
-        self.execute_call = False
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.execute_call = True
-        return self.execute_and_clear_tracks()
+class BulkWritesMixin(TrackableMixin):
 
     def execute_and_clear_tracks(self):
         return_values = list(self.execute_tracks_and_yield_results())
@@ -239,4 +224,8 @@ class DifferedExecutionTrackableMixin(TrackableMixin):
             yield func(self, *args, **kwargs)
 
 
-differed_track_method_calls = partial(track_method_calls, tracking_mixin=DifferedExecutionTrackableMixin)
+with_bulk_writes = partial(
+    track_method_calls,
+    tracking_mixin=BulkWritesMixin,
+    calls_tracker=track_calls_without_executing
+)
