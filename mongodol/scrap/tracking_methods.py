@@ -54,7 +54,7 @@ class TrackableMixin:
     def _tracks(self):
         return self.tracks_factory()
 
-    def execute_tracks(self):
+    def _execute_tracks(self):
         def gen():
             for func, args, kwargs in self._tracks:
                 yield func(self, *args, **kwargs)
@@ -65,10 +65,11 @@ class TrackableMixin:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        return self.execute_and_clear_tracks()
+        return self.flush()
 
-    def execute_and_clear_tracks(self):
-        call_results = self.execute_tracks()
+    # commit_execution
+    def flush(self):
+        call_results = self._execute_tracks()
         self.clear_tracks()
         return call_results
 
@@ -145,12 +146,13 @@ def track_method_calls(obj=None,
     21
 
     But if you really need/want to, you can perform these operations manually.
+
     >>> assert d._tracks == []  # see that we have no _tracks (these are deleted when we exit the with block
     >>> d['a'] = 42
     >>> assert d['a'] == 21  # verifying that dd['a'] is STILL 21
     >>> assert len(d._tracks) > 0  # but dd._tracks is now non-empty
     >>> assert str(d._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
-    >>> _ = d.execute_and_clear_tracks()
+    >>> _ = d.flush()
     >>> # See that the setitem call was indeed made
     >>> assert d['a'] == 42
     >>> assert len(d._tracks) == 0
@@ -214,8 +216,11 @@ def consume(gen):
 
 class MongoBulkWritesMixin(TrackableMixin):
     """Used to accumulate write operations and execute them in bulk, efficiently"""
-    def execute_tracks(self):
+
+    def _execute_tracks(self):
         raise NotImplementedError("Need to implement this using mongo bulk_write")
+
+    differ_writes = __enter__  # alias for those who think "with obj:" is not explicit enough
 
 
 with_bulk_writes = partial(
@@ -223,3 +228,9 @@ with_bulk_writes = partial(
     tracking_mixin=MongoBulkWritesMixin,
     calls_tracker=track_calls_without_executing
 )
+
+# MyBulkWriteStore = with_bulk_writes(OriginalStore)
+#
+# @with_bulk_writes
+# class MyBulkWriteStore(OriginalStore):
+#     """Specific docs"""
