@@ -207,6 +207,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
             getitem_projection: ProjectionSpec = None,
             **mgc_find_kwargs,
     ):
+        if not isinstance(iter_projection, dict):
+            iter_projection = {k: True for k in iter_projection}
         assert iter_projection is not None, "iter_projection cannot be None"
         super().__init__(
             mgc=mgc,
