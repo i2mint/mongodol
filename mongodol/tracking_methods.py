@@ -89,11 +89,10 @@ def track_method_calls(obj=None,
     (i.e. a list of (method_func, args, kwargs) is maintained) 
     
     :param obj: 
-    :param tracked_methods: 
-    :param execute_call: 
-    :param tracks_factory: 
-    :param forwarded_methods: 
-    :return:
+    :param tracked_methods: Method name or iterable of method names to track
+    :param tracking_mixin: The mixin class to use to inject the _tracks attribute, and other tracking utils (flush...)
+    :param calls_tracker: The method decorator that implements the actual tracking
+    :return: A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking
     
     >>> @track_method_calls(tracked_methods='__setitem__')
     ... class D(dict):
@@ -159,6 +158,8 @@ def track_method_calls(obj=None,
     >>> assert d['a'] == 42
     >>> assert len(d._tracks) == 0
 
+    Here's what's happening behind the scenes:
+
     >>> d['b'] = [3, 4]  # write to 'b'
     >>> assert d['b'] != [3, 4]  # but it's not actually written
     >>> func, args, kwargs = d._tracks[0]  # the tracks now has a (func, args, kwargs) triple
@@ -184,16 +185,14 @@ def track_method_calls(obj=None,
 
     # TODO: Include this logic in a wrap_first_arg_if_not_a_type decorator instead.
     if isinstance(obj, type):
+        @add_tracked_methods(tracked_methods, calls_tracker)
         class TrackedObj(tracking_mixin, obj):
             pass
-
-        for method_name in tracked_methods:
-            method_to_track = getattr(TrackedObj, method_name)
-            setattr(TrackedObj, method_name, calls_tracker(method_to_track))
 
         return TrackedObj
 
     else:  # obj is NOT a type, so wrap it in one
+        @add_tracked_methods(tracked_methods, calls_tracker)
         class TrackedObj(tracking_mixin, LocalProxy):
             def __init__(
                     self,
@@ -208,11 +207,25 @@ def track_method_calls(obj=None,
             def __dir__(self):
                 return list(set(dir(self.__local)).union(dir(tracking_mixin)))
 
-        for method_name in tracked_methods:
-            method_to_track = getattr(TrackedObj, method_name)
-            setattr(TrackedObj, method_name, calls_tracker(method_to_track))
-
         return TrackedObj(obj)
+
+
+def add_tracked_methods(tracked_methods: Iterable[str] = frozenset(), calls_tracker: Callable = track_calls_of_method):
+    """Factory of decorators to add method call tracking to a class
+
+    :param tracked_methods: Method name or iterable of method names to track
+    :param tracking_mixin: The mixin class to use to inject the _tracks attribute, and other tracking utils (flush...)
+    :param calls_tracker: The method decorator that implements the actual tracking
+    """
+
+    def _add_tracked_methods(cls):
+        assert hasattr(cls, '_tracks')
+        for method_name in tracked_methods:
+            method_to_track = getattr(cls, method_name)
+            setattr(cls, method_name, calls_tracker(method_to_track))
+        return cls
+
+    return _add_tracked_methods
 
 
 def consume(gen):
