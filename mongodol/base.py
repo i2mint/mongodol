@@ -235,9 +235,15 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     @cached_property
     def _items_projection(self):
+        iter_projection = self._iter_projection
+        getitem_projection = self._getitem_projection
+        if iter_projection is None or getitem_projection is None:
+            return None
+        if not isinstance(self._iter_projection, Mapping):
+            iter_projection = {k: True for k in iter_projection}
         return projection_union(
-            self._iter_projection,
-            self._getitem_projection,
+            iter_projection,
+            getitem_projection,
             already_flattened=self._projections_are_flattened,
         )
 
