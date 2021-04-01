@@ -3,6 +3,7 @@ from inspect import signature
 from typing import Iterable, Callable
 # from py2store.base import cls_wrap
 from py2store.trans import double_up_as_factory
+from mongodol.utils.werk_local import LocalProxy
 
 
 def track_calls_of_method(method: Callable, execute_call=True, tracks_factory=list):
@@ -83,7 +84,6 @@ def track_method_calls(obj=None,
                        tracked_methods: Iterable[str] = frozenset(),
                        tracking_mixin: type = TrackableMixin,
                        calls_tracker: Callable = track_calls_of_method,
-                       # forwarded_methods: Iterable[str] = frozenset()
                        ):
     """Wrapping objects (classes or instances) so that specific method calls are tracked 
     (i.e. a list of (method_func, args, kwargs) is maintained) 
@@ -152,10 +152,31 @@ def track_method_calls(obj=None,
     >>> assert d['a'] == 21  # verifying that dd['a'] is STILL 21
     >>> assert len(d._tracks) > 0  # but dd._tracks is now non-empty
     >>> assert str(d._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
+
+    To execute the command in _tracks, you can use the ``.flush()`` method
     >>> _ = d.flush()
     >>> # See that the setitem call was indeed made
     >>> assert d['a'] == 42
     >>> assert len(d._tracks) == 0
+
+    >>> d['b'] = [3, 4]  # write to 'b'
+    >>> assert d['b'] != [3, 4]  # but it's not actually written
+    >>> func, args, kwargs = d._tracks[0]  # the tracks now has a (func, args, kwargs) triple
+    >>> func(d, *args, **kwargs)  # if we cann that function on the instance (and *args, **kwargs)
+    >>> assert d['b'] == [3, 4]  # Not the write is actually performed and d['b'] becomes [3, 4]
+
+    Above, we were wrapping a class, but you can also wrap an instance!
+
+    >>> d = dict(a=1, b=[1,2], c={'hello': 'world'})
+    >>> dd = track_method_calls(d, tracked_methods='__getitem__')
+    >>> v = dd['a']  # TypeError: __getitem__() takes exactly one argument (2 given)
+    >>> assert v == 1  # you got the value alright!
+    >>> dd._tracks
+    [(proxy __getitem__, ('a',), {})]
+    >>> # It's a weird name for the function, but the function still works:
+    >>> func, args, kwargs = dd._tracks[0]
+    >>> func(dd, *args, **kwargs)
+    1
     
     """
     if isinstance(tracked_methods, str):
@@ -173,40 +194,25 @@ def track_method_calls(obj=None,
         return TrackedObj
 
     else:  # obj is NOT a type, so wrap it in one
-        # TODO: Make it work
-        """
-        >>> d = dict(a=1, b=[1,2], c={'hello': 'world'})
-        >>> dd = track_method_calls(d, tracked_methods='__getitem__')
-        >>> t = dd['a']  # TypeError: __getitem__() takes exactly one argument (2 given)
-        >>> repr(dd)
-        """
+        class TrackedObj(tracking_mixin, LocalProxy):
+            def __init__(
+                    self,
+                    local,
+            ) -> None:
+                object.__setattr__(self, "_TrackedObj__local", local)
+                object.__setattr__(self, "__wrapped__", local)
 
-        raise NotImplementedError("Wrapping instances hasn't been implemented yet.")
-        # tracked_or_forwarded = set(forwarded_methods).union(tracked_methods)
-        #
-        # #         print(f"instance: {obj=}: {tracked_or_forwarded=}")
-        #
-        # class WrappedInstance:
-        #     _instance = None
-        #
-        #     def __getattr__(self, a):
-        #         return getattr(self._instance, a)
-        #
-        # WrappedInstance._instance = obj
-        #
-        # for method_name in tracked_or_forwarded:
-        #     forwarded_method = getattr(obj, method_name)
-        #     setattr(WrappedInstance, method_name, forward_method_calls(forwarded_method))
-        #
-        # wrapped_cls = track_method_calls(
-        #     WrappedInstance,
-        #     tracked_methods=tracked_methods,
-        #     tracking_mixin=tracking_mixin,
-        #     execute_call=execute_call,
-        #     forwarded_methods=forwarded_methods)
-        # #         print(wrapped_cls)
-        #
-        # return wrapped_cls()
+            def _get_current_object(self):
+                return self.__local
+
+            def __dir__(self):
+                return list(set(dir(self.__local)).union(dir(tracking_mixin)))
+
+        for method_name in tracked_methods:
+            method_to_track = getattr(TrackedObj, method_name)
+            setattr(TrackedObj, method_name, calls_tracker(method_to_track))
+
+        return TrackedObj(obj)
 
 
 def consume(gen):
