@@ -220,7 +220,7 @@ class MongoBulkWritesMixin(TrackableMixin):
     def _execute_tracks(self):
         raise NotImplementedError("Need to implement this using mongo bulk_write")
 
-    differ_writes = __enter__  # alias for those who think "with obj:" is not explicit enough
+    differ_writes = TrackableMixin.__enter__  # alias for those who think "with obj:" is not explicit enough
 
 
 with_bulk_writes = partial(
