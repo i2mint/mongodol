@@ -262,12 +262,12 @@ class MongoBulkWritesMixin(TrackableMixin):
                 )
             elif func_name == 'extend':
                 values = _kwargs.get('values')
-                return [(
+                return [
                     pymongo.InsertOne(
                         document=self._build_doc(value)
                     )
                     for value in values
-                )]
+                ]
 
         op_requests = []
         for func, args, kwargs in self._tracks:
@@ -276,17 +276,9 @@ class MongoBulkWritesMixin(TrackableMixin):
                 op_requests.extend(request)
             else:
                 op_requests.append(request)
-        raw_result = self.mgc.bulk_write(
+        return self.mgc.bulk_write(
             requests=op_requests
         )
-        # TODO: Return the raw result and build the result through the "normalize_result" decorator
-        n = (
-            raw_result.inserted_count
-            + raw_result.upserted_count
-            + raw_result.modified_count
-            + raw_result.deleted_count
-        )
-        return dict(n=n, ok=n > 0)
 
     differ_writes = TrackableMixin.__enter__  # alias for those who think "with obj:" is not explicit enough
     commit = TrackableMixin.flush

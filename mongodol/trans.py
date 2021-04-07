@@ -247,8 +247,7 @@ DFLT_METHOD_NAMES_TO_NORMALIZE = (
     "__delitem__",
     "append",
     "extend",
-    "clear",
-    # "flush",
+    "flush", "commit",
 )
 
 
@@ -269,6 +268,8 @@ def normalize_result(
         def result_mapper(*args, **kwargs):
             raw_result = func(*args, **kwargs)
             result: WriteOpResult = {"n": 0}
+            if raw_result is None:
+                return None
             if (
                     isinstance(raw_result, InsertOneResult)
                     and raw_result.inserted_id

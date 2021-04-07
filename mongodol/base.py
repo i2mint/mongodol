@@ -303,6 +303,15 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     unique = distinct
 
+    def aggregate(self, pipeline, **kwargs):
+        _pipeline = pipeline.copy()
+        first_stage = {
+            '$match': self.filter,
+            '$project': self._iter_projection
+        }
+        _pipeline.insert(0, first_stage)
+        return self.mgc.aggregate(_pipeline, **kwargs)
+
 
 class MongoCollectionFieldsReader(MongoCollectionReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
@@ -427,9 +436,6 @@ class MongoCollectionPersister(MongoCollectionReader):
             return self.mgc.insert_many(
                 [self._build_doc(v) for v in values]
             )
-
-    def clear(self):
-        return self.mgc.delete_many(self.filter)
 
     def _build_doc(self, *args):
 
