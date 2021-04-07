@@ -428,6 +428,9 @@ class MongoCollectionPersister(MongoCollectionReader):
                 [self._build_doc(v) for v in values]
             )
 
+    def clear(self):
+        return self.mgc.delete_many(self.filter)
+
     def _build_doc(self, *args):
 
         def merge_doc_elements_with_filter():

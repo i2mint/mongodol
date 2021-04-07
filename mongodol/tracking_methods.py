@@ -1,6 +1,9 @@
 from functools import wraps, partial, cached_property
 from inspect import signature
 from typing import Iterable, Callable
+from i2.signatures import Sig
+
+import pymongo
 # from py2store.base import cls_wrap
 from py2store.trans import double_up_as_factory
 from mongodol.utils.werk_local import LocalProxy
@@ -85,15 +88,15 @@ def track_method_calls(obj=None,
                        tracking_mixin: type = TrackableMixin,
                        calls_tracker: Callable = track_calls_of_method,
                        ):
-    """Wrapping objects (classes or instances) so that specific method calls are tracked 
-    (i.e. a list of (method_func, args, kwargs) is maintained) 
-    
-    :param obj: 
+    """Wrapping objects (classes or instances) so that specific method calls are tracked
+    (i.e. a list of (method_func, args, kwargs) is maintained)
+
+    :param obj:
     :param tracked_methods: Method name or iterable of method names to track
     :param tracking_mixin: The mixin class to use to inject the _tracks attribute, and other tracking utils (flush...)
     :param calls_tracker: The method decorator that implements the actual tracking
     :return: A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking
-    
+
     >>> @track_method_calls(tracked_methods='__setitem__')
     ... class D(dict):
     ...     pass
@@ -178,7 +181,7 @@ def track_method_calls(obj=None,
     >>> func, args, kwargs = dd._tracks[0]
     >>> func(dd, *args, **kwargs)
     1
-    
+
     """
     if isinstance(tracked_methods, str):
         tracked_methods = {tracked_methods}
@@ -237,9 +240,56 @@ class MongoBulkWritesMixin(TrackableMixin):
     """Used to accumulate write operations and execute them in bulk, efficiently"""
 
     def _execute_tracks(self):
-        raise NotImplementedError("Need to implement this using mongo bulk_write")
+        def get_op_request(func, *args, **kwargs):
+            _kwargs = Sig(func).extract_kwargs(None, *args, **kwargs)  # First None value to ignore the 'self' parameter
+            func_name = func.__name__
+            k = _kwargs.get('k', {})
+            v = _kwargs.get('v')
+            if func_name == '__setitem__':
+                k = _kwargs.get('k', {})
+                return pymongo.ReplaceOne(
+                    filter=self._merge_with_filt(k),
+                    replacement=self._build_doc(k, v),
+                    upsert=True
+                )
+            elif func_name == '__delitem__':
+                return pymongo.DeleteOne(
+                    filter=self._merge_with_filt(k)
+                )
+            elif func_name == 'append':
+                return pymongo.InsertOne(
+                    document=self._build_doc(v)
+                )
+            elif func_name == 'extend':
+                values = _kwargs.get('values')
+                return [(
+                    pymongo.InsertOne(
+                        document=self._build_doc(value)
+                    )
+                    for value in values
+                )]
+
+        op_requests = []
+        for func, args, kwargs in self._tracks:
+            request = get_op_request(func, *args, **kwargs)
+            if isinstance(request, Iterable):
+                op_requests.extend(request)
+            else:
+                op_requests.append(request)
+        raw_result = self.mgc.bulk_write(
+            requests=op_requests
+        )
+        # TODO: Return the raw result and build the result through the "normalize_result" decorator
+        n = (
+            raw_result.inserted_count
+            + raw_result.upserted_count
+            + raw_result.modified_count
+            + raw_result.deleted_count
+        )
+        return dict(n=n, ok=n > 0)
 
     differ_writes = TrackableMixin.__enter__  # alias for those who think "with obj:" is not explicit enough
+    commit = TrackableMixin.flush
 
 
 with_bulk_writes = partial(
