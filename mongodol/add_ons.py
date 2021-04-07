@@ -2,11 +2,10 @@
 https://github.com/i2mint/mongodol/issues/3
 """
 from inspect import signature, Parameter
-from functools import partial
-from typing import Callable, Optional
+from typing import Callable
 
-from py2store.trans import store_decorator
 from py2store.util import has_enabled_clear_method
+from py2store.trans import add_store_method
 from mongodol.base import MongoCollectionCollection
 from mongodol.errors import MethodNameAlreadyExists, SetattrNotAllowed
 
@@ -54,36 +53,8 @@ class Addons:
     dflt_clear_method = clear
 
 
-InjectionValidator = Callable[[type, Callable], bool]
-
-
-@store_decorator
-def add_method(
-        store: type,
-        *,
-        method_func,
-        method_name=None,
-        validator: Optional[InjectionValidator] = None
-):
-    """Add methods to store classes or instances
-
-    :param store: A store type or instance
-    :param method_func: The function of the method to be added
-    :param method_name: The name of the store attribute this function should be written to
-    :param validator: An optional validator. If not None, ``validator(store, method_func)`` will be called.
-        If it doesn't return True, a ``SetattrNotAllowed`` will be raised.
-        Note that ``validator`` can also raise its own exception.
-    :return: A store with the added (or modified) method
-    """
-    method_name = method_name or method_func.__name__
-    if validator is not None:
-        if not validator(store, method_func):
-            raise SetattrNotAllowed(f"Method is not allowed to be set (according to {validator}): {method_func}")
-    setattr(store, method_name, method_func)
-    return store
-
-
-def _clear_method_injection_validator(store, method_func):
+# InjectionValidator
+def _clear_method_injection_validator(store: type, method_func: Callable) -> bool:
     if has_enabled_clear_method(store):
         raise SetattrNotAllowed(f"An ENABLED clear method exist's already, so won't set it as {method_func}")
     else:
@@ -134,4 +105,4 @@ def add_clear_method(
 
     """
     """Add a clear method to the store"""
-    return add_method(store, method_func=clear_method, method_name='clear', validator=validator)
+    return add_store_method(store, method_func=clear_method, method_name='clear', validator=validator)
