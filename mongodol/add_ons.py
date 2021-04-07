@@ -1,6 +1,7 @@
 """Add-ons
 https://github.com/i2mint/mongodol/issues/3
 """
+from abc import ABC
 from inspect import signature, Parameter
 from typing import Callable
 
@@ -30,7 +31,9 @@ def has_exactly_one_non_defaulted_input(func):
 #######################################################################################################################
 
 
-class Addons:
+class Addons(ABC):
+    """A collection of add-on methods. Addons can't (and is not meant to) be instantiated.
+    It's just to group add-on functions (meant to be injected in stores) in one place"""
 
     def clear(self: MongoCollectionCollection):
         return self.mgc.delete_many(self.filter)
