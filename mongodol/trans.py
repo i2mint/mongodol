@@ -247,6 +247,8 @@ DFLT_METHOD_NAMES_TO_NORMALIZE = (
     "__delitem__",
     "append",
     "extend",
+    "clear",
+    # "flush",
 )
 
 
