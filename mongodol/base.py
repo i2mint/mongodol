@@ -305,11 +305,9 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def aggregate(self, pipeline, **kwargs):
         _pipeline = pipeline.copy()
-        first_stage = {
-            '$match': self.filter,
-            '$project': self._iter_projection
-        }
-        _pipeline.insert(0, first_stage)
+        _pipeline.insert(0, {
+            '$match': self.filter
+        })
         return self.mgc.aggregate(_pipeline, **kwargs)
 
 
