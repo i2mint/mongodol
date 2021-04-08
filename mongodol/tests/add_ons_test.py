@@ -1,4 +1,4 @@
-from py2store.util import has_enabled_clear_method
+from dol.util import has_enabled_clear_method
 
 from mongodol import MongoCollectionPersister
 from mongodol.stores import MongoStore

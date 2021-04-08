@@ -2,6 +2,7 @@
 Remember to test FEATURES, not OBJECTS!!
 
 """
+from mongodol.constants import DFLT_TEST_DB
 from mongodol.base import ID, MongoCollectionCollection, MongoCollectionReader
 from mongodol.tests.util import (
     clear_all_and_populate,
@@ -87,7 +88,7 @@ def test_mongo_collection_reader_without_test_data_dependencies(
 
     from pymongo import MongoClient
 
-    s = collection_kvreader_cls(MongoClient()["py2store"]["test"])
+    s = collection_kvreader_cls(MongoClient()[DFLT_TEST_DB]["test"])
     list_of_keys = list(s)
     fake_key = {"_id": "this key does not exist"}
     assert fake_key not in s

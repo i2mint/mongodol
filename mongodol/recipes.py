@@ -1,6 +1,6 @@
 from functools import partial
-from py2store import wrap_kvs
-from py2store.trans import wrap_kvs, store_decorator
+from dol import wrap_kvs
+from dol.trans import wrap_kvs, store_decorator
 
 
 class WriteNotAllowedToThatKey(KeyError):

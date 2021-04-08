@@ -9,12 +9,12 @@ def test_mongo_values_view_when_wrapping():
 
     assert type(s.values()).__name__ == 'MongoValuesView'
 
-    from py2store import wrap_kvs
+    from dol import wrap_kvs
 
     ss = wrap_kvs(s)
     assert type(ss.values()).__name__ == 'MongoValuesView'
 
-    from py2store import wrap_kvs
+    from dol import wrap_kvs
 
     ss = wrap_kvs(s)
     ss.values()

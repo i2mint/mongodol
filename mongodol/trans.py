@@ -12,7 +12,7 @@ from pymongo.results import (
     UpdateResult,
 )
 
-from py2store.trans import (
+from dol.trans import (
     condition_function_call,
     double_up_as_factory,
     store_decorator,

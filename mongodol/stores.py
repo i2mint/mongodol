@@ -1,10 +1,10 @@
 from functools import wraps, partial
 from typing import Collection, Mapping
 
-from py2store import Store, wrap_kvs
-from py2store.util import lazyprop
-from py2store.trans import condition_function_call, double_up_as_factory
+from dol import Store, wrap_kvs
+from dol.util import lazyprop
 
+from mongodol.constants import DFLT_TEST_DB
 from mongodol.base import MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData, normalize_result
 
@@ -137,7 +137,7 @@ class MongoTupleKeyStore(MongoStore):
     """
     MongoStore using tuple keys.
 
-    >>> s = MongoTupleKeyStore(db_name='py2store_tests', collection_name='tmp', key_fields=('_id', 'user'))
+    >>> s = MongoTupleKeyStore(db_name=DFLT_TEST_DB, collection_name='tmp', key_fields=('_id', 'user'))
     >>> _ = s._mgc.remove({})
     >>> k = (1234, 'user')
     >>> v = {'name': 'bob', 'age': 42}
@@ -175,7 +175,7 @@ class MongoAnyKeyStore(MongoStore):
     """
     MongoStore using tuple keys.
 
-    >>> s = MongoAnyKeyStore(db_name='py2store_tests', collection_name='tmp', )
+    >>> s = MongoAnyKeyStore(db_name=DFLT_TEST_DB, collection_name='tmp', )
     >>> for k in s: del s[k]
     >>> s['foo'] = {'must': 'be', 'a': 'dict'}
     >>> s['foo']

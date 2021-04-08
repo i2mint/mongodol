@@ -137,7 +137,7 @@ def normalize_projection(projection: Union[Iterable, None]):
             projection = None
         projection = dict({field: True for field in projection})
         if (
-            ID not in projection
+                ID not in projection
         ):  # if the projection doesn't contain the ID, we need to explicitly say this...
             projection.update(
                 **{ID: False}
@@ -147,9 +147,9 @@ def normalize_projection(projection: Union[Iterable, None]):
 
 
 def projection_union(
-    projection_1: ProjectionDict,
-    projection_2: ProjectionDict,
-    already_flattened=False,
+        projection_1: ProjectionDict,
+        projection_2: ProjectionDict,
+        already_flattened=False,
 ):
     """
 
@@ -176,7 +176,7 @@ def get_mongo_collection_pymongo_obj(obj=None):
     """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
 
     ```
-    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection (py2store/test)
+    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection ({DFLT_TEST_DB}/test)
     get_mongo_collection_pymongo_obj('database_name/collection_name')  # does the obvious (with default host)
     get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute
     get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it

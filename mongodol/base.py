@@ -5,10 +5,10 @@ from collections import ChainMap
 
 from pymongo import MongoClient
 
-from py2store import KvReader
-from py2store import Collection as DolCollection
+from dol import KvReader
+from dol import Collection as DolCollection
 
-from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor
+from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor, DFLT_TEST_DB
 from mongodol.util import (
     ProjectionSpec,
     normalize_projection,
@@ -276,7 +276,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     @classmethod
     def from_params(
             cls,
-            db_name: str = "py2store",
+            db_name: str = DFLT_TEST_DB,
             collection_name: str = "test",
             mongo_client: Optional[dict] = None,
             filter: Optional[dict] = None,
@@ -489,7 +489,7 @@ class MongoClientReader(KvReader):
 class MongoDbReader(KvReader):
     def __init__(
             self,
-            db_name="py2store",
+            db_name=DFLT_TEST_DB,
             mk_collection_store=MongoCollectionReader,
             mongo_client=None,
             **mongo_client_kwargs,

@@ -4,8 +4,8 @@ from typing import Iterable, Callable
 from i2.signatures import Sig
 
 import pymongo
-# from py2store.base import cls_wrap
-from py2store.trans import double_up_as_factory
+# from dol.base import cls_wrap
+from dol.trans import double_up_as_factory
 from mongodol.utils.werk_local import LocalProxy
 
 

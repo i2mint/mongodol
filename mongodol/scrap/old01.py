@@ -1,11 +1,11 @@
 from collections.abc import KeysView, ValuesView, ItemsView
 from typing import Mapping, Optional, Union, Iterable
 
-from py2store import Collection as DolCollection, KvPersister
-from py2store import KvReader
+from dol import Collection as DolCollection, KvPersister
+from dol import KvReader
 from pymongo import MongoClient
 
-from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor
+from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor, DFLT_TEST_DB
 from mongodol.util import get_mongo_collection_pymongo_obj
 
 
@@ -14,7 +14,7 @@ class MongoCollectionReader(KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
     >>> from mongodol import MongoCollectionReader
     >>> from pymongo import MongoClient
-    >>> s = MongoCollectionReader(MongoClient()['py2store']['test'])
+    >>> s = MongoCollectionReader(MongoClient()[DFLT_TEST_DB]['test'])
     >>> list_of_keys = list(s)
     >>> fake_key = {'_id': 'this key does not exist'}
     >>> fake_key in s
@@ -98,7 +98,7 @@ class MongoCollectionReader(KvReader):
     @classmethod
     def from_params(
         cls,
-        db_name: str = "py2store",
+        db_name: str = DFLT_TEST_DB,
         collection_name: str = "test",
         key_fields: Iterable = (ID,),
         data_fields: Optional[Iterable] = None,
@@ -190,7 +190,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     """A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.
 
     # >>> from pymongo import MongoClient
-    # >>> mongo_collection_obj = MongoClient()['py2store']['test']
+    # >>> mongo_collection_obj = MongoClient()[DFLT_TEST_DB]['test']
     # >>> s = MongoCollectionPersister(mongo_collection_obj)
     # >>> for k in s:  # deleting all docs in default collection
     # ...     del s[k]
@@ -226,7 +226,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     #
     # >>>
     # >>> # Making a persister whose keys are 2-dimensional and values are 3-dimensional
-    # >>> s = MongoCollectionPersister.from_params(db_name='py2store', collection_name='tmp',
+    # >>> s = MongoCollectionPersister.from_params(db_name=DFLT_TEST_DB, collection_name='tmp',
     # ...                     key_fields=('first', 'last'), data_fields=('yob', 'proj', 'bdfl'))
     # >>> for _id in s:  # deleting all docs in tmp
     # ...     del s[_id]
@@ -311,7 +311,7 @@ class OldMongoPersister(KvPersister):
     0
     >>>
     >>> # Making a persister whose keys are 2-dimensional and values are 3-dimensional
-    >>> s = OldMongoPersister(db_name='py2store', collection_name='tmp',
+    >>> s = OldMongoPersister(db_name=DFLT_TEST_DB, collection_name='tmp',
     ...                     key_fields=('first', 'last'), data_fields=('yob', 'proj', 'bdfl'))
     >>> for _id in s:  # deleting all docs in tmp
     ...     del s[_id]
@@ -327,7 +327,7 @@ class OldMongoPersister(KvPersister):
 
     def __init__(
         self,
-        db_name="py2store",
+        db_name=DFLT_TEST_DB,
         collection_name="test",
         key_fields=(ID,),
         data_fields=None,
@@ -384,7 +384,7 @@ class OldMongoPersister(KvPersister):
 class OldMongoInsertPersister(OldMongoPersister):
     def __init__(
         self,
-        db_name="py2store",
+        db_name=DFLT_TEST_DB,
         collection_name="test",
         data_fields=None,
         mongo_client_kwargs=None,

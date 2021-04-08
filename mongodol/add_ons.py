@@ -5,8 +5,8 @@ from abc import ABC
 from inspect import signature, Parameter
 from typing import Callable
 
-from py2store.util import has_enabled_clear_method
-from py2store.trans import add_store_method
+from dol.util import has_enabled_clear_method
+from dol.trans import add_store_method
 from mongodol.base import MongoCollectionCollection
 from mongodol.errors import MethodNameAlreadyExists, SetattrNotAllowed
 
@@ -76,7 +76,7 @@ def add_clear_method(
     :param clear_method:
     :return:
 
-    >>> from py2store.util import has_enabled_clear_method
+    >>> from dol.util import has_enabled_clear_method
     >>> from mongodol.base import MongoCollectionPersister
     >>> from mongodol.tests import data, populated_pymongo_collection
     >>>
