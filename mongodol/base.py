@@ -401,6 +401,23 @@ class MongoCollectionPersister(MongoCollectionReader):
 
     """
 
+    def __init__(
+            self,
+            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+            filter: Optional[dict] = None,
+            on_write_filter: Optional[dict] = None,
+            iter_projection: ProjectionSpec = (ID,),
+            getitem_projection: ProjectionSpec = None,
+            **mgc_find_kwargs,
+    ):
+        super().__init__(
+            mgc=mgc,
+            filter=filter,
+            iter_projection=iter_projection,
+            **mgc_find_kwargs,
+        )
+        self._on_write_filter = on_write_filter
+
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(
             v, Mapping
@@ -438,7 +455,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     def _build_doc(self, *args):
 
         def merge_doc_elements_with_filter():
-            d = self.filter
+            d = self._on_write_filter or self.filter
             for v in args:
                 if v is None:
                     v = {}
