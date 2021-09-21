@@ -4,6 +4,7 @@ from typing import Iterable, Callable
 from i2.signatures import Sig
 
 import pymongo
+
 # from dol.base import cls_wrap
 from dol.trans import double_up_as_factory
 from mongodol.utils.werk_local import LocalProxy
@@ -52,6 +53,7 @@ class TrackableMixin:
 
     TrackableMixin is meant to be subclassed and execute_tracks overwritten by a custom handler.
     """
+
     tracks_factory = list
 
     @cached_property
@@ -82,12 +84,13 @@ class TrackableMixin:
 
 
 @double_up_as_factory
-def track_method_calls(obj=None,
-                       *,
-                       tracked_methods: Iterable[str] = frozenset(),
-                       tracking_mixin: type = TrackableMixin,
-                       calls_tracker: Callable = track_calls_of_method,
-                       ):
+def track_method_calls(
+    obj=None,
+    *,
+    tracked_methods: Iterable[str] = frozenset(),
+    tracking_mixin: type = TrackableMixin,
+    calls_tracker: Callable = track_calls_of_method,
+):
     """Wrapping objects (classes or instances) so that specific method calls are tracked
     (i.e. a list of (method_func, args, kwargs) is maintained)
 
@@ -188,6 +191,7 @@ def track_method_calls(obj=None,
 
     # TODO: Include this logic in a wrap_first_arg_if_not_a_type decorator instead.
     if isinstance(obj, type):
+
         @add_tracked_methods(tracked_methods, calls_tracker)
         class TrackedObj(tracking_mixin, obj):
             pass
@@ -195,14 +199,12 @@ def track_method_calls(obj=None,
         return TrackedObj
 
     else:  # obj is NOT a type, so wrap it in one
+
         @add_tracked_methods(tracked_methods, calls_tracker)
         class TrackedObj(tracking_mixin, LocalProxy):
-            def __init__(
-                    self,
-                    local,
-            ) -> None:
-                object.__setattr__(self, "_TrackedObj__local", local)
-                object.__setattr__(self, "__wrapped__", local)
+            def __init__(self, local,) -> None:
+                object.__setattr__(self, '_TrackedObj__local', local)
+                object.__setattr__(self, '__wrapped__', local)
 
             def _get_current_object(self):
                 return self.__local
@@ -213,7 +215,10 @@ def track_method_calls(obj=None,
         return TrackedObj(obj)
 
 
-def add_tracked_methods(tracked_methods: Iterable[str] = frozenset(), calls_tracker: Callable = track_calls_of_method):
+def add_tracked_methods(
+    tracked_methods: Iterable[str] = frozenset(),
+    calls_tracker: Callable = track_calls_of_method,
+):
     """Factory of decorators to add method call tracking to a class
 
     :param tracked_methods: Method name or iterable of method names to track
@@ -241,7 +246,9 @@ class MongoBulkWritesMixin(TrackableMixin):
 
     def _execute_tracks(self):
         def get_op_request(func, *args, **kwargs):
-            _kwargs = Sig(func).extract_kwargs(None, *args, **kwargs)  # First None value to ignore the 'self' parameter
+            _kwargs = Sig(func).extract_kwargs(
+                None, *args, **kwargs
+            )  # First None value to ignore the 'self' parameter
             func_name = func.__name__
             k = _kwargs.get('k', {})
             v = _kwargs.get('v')
@@ -250,22 +257,16 @@ class MongoBulkWritesMixin(TrackableMixin):
                 return pymongo.ReplaceOne(
                     filter=self._merge_with_filt(k),
                     replacement=self._build_doc(k, v),
-                    upsert=True
+                    upsert=True,
                 )
             elif func_name == '__delitem__':
-                return pymongo.DeleteOne(
-                    filter=self._merge_with_filt(k)
-                )
+                return pymongo.DeleteOne(filter=self._merge_with_filt(k))
             elif func_name == 'append':
-                return pymongo.InsertOne(
-                    document=self._build_doc(v)
-                )
+                return pymongo.InsertOne(document=self._build_doc(v))
             elif func_name == 'extend':
                 values = _kwargs.get('values')
                 return [
-                    pymongo.InsertOne(
-                        document=self._build_doc(value)
-                    )
+                    pymongo.InsertOne(document=self._build_doc(value))
                     for value in values
                 ]
 
@@ -276,18 +277,18 @@ class MongoBulkWritesMixin(TrackableMixin):
                 op_requests.extend(request)
             else:
                 op_requests.append(request)
-        return self.mgc.bulk_write(
-            requests=op_requests
-        )
+        return self.mgc.bulk_write(requests=op_requests)
 
-    differ_writes = TrackableMixin.__enter__  # alias for those who think "with obj:" is not explicit enough
+    differ_writes = (
+        TrackableMixin.__enter__
+    )  # alias for those who think "with obj:" is not explicit enough
     commit = TrackableMixin.flush
 
 
 with_bulk_writes = partial(
     track_method_calls,
     tracking_mixin=MongoBulkWritesMixin,
-    calls_tracker=track_calls_without_executing
+    calls_tracker=track_calls_without_executing,
 )
 
 # MyBulkWriteStore = with_bulk_writes(OriginalStore)

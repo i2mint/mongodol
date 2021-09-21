@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mongodol.util &#8212; mongodol 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for mongodol.util</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">or_</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
+
+<span class="kn">from</span> <span class="nn">pymongo.collection</span> <span class="kn">import</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">PyMongoCollection</span>
+<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+
+<span class="kn">from</span> <span class="nn">linkup</span> <span class="kn">import</span> <span class="n">key_aligned_val_op_with_forced_defaults</span>
+
+<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ID</span><span class="p">,</span>
+    <span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
+    <span class="n">DFLT_TEST_DB</span><span class="p">,</span>
+    <span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">mk_dflt_mgc</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">MongoClient</span><span class="p">(</span><span class="o">*</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">)[</span><span class="n">DFLT_TEST_DB</span><span class="p">][</span><span class="n">DFLT_TEST_COLLECTION</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="KeyNotUniqueError"><a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.KeyNotUniqueError">[docs]</a><span class="k">class</span> <span class="nc">KeyNotUniqueError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when a key was expected to be unique, but wasn&#39;t (i.e. cursor has more than one match)&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">raise_error</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">KeyNotUniqueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;Key was not unique (i.e. cursor has more than one match): </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="p">)</span></div>
+
+
+<span class="n">ProjectionDict</span> <span class="o">=</span> <span class="nb">dict</span>  <span class="c1"># TODO: Specify that keys are strings and values are boolean</span>
+<span class="n">ProjectionSpec</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_key_value_specs</span><span class="p">(</span><span class="n">key_fields</span><span class="p">,</span> <span class="n">data_fields</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key_fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">key_fields</span> <span class="o">=</span> <span class="p">(</span><span class="n">key_fields</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">data_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">key_projection</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">}</span>
+    <span class="k">if</span> <span class="s1">&#39;_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">:</span>
+        <span class="n">key_projection</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">_id</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>  <span class="c1"># need to explicitly specify this since mongo includes _id by dflt</span>
+    <span class="k">if</span> <span class="n">data_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data_fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">}</span>
+        <span class="n">items_projection</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">data_fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="p">}</span>
+        <span class="k">if</span> <span class="s1">&#39;_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="p">:</span>
+            <span class="n">data_fields</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">items_projection</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span>
+            <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">key_projection</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="n">key_fields</span><span class="p">,</span> <span class="n">data_fields</span><span class="p">,</span> <span class="n">key_projection</span><span class="p">,</span> <span class="n">items_projection</span>
+
+
+<div class="viewcode-block" id="flatten_dict_items"><a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.flatten_dict_items">[docs]</a><span class="k">def</span> <span class="nf">flatten_dict_items</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a &quot;flat&quot; dict from a nested one. A flat dict&#39;s keys are the dot-paths of the input dict.</span>
+
+<span class="sd">    :param d: a nested dict</span>
+<span class="sd">    :param prefix: A string to prepend on all the paths</span>
+<span class="sd">    :return: A flat dict</span>
+
+<span class="sd">    &gt;&gt;&gt; d = {&#39;a&#39;: {</span>
+<span class="sd">    ...         &#39;a&#39;: &#39;2a&#39;,</span>
+<span class="sd">    ...         &#39;c&#39;: {&#39;a&#39;: &#39;aca&#39;, &#39;u&#39;: 4}</span>
+<span class="sd">    ...         },</span>
+<span class="sd">    ...      &#39;c&#39;: 3</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    &gt;&gt;&gt; dict(flatten_dict_items(d))</span>
+<span class="sd">    {&#39;a.a&#39;: &#39;2a&#39;, &#39;a.c.a&#39;: &#39;aca&#39;, &#39;a.c.u&#39;: 4, &#39;c&#39;: 3}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span></div>
+
+
+<span class="n">merge_projection_dicts</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+    <span class="n">key_aligned_val_op_with_forced_defaults</span><span class="p">,</span>
+    <span class="n">op</span><span class="o">=</span><span class="n">or_</span><span class="p">,</span>
+    <span class="n">dflt_val_for_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dflt_val_for_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="normalize_projection"><a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.normalize_projection">[docs]</a><span class="k">def</span> <span class="nf">normalize_projection</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,...</span>
+<span class="sd">    (or None if projection is None to start with).</span>
+
+<span class="sd">    This is used to be able to have a consistent specification of mongo projections.</span>
+
+<span class="sd">    If projection is None, the output will None as well:</span>
+
+<span class="sd">    &gt;&gt;&gt; assert normalize_projection(None) is None</span>
+
+<span class="sd">    If projection is a dict, the dict will be &quot;flattened&quot; to use &quot;dot-paths&quot; instead of nested dicts:</span>
+
+<span class="sd">    &gt;&gt;&gt; normalize_projection({&#39;name&#39;: {&#39;first&#39;: True, &#39;last&#39;: False}, &#39;age&#39;: True})</span>
+<span class="sd">    {&#39;name.first&#39;: True, &#39;name.last&#39;: False, &#39;age&#39;: True}</span>
+
+
+<span class="sd">    If projection is not a dict, it will make the &quot;equivalent&quot; dict version of the projection.</span>
+<span class="sd">    One difference with mongodb&#39;s projection language: Here, if you don&#39;t specify that you want &quot;_id&quot;,</span>
+<span class="sd">    it will explicitly specify that you DO NOT want that field (because mongodb will otherwise assume that you do!)</span>
+
+<span class="sd">    &gt;&gt;&gt; normalize_projection([&#39;name.first&#39;, &#39;age&#39;])</span>
+<span class="sd">    {&#39;name.first&#39;: True, &#39;age&#39;: True, &#39;_id&#39;: False}</span>
+
+<span class="sd">    But if you actually want that &quot;_id&quot;, just say so:</span>
+
+<span class="sd">    &gt;&gt;&gt; normalize_projection([&#39;name.first&#39;, &#39;age&#39;, &#39;_id&#39;])</span>
+<span class="sd">    {&#39;name.first&#39;: True, &#39;age&#39;: True, &#39;_id&#39;: True}</span>
+
+<span class="sd">    Also, if you specify a string, it will think of this as a tuple containing just that string:</span>
+
+<span class="sd">    &gt;&gt;&gt; normalize_projection(&#39;name.last&#39;)</span>
+<span class="sd">    {&#39;name.last&#39;: True, &#39;_id&#39;: False}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="p">(</span><span class="n">projection</span><span class="p">,)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">projection</span>  <span class="c1"># it&#39;s probably the empty projection</span>
+        <span class="k">elif</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">projection</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span><span class="n">field</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">projection</span><span class="p">})</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">ID</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">projection</span>
+        <span class="p">):</span>  <span class="c1"># if the projection doesn&#39;t contain the ID, we need to explicitly say this...</span>
+            <span class="n">projection</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+            <span class="p">)</span>  <span class="c1"># ... or mongo will resolve this to {ID: True}</span>
+
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">projection</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="projection_union"><a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.projection_union">[docs]</a><span class="k">def</span> <span class="nf">projection_union</span><span class="p">(</span>
+    <span class="n">projection_1</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">projection_2</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">already_flattened</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &gt;&gt;&gt; d = {&#39;a&#39;: {</span>
+<span class="sd">    ...         &#39;a&#39;: True,</span>
+<span class="sd">    ...         &#39;c&#39;: {&#39;a&#39;: True, &#39;u&#39;: True}</span>
+<span class="sd">    ...         },</span>
+<span class="sd">    ...      &#39;b&#39;: True,</span>
+<span class="sd">    ...      &#39;c&#39;: False</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    &gt;&gt;&gt; dd = {&#39;b&#39;: True, &#39;c&#39;: True, &#39;x&#39;: True, &#39;y&#39;: False}</span>
+<span class="sd">    &gt;&gt;&gt; assert projection_union(d, dd) == (</span>
+<span class="sd">    ...     {&#39;a.a&#39;: True, &#39;a.c.a&#39;: True, &#39;a.c.u&#39;: True, &#39;b&#39;: True, &#39;c&#39;: True, &#39;x&#39;: True, &#39;y&#39;: True}</span>
+<span class="sd">    ... )</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">already_flattened</span><span class="p">:</span>
+        <span class="n">projection_1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">projection_1</span><span class="p">))</span>
+        <span class="n">projection_2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">projection_2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">merge_projection_dicts</span><span class="p">(</span><span class="n">projection_1</span><span class="p">,</span> <span class="n">projection_2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_mongo_collection_pymongo_obj"><a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.get_mongo_collection_pymongo_obj">[docs]</a><span class="k">def</span> <span class="nf">get_mongo_collection_pymongo_obj</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a pymongo.collection.Collection object for a mongo collection, flexibly.</span>
+
+<span class="sd">    ```</span>
+<span class="sd">    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection ({DFLT_TEST_DB}/test)</span>
+<span class="sd">    get_mongo_collection_pymongo_obj(&#39;database_name/collection_name&#39;)  # does the obvious (with default host)</span>
+<span class="sd">    get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute</span>
+<span class="sd">    get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it</span>
+<span class="sd">    ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;mongodb://&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;No support (yet) for URI access. &#39;</span>
+                <span class="s1">&#39;If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html&#39;</span>
+            <span class="p">)</span>
+        <span class="n">database_name</span><span class="p">,</span> <span class="n">collection_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PyMongoCollection</span><span class="p">()[</span><span class="n">database_name</span><span class="p">][</span><span class="n">collection_name</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_mgc&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_mgc</span><span class="p">,</span> <span class="n">PyMongoCollection</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_mgc</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyMongoCollection</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown pymongo collection specification: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">mongodol</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NO COPYRIGHT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

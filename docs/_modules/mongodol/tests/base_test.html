@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mongodol.tests.base_test &#8212; mongodol 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for mongodol.tests.base_test</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Remember to test FEATURES, not OBJECTS!!</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="n">DFLT_TEST_DB</span>
+<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">MongoCollectionCollection</span><span class="p">,</span> <span class="n">MongoCollectionReader</span>
+<span class="kn">from</span> <span class="nn">mongodol.tests.util</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">clear_all_and_populate</span><span class="p">,</span>
+    <span class="n">get_test_collection_persister</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">mongodol.tests.data</span> <span class="kn">import</span> <span class="n">feature_cube</span>
+
+
+<span class="k">def</span> <span class="nf">test_mongo_collection_collection</span><span class="p">(</span>
+    <span class="n">mongo_collection_collection_cls</span><span class="o">=</span><span class="n">MongoCollectionCollection</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">persister</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
+    <span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">feature_cube</span><span class="p">,</span> <span class="n">persister</span><span class="p">)</span>
+
+    <span class="n">mgc</span> <span class="o">=</span> <span class="n">persister</span><span class="o">.</span><span class="n">mgc</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_collection_collection_cls</span><span class="p">(</span><span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span>
+        <span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Test filter</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_collection_collection_cls</span><span class="p">(</span><span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> <span class="o">==</span> <span class="p">{</span>
+        <span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">assert</span> <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}</span> <span class="ow">in</span> <span class="n">s</span>
+    <span class="k">assert</span> <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},}</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span>
+    <span class="k">assert</span> <span class="p">{</span><span class="s1">&#39;this&#39;</span><span class="p">:</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;complete&#39;</span><span class="p">:</span> <span class="s1">&#39;nonsense&#39;</span><span class="p">}</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span>
+
+    <span class="c1"># Test the __repr__/__str__</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="o">==</span> <span class="s2">&quot;MongoCollectionCollection(mgc=&lt;mongodol/mongodol_test&gt;, filter={&#39;color&#39;: &#39;blue&#39;}, iter_projection=None)&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Test skip and limit</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_collection_collection_cls</span><span class="p">(</span><span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> <span class="o">==</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span>
+
+
+<div class="viewcode-block" id="test_mongo_collection_reader_without_test_data_dependencies"><a class="viewcode-back" href="../../../module_docs/mongodol/tests/base_test.html#mongodol.tests.base_test.test_mongo_collection_reader_without_test_data_dependencies">[docs]</a><span class="k">def</span> <span class="nf">test_mongo_collection_reader_without_test_data_dependencies</span><span class="p">(</span>
+    <span class="n">collection_kvreader_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tests reader functionality that doesn&#39;t need specific data to be injected in the data base.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">collection_kvreader_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">mongodol</span> <span class="kn">import</span> <span class="n">MongoCollectionReader</span> <span class="k">as</span> <span class="n">collection_kvreader_cls</span>
+
+    <span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">collection_kvreader_cls</span><span class="p">(</span><span class="n">MongoClient</span><span class="p">()[</span><span class="n">DFLT_TEST_DB</span><span class="p">][</span><span class="s1">&#39;test&#39;</span><span class="p">])</span>
+    <span class="n">list_of_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">fake_key</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;this key does not exist&#39;</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">fake_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span>
+
+    <span class="c1"># ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances</span>
+    <span class="c1"># (specialized for mongo).</span>
+    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">KeysView</span>
+    <span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">MongoValuesView</span><span class="p">,</span> <span class="n">MongoItemsView</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">KeysView</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">MongoValuesView</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">MongoItemsView</span><span class="p">)</span>
+
+    <span class="c1"># Recall that ``collections.abc.MappingViews`` have many set-like functionalities:</span>
+
+    <span class="k">assert</span> <span class="n">fake_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="n">a_list_of_fake_keys</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;fake_key&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;yet_another&#39;</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">a_list_of_fake_keys</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">a_list_of_fake_keys</span> <span class="o">==</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="n">fake_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;this does not exist&#39;</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span>
+        <span class="n">fake_value</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="p">)</span>  <span class="c1"># Note: not (... in ...) instead of (... not in ...) to test &quot;in&quot; directly</span>
+
+    <span class="n">fake_item</span> <span class="o">=</span> <span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="n">fake_value</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">fake_item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">int</span><span class="p">)</span></div>
+
+    <span class="c1"># Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities</span>
+    <span class="c1"># might not work (complaints such as ``TypeError: unhashable type: &#39;dict&#39;``),</span>
+    <span class="c1"># such as:</span>
+
+    <span class="c1"># s.keys() | a_list_of_fake_keys</span>
+    <span class="c1"># Traceback (most recent call last):</span>
+    <span class="c1">#     ...</span>
+    <span class="c1"># TypeError: unhashable type: &#39;dict&#39;</span>
+
+    <span class="c1"># But you can take care of that in higher level wrappers that have hashable keys and/or values.</span>
+
+
+<span class="k">def</span> <span class="nf">test_basic_mongo_kvreader_functionality</span><span class="p">(</span><span class="n">mongo_reader_cls</span><span class="o">=</span><span class="n">MongoCollectionReader</span><span class="p">,):</span>
+    <span class="n">test_persister</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
+    <span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">feature_cube</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">test_persister</span><span class="p">)</span>
+    <span class="n">test_mgc</span> <span class="o">=</span> <span class="n">test_persister</span><span class="o">.</span><span class="n">mgc</span>
+
+    <span class="c1"># By default, we get ``{&quot;_id&quot;:...}`` as keys, and the full contents of the mongo docs as values</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span><span class="n">test_mgc</span><span class="p">,)</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;dims.x&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+
+    <span class="c1"># This default behavior is equivalent to the following settings:</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span>
+        <span class="n">test_mgc</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">iter_projection</span><span class="o">=</span><span class="p">(</span><span class="n">ID</span><span class="p">,),</span>
+        <span class="n">getitem_projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># meaning &quot;keep everything (including ID)&quot;</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Let&#39;s ask to NOT have the ``&quot;_id&quot;`` field in the values.</span>
+    <span class="c1"># The ``getitem_projection`` argument is what controls what we get as values.</span>
+    <span class="c1"># It follows the ``pymongo`` ``projection`` argument language as is, so see ``pymongo`` documentation for details.</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span><span class="n">test_mgc</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Let&#39;s ask to only have the ``&quot;color&quot;`` field in the values.</span>
+    <span class="c1"># Note that for &quot;_id&quot; (==ID) we need to explicitly ask to NOT have it, or we&#39;ll get it by default</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span><span class="n">test_mgc</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># See that if we ask for ``color=False`` what we actually get is... everything BUT color</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span><span class="n">test_mgc</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}]</span>
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Let&#39;s specify a different key now: Namely, let&#39;s use {color:, number:} pairs as keys, and just {dims:} as values</span>
+    <span class="c1"># You control what you get as keys with the iter_projection (that, again, follows the pymongo specs of projection).</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">mongo_reader_cls</span><span class="p">(</span>
+        <span class="n">test_mgc</span><span class="p">,</span>
+        <span class="n">iter_projection</span><span class="o">=</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="o">==</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># See that you can retrieve values that match that key, as such:</span>
+
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">}])</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}]</span>
+
+    <span class="c1"># The list(...) is needed because in fact, ``s[key]`` gives you a mongo CURSOR, that needs to be &quot;consumed&quot;.</span>
+
+    <span class="kn">from</span> <span class="nn">pymongo.cursor</span> <span class="kn">import</span> <span class="n">Cursor</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">[{}],</span> <span class="n">Cursor</span><span class="p">)</span>
+
+    <span class="c1"># Note that if several values match, you&#39;ll get all of them when you consume the cursor</span>
+
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}])</span> <span class="o">==</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Also, see that if you specify a key that doesn&#39;t exist, you&#39;ll just get empty data</span>
+    <span class="c1">#  (no complaints that the key doesn&#39;t exist)</span>
+
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;PINK&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">42</span><span class="p">}])</span> <span class="o">==</span> <span class="p">[]</span>
+
+    <span class="c1"># In fact, your key doesn&#39;t even have to match the &quot;schema&quot; expected for keys.</span>
+    <span class="c1"># Any dict (but it does have to be a dict!) will do. It just might not match anything</span>
+
+    <span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;any&#39;</span><span class="p">:</span> <span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;want&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}])</span> <span class="o">==</span> <span class="p">[]</span>
+
+    <span class="c1"># This is often not a desirable behavior. Instead, one often wants to get a KeyError if a key is not valid.</span>
+    <span class="c1"># But that concern is a separate one, and as such, the ability to validate keys has been separated.</span>
+    <span class="c1"># You can easily slap such a key validation layer on though -- no worries!</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">mongodol</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NO COPYRIGHT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -62,7 +62,7 @@ class MongoCollectionReader(KvReader):
     def __init__(
         self,
         mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-        key_fields=("_id",),
+        key_fields=('_id',),
         data_fields: Optional[Iterable] = None,
         filt: Optional[dict] = None,
     ):
@@ -85,9 +85,9 @@ class MongoCollectionReader(KvReader):
             data_fields = {k: True for k in data_fields}
             if ID not in data_fields:
                 data_fields[ID] = False
-            self._items_projection = {
-                k for k, v in data_fields.items() if v
-            } | {k for k, v in self._key_projection.items() if v}
+            self._items_projection = {k for k, v in data_fields.items() if v} | {
+                k for k, v in self._key_projection.items() if v
+            }
         self._data_fields = data_fields
         self._key_fields = key_fields
 
@@ -99,7 +99,7 @@ class MongoCollectionReader(KvReader):
     def from_params(
         cls,
         db_name: str = DFLT_TEST_DB,
-        collection_name: str = "test",
+        collection_name: str = 'test',
         key_fields: Iterable = (ID,),
         data_fields: Optional[Iterable] = None,
         filt: Optional[dict] = None,
@@ -120,15 +120,13 @@ class MongoCollectionReader(KvReader):
     def __getitem__(self, k):
         assert isinstance(
             k, Mapping
-        ), f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        ), f'k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}'
         return self._mgc.find(
             filter=self._merge_with_filt(k), projection=self._data_fields
         )
 
     def __iter__(self):
-        yield from self._mgc.find(
-            filter=self._filt, projection=self._key_projection
-        )
+        yield from self._mgc.find(filter=self._filt, projection=self._key_projection)
 
     def __len__(self):
         return self._mgc.count_documents(self._filt)
@@ -152,7 +150,7 @@ class MongoCollectionReader(KvReader):
         for v in args:
             assert isinstance(
                 v, Mapping
-            ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+            ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
             d = dict(d, **v)
         return d
 
@@ -173,9 +171,7 @@ class MongoItemsView(ItemsView):
         m = self._mapping
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m._mgc.find(
-            filter=dict(v, **m._merge_with_filt(k)), projection=()
-        )
+        cursor = m._mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
         # return cursor
         return next(cursor, end_of_cursor) is not end_of_cursor
 
@@ -244,7 +240,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(
             v, Mapping
-        ), f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        ), f'k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}'
         return self._mgc.replace_one(
             filter=self._merge_with_filt(k),
             replacement=self._merge_with_filt(k, v),
@@ -260,17 +256,15 @@ class MongoCollectionPersister(MongoCollectionReader):
     def append(self, v):
         assert isinstance(
             v, Mapping
-        ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
         return self._mgc.insert_one(self._merge_with_filt(v))
 
     def extend(self, values):
         assert all(
             [isinstance(v, Mapping) for v in values]
-        ), f" values must be mappings (often dictionaries)"
+        ), f' values must be mappings (often dictionaries)'
         if values:
-            return self._mgc.insert_many(
-                [self._merge_with_filt(v) for v in values]
-            )
+            return self._mgc.insert_many([self._merge_with_filt(v) for v in values])
 
     def persist_data(self, data):
         return self.__setitem__({ID: data[ID]}, data)
@@ -328,7 +322,7 @@ class OldMongoPersister(KvPersister):
     def __init__(
         self,
         db_name=DFLT_TEST_DB,
-        collection_name="test",
+        collection_name='test',
         key_fields=(ID,),
         data_fields=None,
         mongo_client_kwargs=None,
@@ -363,7 +357,7 @@ class OldMongoPersister(KvPersister):
         if doc is not None:
             return doc
         else:
-            raise KeyError(f"No document found for query: {k}")
+            raise KeyError(f'No document found for query: {k}')
 
     def __setitem__(self, k, v):
         return self._mgc.insert_one(dict(k, **v))
@@ -385,7 +379,7 @@ class OldMongoInsertPersister(OldMongoPersister):
     def __init__(
         self,
         db_name=DFLT_TEST_DB,
-        collection_name="test",
+        collection_name='test',
         data_fields=None,
         mongo_client_kwargs=None,
     ):

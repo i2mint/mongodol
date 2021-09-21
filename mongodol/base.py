@@ -21,11 +21,11 @@ from mongodol.util import (
 #  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
     def __init__(
-            self,
-            mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-            filter: Optional[dict] = None,
-            iter_projection: Optional[dict] = None,
-            **mgc_find_kwargs,
+        self,
+        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
+        filter: Optional[dict] = None,
+        iter_projection: Optional[dict] = None,
+        **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
         self.filter = filter or {}
@@ -48,7 +48,7 @@ class MongoCollectionCollection(DolCollection):
         {'$and': [{'a': 3, 'b': {'$in': [1, 2, 3]}}, {'b': 4}]}
         """
         # return {"$and": [self.filter, *args]}  # in case we want to move to handling several elements to merge
-        return {"$and": [self.filter, m]}
+        return {'$and': [self.filter, m]}
 
     def __iter__(self):
         return self.mgc.find(
@@ -69,17 +69,17 @@ class MongoCollectionCollection(DolCollection):
         search_map = ChainMap(self._mgc_find_kwargs, dict(filter=self.filter))
         return {
             x: search_map[x]
-            for x in ["filter", "skip", "limit", "hint"]
+            for x in ['filter', 'skip', 'limit', 'hint']
             if x in search_map
         }
 
     @cached_property
     def mgc_repr(self):
-        return f"<{self.mgc.database.name}/{self.mgc.name}>"
+        return f'<{self.mgc.database.name}/{self.mgc.name}>'
 
     def __repr__(self):
         return (
-            f"{type(self).__name__}(mgc={self.mgc_repr}, filter={self.filter}, iter_projection={self._iter_projection}"
+            f'{type(self).__name__}(mgc={self.mgc_repr}, filter={self.filter}, iter_projection={self._iter_projection}'
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
 
@@ -107,9 +107,7 @@ class MongoItemsView(ItemsView):
         m = self._mapping
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m.mgc.find(
-            filter=dict(v, **m._merge_with_filt(k)), projection=()
-        )
+        cursor = m.mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
         # return cursor
         return next(cursor, end_of_cursor) is not end_of_cursor
 
@@ -200,31 +198,27 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     }
 
     def __init__(
-            self,
-            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-            filter: Optional[dict] = None,
-            iter_projection: ProjectionSpec = (ID,),
-            getitem_projection: ProjectionSpec = None,
-            **mgc_find_kwargs,
+        self,
+        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+        filter: Optional[dict] = None,
+        iter_projection: ProjectionSpec = (ID,),
+        getitem_projection: ProjectionSpec = None,
+        **mgc_find_kwargs,
     ):
         if not isinstance(iter_projection, dict):
             iter_projection = {k: True for k in iter_projection}
-        assert iter_projection is not None, "iter_projection cannot be None"
+        assert iter_projection is not None, 'iter_projection cannot be None'
         super().__init__(
-            mgc=mgc,
-            filter=filter,
-            iter_projection=iter_projection,
-            **mgc_find_kwargs,
+            mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs,
         )
         self._getitem_projection = getitem_projection
 
     def __getitem__(self, k):
         assert isinstance(
             k, Mapping
-        ), f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        ), f'k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}'
         return self.mgc.find(
-            filter=self._merge_with_filt(k),
-            projection=self._getitem_projection,
+            filter=self._merge_with_filt(k), projection=self._getitem_projection,
         )
 
     def keys(self):
@@ -251,9 +245,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     def key_fields(self):
         _iter_projection = normalize_projection(self._iter_projection)
         return tuple(
-            field
-            for field in _iter_projection
-            if _iter_projection[field] is True
+            field for field in _iter_projection if _iter_projection[field] is True
         )
 
     @cached_property
@@ -261,9 +253,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         if self._getitem_projection is None:
             return None
         else:
-            _getitem_projection = normalize_projection(
-                self._getitem_projection
-            )
+            _getitem_projection = normalize_projection(self._getitem_projection)
             return tuple(
                 field
                 for field in _getitem_projection
@@ -275,14 +265,14 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     @classmethod
     def from_params(
-            cls,
-            db_name: str = DFLT_TEST_DB,
-            collection_name: str = "test",
-            mongo_client: Optional[dict] = None,
-            filter: Optional[dict] = None,
-            iter_projection: ProjectionSpec = (ID,),
-            getitem_projection: ProjectionSpec = None,
-            **mgc_find_kwargs,
+        cls,
+        db_name: str = DFLT_TEST_DB,
+        collection_name: str = 'test',
+        mongo_client: Optional[dict] = None,
+        filter: Optional[dict] = None,
+        iter_projection: ProjectionSpec = (ID,),
+        getitem_projection: ProjectionSpec = None,
+        **mgc_find_kwargs,
     ):
         if mongo_client is None:
             mongo_client = MongoClient()
@@ -299,15 +289,15 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def distinct(self, key, filter=None, **kwargs):
         # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        return self.mgc.distinct(key, filter=self._merge_with_filt(filter or {}), **kwargs)
+        return self.mgc.distinct(
+            key, filter=self._merge_with_filt(filter or {}), **kwargs
+        )
 
     unique = distinct
 
     def aggregate(self, pipeline, **kwargs):
         _pipeline = pipeline.copy()
-        _pipeline.insert(0, {
-            '$match': self.filter
-        })
+        _pipeline.insert(0, {'$match': self.filter})
         return self.mgc.aggregate(_pipeline, **kwargs)
 
 
@@ -321,11 +311,11 @@ class MongoCollectionFieldsReader(MongoCollectionReader):
     _projections_are_flattened = True
 
     def __init__(
-            self,
-            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-            filter: Optional[dict] = None,
-            key_fields: ProjectionSpec = (ID,),
-            val_fields: ProjectionSpec = None,
+        self,
+        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+        filter: Optional[dict] = None,
+        key_fields: ProjectionSpec = (ID,),
+        val_fields: ProjectionSpec = None,
     ):
         iter_projection = normalize_projection(key_fields)
         super().__init__(
@@ -402,26 +392,23 @@ class MongoCollectionPersister(MongoCollectionReader):
     """
 
     def __init__(
-            self,
-            mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-            filter: Optional[dict] = None,
-            on_write_filter: Optional[dict] = None,
-            iter_projection: ProjectionSpec = (ID,),
-            getitem_projection: ProjectionSpec = None,
-            **mgc_find_kwargs,
+        self,
+        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
+        filter: Optional[dict] = None,
+        on_write_filter: Optional[dict] = None,
+        iter_projection: ProjectionSpec = (ID,),
+        getitem_projection: ProjectionSpec = None,
+        **mgc_find_kwargs,
     ):
         super().__init__(
-            mgc=mgc,
-            filter=filter,
-            iter_projection=iter_projection,
-            **mgc_find_kwargs,
+            mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs,
         )
         self._on_write_filter = on_write_filter
 
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(
             v, Mapping
-        ), f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        ), f'k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}'
         return self.mgc.replace_one(
             filter=self._merge_with_filt(k),
             replacement=self._build_doc(k, v),
@@ -431,7 +418,7 @@ class MongoCollectionPersister(MongoCollectionReader):
     def __delitem__(self, k):
         assert isinstance(
             k, Mapping
-        ), f"k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}"
+        ), f'k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}'
         if len(k) > 0:
             return self.mgc.delete_one(self._merge_with_filt(k))
         else:
@@ -440,20 +427,17 @@ class MongoCollectionPersister(MongoCollectionReader):
     def append(self, v):
         assert isinstance(
             v, Mapping
-        ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
         return self.mgc.insert_one(self._build_doc(v))
 
     def extend(self, values):
         assert all(
             [isinstance(v, Mapping) for v in values]
-        ), f" values must be mappings (often dictionaries)"
+        ), f' values must be mappings (often dictionaries)'
         if values:
-            return self.mgc.insert_many(
-                [self._build_doc(v) for v in values]
-            )
+            return self.mgc.insert_many([self._build_doc(v) for v in values])
 
     def _build_doc(self, *args):
-
         def merge_doc_elements_with_filter():
             d = self._on_write_filter or self.filter
             for v in args:
@@ -461,15 +445,22 @@ class MongoCollectionPersister(MongoCollectionReader):
                     v = {}
                 assert isinstance(
                     v, Mapping
-                ), f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+                ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
                 d = dict(d, **v)
             return d
 
         doc = merge_doc_elements_with_filter()
-        is_invalid = len([
-            x for x in doc.values()
-            if isinstance(x, Mapping) and len([k for k in x.keys() if '$' in k]) > 0
-        ]) > 0
+        is_invalid = (
+            len(
+                [
+                    x
+                    for x in doc.values()
+                    if isinstance(x, Mapping)
+                    and len([k for k in x.keys() if '$' in k]) > 0
+                ]
+            )
+            > 0
+        )
         if is_invalid:
             raise ValueError('The doc contains some query-specific values.')
         return doc
@@ -505,11 +496,11 @@ class MongoClientReader(KvReader):
 
 class MongoDbReader(KvReader):
     def __init__(
-            self,
-            db_name=DFLT_TEST_DB,
-            mk_collection_store=MongoCollectionReader,
-            mongo_client=None,
-            **mongo_client_kwargs,
+        self,
+        db_name=DFLT_TEST_DB,
+        mk_collection_store=MongoCollectionReader,
+        mongo_client=None,
+        **mongo_client_kwargs,
     ):
         """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
 

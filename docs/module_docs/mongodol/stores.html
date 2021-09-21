@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>mongodol.stores &#8212; mongodol 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mongodol.tests" href="tests.html" />
+    <link rel="prev" title="mongodol.scrap.views_work" href="scrap/views_work.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-mongodol.stores">
+<span id="mongodol-stores"></span><h1>mongodol.stores<a class="headerlink" href="#module-mongodol.stores" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="mongodol.stores.MongoAnyKeyStore">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoAnyKeyStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoAnyKeyStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoAnyKeyStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>MongoStore using tuple keys.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoAnyKeyStore</span><span class="p">(</span><span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span> <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span> <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;must&#39;</span><span class="p">:</span> <span class="s1">&#39;be&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;dict&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+<span class="go">{&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionFirstDocPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionFirstDocPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionFirstDocPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionFirstDocPersister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] is the first key-matching value found.
+Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn’t check for uniqueness.</p>
+<p>Typically, this should be used when you don’t want the overhead of checking for uniqueness,
+because it doesn’t matter, you like risk, or you told the mongo collection indexing system itself to
+ensure uniqueness for you.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionFirstDocReader">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionFirstDocReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionFirstDocReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionFirstDocReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] is the first key-matching value found.
+Unlike MongoCollectionUniqueDocReader, MongoCollectionFirstDocReader doesn’t check for uniqueness.</p>
+<p>Typically, this should be used when you don’t want the overhead of checking for uniqueness,
+because it doesn’t matter, you like risk, or you told the mongo collection indexing system itself to
+ensure uniqueness for you.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionMultipleDocsPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionMultipleDocsPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionMultipleDocsPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionMultipleDocsPersister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
+If no docs match, will return an empty list.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionMultipleDocsReader">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionMultipleDocsReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionMultipleDocsReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionMultipleDocsReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
+If no docs match, will return an empty list.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionPersisterWithResultMapping">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionPersisterWithResultMapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mgc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>pymongo.collection.Collection<span class="p">, </span>str<span class="p">, </span>dol.base.KvReader<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filter</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">on_write_filter</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iter_projection</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>dict<span class="p">, </span>Iterable<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">getitem_projection</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>dict<span class="p">, </span>Iterable<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">mgc_find_kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionPersisterWithResultMapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionPersisterWithResultMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>MongoCollectionPersister with result mapping</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionUniqueDocPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionUniqueDocPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionUniqueDocPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionUniqueDocPersister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
+:raises KeyNotUniqueError if the k matches more than a single unique doc.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoCollectionUniqueDocReader">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionUniqueDocReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionUniqueDocReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionUniqueDocReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
+:raises KeyNotUniqueError if the k matches more than a single unique doc.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mongodol.stores</span> <span class="kn">import</span> <span class="n">MongoCollectionUniqueDocReader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mongodol.tests</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">util</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_mgc</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">populated_pymongo_collection</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">three_simple_docs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionUniqueDocReader</span><span class="p">(</span><span class="n">test_mgc</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">iter_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="p">[{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;a&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>And you see where the problem will be: There’s two {‘s’: ‘b’} in that listing,
+so though getting the value for {‘s’: ‘a’} won’t be a problem:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="p">[{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;a&#39;</span><span class="p">}]</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>  <span class="c1"># there&#39;s only one doc matching {&#39;s&#39;: &#39;a&#39;}</span>
+</pre></div>
+</div>
+<p>… but there’s more than one doc matching {‘s’: ‘b’}</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">}]</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">mongodol.util.KeyNotUniqueError</span>: <span class="n">Key was not unique (i.e. cursor has more than one match): {&#39;s&#39;: &#39;b&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoStore">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoStore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.stores.MongoTupleKeyStore">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoTupleKeyStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoTupleKeyStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoTupleKeyStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>MongoStore using tuple keys.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoTupleKeyStore</span><span class="p">(</span><span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span> <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span> <span class="n">key_fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">remove</span><span class="p">({})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1234</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span>  <span class="c1"># see that key is not in store (and testing __contains__)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">orig_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">orig_length</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span> <span class="c1"># testing __contains__ again</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">orig_length</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">mongodol</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="scrap/views_work.html" title="previous chapter">mongodol.scrap.views_work</a></li>
+      <li>Next: <a href="tests.html" title="next chapter">mongodol.tests</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NO COPYRIGHT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/module_docs/mongodol/stores.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

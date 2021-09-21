@@ -13,14 +13,17 @@ from mongodol.errors import MethodNameAlreadyExists, SetattrNotAllowed
 
 # Util functions for making method validations ########################################################################
 
+
 def disallow_if_name_exists_already(store, method_name):
     if hasattr(store, method_name):
-        raise MethodNameAlreadyExists(f"Method name already exists: {method_name}")
+        raise MethodNameAlreadyExists(f'Method name already exists: {method_name}')
 
 
 def number_of_non_defaulted_arguments(func):
     """Return the number of arguments that don't have defaults in it's signature"""
-    return sum([1 for p in signature(func).parameters.values() if p.default is Parameter.empty])
+    return sum(
+        [1 for p in signature(func).parameters.values() if p.default is Parameter.empty]
+    )
 
 
 def has_exactly_one_non_defaulted_input(func):
@@ -41,7 +44,7 @@ class Addons(ABC):
     def clear_after_checking_with_user(self: MongoCollectionCollection):
         n = len(self)
         answer = input(
-            f"Are you sure you want to delete all {n} docs matching the filter: {self.filter}?\n"
+            f'Are you sure you want to delete all {n} docs matching the filter: {self.filter}?\n'
             "To confirm, type the number of docs you're deleting: "
         )
         try:
@@ -49,9 +52,11 @@ class Addons(ABC):
             if number == n:
                 return self.mgc.delete_many(self.filter)
             else:
-                print(f"You typed {number}, but {n} is the correct number, so I won't delete anything")
+                print(
+                    f"You typed {number}, but {n} is the correct number, so I won't delete anything"
+                )
         except:
-            print(f"Okay, I will NOT delete anything")
+            print(f'Okay, I will NOT delete anything')
 
     dflt_clear_method = clear
 
@@ -59,16 +64,18 @@ class Addons(ABC):
 # InjectionValidator
 def _clear_method_injection_validator(store: type, method_func: Callable) -> bool:
     if has_enabled_clear_method(store):
-        raise SetattrNotAllowed(f"An ENABLED clear method exist's already, so won't set it as {method_func}")
+        raise SetattrNotAllowed(
+            f"An ENABLED clear method exist's already, so won't set it as {method_func}"
+        )
     else:
         return has_exactly_one_non_defaulted_input(method_func)
 
 
 def add_clear_method(
-        store,
-        *,
-        clear_method=Addons.dflt_clear_method,
-        validator=_clear_method_injection_validator  # because should be .clear(self)
+    store,
+    *,
+    clear_method=Addons.dflt_clear_method,
+    validator=_clear_method_injection_validator,  # because should be .clear(self)
 ):
     """Add a clear method to a store that doesn't have one
 
@@ -108,4 +115,6 @@ def add_clear_method(
 
     """
     """Add a clear method to the store"""
-    return add_store_method(store, method_func=clear_method, method_name='clear', validator=validator)
+    return add_store_method(
+        store, method_func=clear_method, method_name='clear', validator=validator
+    )

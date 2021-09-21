@@ -12,87 +12,81 @@ from mongodol.tests import (
 
 
 @pytest.mark.parametrize(
-    "mgc_name, filter, iter_projection, mgc_find_kwargs, expected_result",
+    'mgc_name, filter, iter_projection, mgc_find_kwargs, expected_result',
     [
         # NUMBER COLLECTION
         (
-                NUMBER_MGC_NAME,  # mgc_name
-                None,  # filter
-                None,  # iter_projection
-                None,  # mgc_find_kwargs
-                nums_and_lans,  # expected_result
+            NUMBER_MGC_NAME,  # mgc_name
+            None,  # filter
+            None,  # iter_projection
+            None,  # mgc_find_kwargs
+            nums_and_lans,  # expected_result
         ),
         (
             NUMBER_MGC_NAME,
-            {"sp": {"$exists": True}},
+            {'sp': {'$exists': True}},
             None,
             None,
-            [x for x in nums_and_lans if "sp" in x],
-        ),
-        (
-            NUMBER_MGC_NAME,
-            None,
-            {"so_far": False},
-            None,
-            [
-                {k: v for k, v in x.items() if k != "so_far"}
-                for x in nums_and_lans
-            ],
+            [x for x in nums_and_lans if 'sp' in x],
         ),
         (
             NUMBER_MGC_NAME,
             None,
+            {'so_far': False},
             None,
-            {"skip": 1, "limit": 2},
+            [{k: v for k, v in x.items() if k != 'so_far'} for x in nums_and_lans],
+        ),
+        (
+            NUMBER_MGC_NAME,
+            None,
+            None,
+            {'skip': 1, 'limit': 2},
             list(islice(islice(nums_and_lans, 1, None), 2)),
         ),
         # FEATURE CUBE COLLECTION
         (FEATURE_CUBE_MGC_NAME, None, None, None, feature_cube),
         (
             FEATURE_CUBE_MGC_NAME,
-            {"number": {"$gte": 10}},
+            {'number': {'$gte': 10}},
             None,
             None,
-            [x for x in feature_cube if x["number"] >= 10],
+            [x for x in feature_cube if x['number'] >= 10],
         ),
         (
             FEATURE_CUBE_MGC_NAME,
             None,
-            {"number": True, "dims": True},
+            {'number': True, 'dims': True},
             None,
-            [
-                {k: x[k] for k in ("_id", "number", "dims")}
-                for x in feature_cube
-            ],
+            [{k: x[k] for k in ('_id', 'number', 'dims')} for x in feature_cube],
         ),
         (
             FEATURE_CUBE_MGC_NAME,
             None,
             None,
-            {"skip": 3, "limit": 2},
+            {'skip': 3, 'limit': 2},
             list(islice(islice(feature_cube, 3, None), 2)),
         ),
         # BDFL COLLECTION
         (BDFL_MGC_NAME, None, None, None, bdfl),
         (
             BDFL_MGC_NAME,
-            {"Type": "Web framework"},
+            {'Type': 'Web framework'},
             None,
             None,
-            [x for x in bdfl if x["Type"] == "Web framework"],
+            [x for x in bdfl if x['Type'] == 'Web framework'],
         ),
         (
             BDFL_MGC_NAME,
             None,
-            {"_id": False, "Name": True},
+            {'_id': False, 'Name': True},
             None,
-            [{"Name": x["Name"]} for x in bdfl],
+            [{'Name': x['Name']} for x in bdfl],
         ),
         (
             BDFL_MGC_NAME,
             None,
             None,
-            {"skip": 2, "limit": 2},
+            {'skip': 2, 'limit': 2},
             list(islice(islice(bdfl, 2, None), 2)),
         ),
     ],

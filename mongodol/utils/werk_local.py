@@ -22,10 +22,10 @@ class _ProxyLookup:
         Used for ``__doc__`` so building docs still works.
     """
 
-    __slots__ = ("bind_f", "fallback", "class_value", "name")
+    __slots__ = ('bind_f', 'fallback', 'class_value', 'name')
 
     def __init__(self, f=None, fallback=None, class_value=None):
-        if hasattr(f, "__get__"):
+        if hasattr(f, '__get__'):
             # A Python function, can be turned into a bound method.
 
             def bind_f(instance, obj):
@@ -69,7 +69,7 @@ class _ProxyLookup:
         return getattr(obj, self.name)
 
     def __repr__(self):
-        return f"proxy {self.name}"
+        return f'proxy {self.name}'
 
     def __call__(self, instance, *args, **kwargs):
         """Support calling unbound methods from the class. For example,
@@ -155,40 +155,40 @@ class LocalProxy:
         The class can be instantiated with a callable.
     """
 
-    __slots__ = ("__local", "__name", "__wrapped__")
+    __slots__ = ('__local', '__name', '__wrapped__')
 
     def __init__(
-            self,
-            local: t.Union["Local", t.Callable[[], t.Any]],
-            name: t.Optional[str] = None,
+        self,
+        local: t.Union['Local', t.Callable[[], t.Any]],
+        name: t.Optional[str] = None,
     ) -> None:
-        object.__setattr__(self, "_LocalProxy__local", local)
-        object.__setattr__(self, "_LocalProxy__name", name)
+        object.__setattr__(self, '_LocalProxy__local', local)
+        object.__setattr__(self, '_LocalProxy__name', name)
 
-        if callable(local) and not hasattr(local, "__release_local__"):
+        if callable(local) and not hasattr(local, '__release_local__'):
             # "local" is a callable that is not an instance of Local or
             # LocalManager: mark it as a wrapped function.
-            object.__setattr__(self, "__wrapped__", local)
+            object.__setattr__(self, '__wrapped__', local)
 
     def _get_current_object(self) -> t.Any:
         """Return the current object.  This is useful if you want the real
         object behind the proxy at a time for performance reasons or because
         you want to pass the object into a different context.
         """
-        if not hasattr(self.__local, "__release_local__"):  # type: ignore
+        if not hasattr(self.__local, '__release_local__'):  # type: ignore
             return self.__local()  # type: ignore
 
         try:
             return getattr(self.__local, self.__name)  # type: ignore
         except AttributeError:
-            raise RuntimeError(f"no object bound to {self.__name}")  # type: ignore
+            raise RuntimeError(f'no object bound to {self.__name}')  # type: ignore
 
     __doc__ = _ProxyLookup(  # type: ignore
         class_value=__doc__, fallback=lambda self: type(self).__doc__
     )
     # __del__ should only delete the proxy
     __repr__ = _ProxyLookup(
-        repr, fallback=lambda self: f"<{type(self).__name__} unbound>"
+        repr, fallback=lambda self: f'<{type(self).__name__} unbound>'
     )
     __str__ = _ProxyLookup(str)
     __bytes__ = _ProxyLookup(bytes)

@@ -1,6 +1,6 @@
-NUMBER_MGC_NAME = "number"
-FEATURE_CUBE_MGC_NAME = "feature_cube"
-BDFL_MGC_NAME = "bdfl"
+NUMBER_MGC_NAME = 'number'
+FEATURE_CUBE_MGC_NAME = 'feature_cube'
+BDFL_MGC_NAME = 'bdfl'
 
 from mongodol.tests.util import (
     get_test_collection_persister,
@@ -9,4 +9,3 @@ from mongodol.tests.util import (
 )
 
 from mongodol.tests import data as test_data
-

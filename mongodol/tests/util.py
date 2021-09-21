@@ -8,35 +8,32 @@ from mongodol.constants import (
 from pymongo import MongoClient
 
 from mongodol.base import MongoCollectionPersister
+
 # from mongodol.util import mk_dflt_mgc
 from mongodol.tests import data as test_data
 
 
 @lru_cache(maxsize=1)
-def get_test_database(
-        mongo_client_args=DFLT_MONGO_CLIENT_ARGS, db_name=DFLT_TEST_DB
-):
+def get_test_database(mongo_client_args=DFLT_MONGO_CLIENT_ARGS, db_name=DFLT_TEST_DB):
     return MongoClient(*mongo_client_args)[db_name]
 
 
 @lru_cache()
 def get_test_collection_object(
-        mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
-        db_name=DFLT_TEST_DB,
-        collection_name=DFLT_TEST_COLLECTION,
+    mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
+    db_name=DFLT_TEST_DB,
+    collection_name=DFLT_TEST_COLLECTION,
 ):
     db = get_test_database(mongo_client_args, db_name)
     return db[collection_name]
 
 
 def get_test_collection_persister(
-        mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
-        db_name=DFLT_TEST_DB,
-        collection_name=DFLT_TEST_COLLECTION,
+    mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
+    db_name=DFLT_TEST_DB,
+    collection_name=DFLT_TEST_COLLECTION,
 ):
-    mgc = get_test_collection_object(
-        mongo_client_args, db_name, collection_name
-    )
+    mgc = get_test_collection_object(mongo_client_args, db_name, collection_name)
     return MongoCollectionPersister(mgc)
 
 

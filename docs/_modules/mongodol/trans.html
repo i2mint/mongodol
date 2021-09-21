@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mongodol.trans &#8212; mongodol 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for mongodol.trans</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypedDict</span>
+
+<span class="kn">from</span> <span class="nn">pymongo.results</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BulkWriteResult</span><span class="p">,</span>
+    <span class="n">DeleteResult</span><span class="p">,</span>
+    <span class="n">InsertManyResult</span><span class="p">,</span>
+    <span class="n">InsertOneResult</span><span class="p">,</span>
+    <span class="n">UpdateResult</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">dol.trans</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">condition_function_call</span><span class="p">,</span>
+    <span class="n">double_up_as_factory</span><span class="p">,</span>
+    <span class="n">store_decorator</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">mongodol.util</span> <span class="kn">import</span> <span class="n">KeyNotUniqueError</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># def _key_does_not_exist(store, k, v):</span>
+<span class="c1">#     &quot;&quot;&quot;Condition function for use in condition_function_call. Returns true iff the k is not in store&quot;&quot;&quot;</span>
+<span class="c1">#     return k in not store</span>
+<span class="c1">#</span>
+<span class="c1"># @store_decorator</span>
+<span class="c1"># def only_allow_keys</span>
+
+
+<div class="viewcode-block" id="PersistentObjectBase"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentObjectBase">[docs]</a><span class="k">class</span> <span class="nc">PersistentObjectBase</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class to propagate a modification event through a parent-child chain structure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_container</span> <span class="o">=</span> <span class="n">container</span>
+
+    <span class="k">def</span> <span class="nf">persist_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="o">.</span><span class="n">persist_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PersistentDict"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentDict">[docs]</a><span class="k">class</span> <span class="nc">PersistentDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">PersistentObjectBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Extension of a dict wich triggers an event to notify the object that contains the dict that a modification</span>
+<span class="sd">    has been made.</span>
+
+<span class="sd">    Requirement: The container object needs to implement the method &quot;persist_data(self, data: Mapping)&quot;.</span>
+
+<span class="sd">    &gt;&gt;&gt; d = {</span>
+<span class="sd">    ...     &#39;a&#39;: 1,</span>
+<span class="sd">    ...     &#39;b&#39;: {&#39;ba&#39;: 2, &#39;bb&#39;: 3},</span>
+<span class="sd">    ...     &#39;c&#39;: [</span>
+<span class="sd">    ...         {&#39;c1a&#39;: 4, &#39;c1b&#39;: 5},</span>
+<span class="sd">    ...         {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; class Container:</span>
+<span class="sd">    ...     def persist_data(self, data):</span>
+<span class="sd">    ...         &quot;&quot;&quot;Here, you&#39;d normally put code to ACTUALLY persist the data&quot;&quot;&quot;</span>
+<span class="sd">    ...         print(f&quot;persisting {data}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; pd = PersistentDict(Container(), d)</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;a&#39;] = 8</span>
+<span class="sd">    persisting {&#39;a&#39;: 8, &#39;b&#39;: {&#39;ba&#39;: 2, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 4, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;a&#39;] == 8  # and indeed pd[&#39;a&#39;] is 8 now!</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;b&#39;][&#39;ba&#39;] = 8</span>
+<span class="sd">    persisting {&#39;a&#39;: 8, &#39;b&#39;: {&#39;ba&#39;: 8, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 4, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;b&#39;][&#39;ba&#39;] == 8  # and indeed pd[&#39;b&#39;][&#39;ba&#39;] is 8 now!</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;c&#39;][0][&#39;c1a&#39;] = 8</span>
+<span class="sd">    persisting {&#39;a&#39;: 8, &#39;b&#39;: {&#39;ba&#39;: 8, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 8, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;c&#39;][0][&#39;c1a&#39;] == 8  # and indeed pd[&#39;c&#39;][0][&#39;c1a&#39;] is 8 now!</span>
+<span class="sd">    &gt;&gt;&gt; pd.update({&#39;a&#39;: 9})</span>
+<span class="sd">    persisting {&#39;a&#39;: 9, &#39;b&#39;: {&#39;ba&#39;: 8, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 8, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;a&#39;] == 9</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;b&#39;].update({&#39;ba&#39;: 9})</span>
+<span class="sd">    persisting {&#39;a&#39;: 9, &#39;b&#39;: {&#39;ba&#39;: 9, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 8, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;b&#39;][&#39;ba&#39;] == 9</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;c&#39;][0].update({&#39;c1a&#39;: 9})</span>
+<span class="sd">    persisting {&#39;a&#39;: 9, &#39;b&#39;: {&#39;ba&#39;: 9, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 9, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;c&#39;][0][&#39;c1a&#39;] == 9</span>
+<span class="sd">    &gt;&gt;&gt; pd.update([(&#39;a&#39;, 10)])</span>
+<span class="sd">    persisting {&#39;a&#39;: 10, &#39;b&#39;: {&#39;ba&#39;: 9, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 9, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;a&#39;] == 10</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;b&#39;].update([(&#39;ba&#39;, 10)])</span>
+<span class="sd">    persisting {&#39;a&#39;: 10, &#39;b&#39;: {&#39;ba&#39;: 10, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 9, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;b&#39;][&#39;ba&#39;] == 10</span>
+<span class="sd">    &gt;&gt;&gt; pd[&#39;c&#39;][0].update([(&#39;c1a&#39;, 10)])</span>
+<span class="sd">    persisting {&#39;a&#39;: 10, &#39;b&#39;: {&#39;ba&#39;: 10, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 10, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert pd[&#39;c&#39;][0][&#39;c1a&#39;] == 10</span>
+<span class="sd">    &gt;&gt;&gt; del pd[&#39;a&#39;]</span>
+<span class="sd">    persisting {&#39;b&#39;: {&#39;ba&#39;: 10, &#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 10, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert &#39;a&#39; not in pd  # indeed, &#39;a&#39; no longer in pd</span>
+<span class="sd">    &gt;&gt;&gt; del pd[&#39;b&#39;][&#39;ba&#39;]</span>
+<span class="sd">    persisting {&#39;b&#39;: {&#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1a&#39;: 10, &#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert &#39;ba&#39; not in pd[&#39;b&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; del pd[&#39;c&#39;][0][&#39;c1a&#39;]</span>
+<span class="sd">    persisting {&#39;b&#39;: {&#39;bb&#39;: 3}, &#39;c&#39;: [{&#39;c1b&#39;: 5}, {&#39;c2a&#39;: 6, &#39;c2b&#39;: &#39;7&#39;}]}</span>
+<span class="sd">    &gt;&gt;&gt; assert &#39;c1a&#39; not in pd[&#39;c&#39;][0]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">wrapped_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">PersistentObjectBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">)</span>
+        <span class="n">persistent_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="n">get_persistent_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">wrapped_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="nb">dict</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persistent_kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PersistentDict.update"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentDict.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PersistentList"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentList">[docs]</a><span class="k">class</span> <span class="nc">PersistentList</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PersistentObjectBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Extension of a list wich triggers an event to notify the object that contains the list that a modification</span>
+<span class="sd">    has been made.</span>
+
+<span class="sd">    Requirement: The container object needs to implement the method &quot;persist_data(self, data: Mapping)&quot;.</span>
+
+<span class="sd">    &gt;&gt;&gt; l = [1, 2, 3]</span>
+<span class="sd">    &gt;&gt;&gt; class Container:</span>
+<span class="sd">    ...     def persist_data(self, data):</span>
+<span class="sd">    ...         &quot;&quot;&quot;Here, you&#39;d normally put code to ACTUALLY persist the data&quot;&quot;&quot;</span>
+<span class="sd">    ...         print(f&quot;persisting {data}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; pl = PersistentList(Container(), l)</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [1, 2, 3]  # pl is equal to [1, 2, 3]</span>
+<span class="sd">    &gt;&gt;&gt; pl.append(4)</span>
+<span class="sd">    persisting [1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [1, 2, 3, 4]  # indeed pl is now [1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; pl.extend([5, 6])</span>
+<span class="sd">    persisting [1, 2, 3, 4, 5, 6]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [1, 2, 3, 4, 5, 6]</span>
+<span class="sd">    &gt;&gt;&gt; pl += [7, 8]</span>
+<span class="sd">    persisting [1, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [1, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; pl[0] = 9</span>
+<span class="sd">    persisting [9, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [9, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; n = pl.pop(0)</span>
+<span class="sd">    persisting [2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [2, 3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; pl.remove(2)</span>
+<span class="sd">    persisting [3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [3, 4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; del pl[0]</span>
+<span class="sd">    persisting [4, 5, 6, 7, 8]</span>
+<span class="sd">    &gt;&gt;&gt; assert pl == [4, 5, 6, 7, 8]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_iterable</span> <span class="o">=</span> <span class="n">iterable</span>
+        <span class="n">PersistentObjectBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">)</span>
+        <span class="n">persistent_iterable</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_persistent_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">]</span>
+        <span class="nb">list</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persistent_iterable</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PersistentList.append"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentList.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__object</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PersistentList.extend"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentList.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__iterable</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">__iterable</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__iadd__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PersistentList.pop"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentList.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__index</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">__index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="PersistentList.remove"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.PersistentList.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__value</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">__value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist_data</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_iterable</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_persistent_obj</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">PersistentDict</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">PersistentList</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+
+<span class="c1"># TODO: Make trans funcs/method carry their role and find their place in wrap_kvs automatically</span>
+<span class="k">class</span> <span class="nc">PostGet</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">single_value_fetch_with_unicity_validation</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">):</span>  <span class="c1"># TODO: Fetches! Faster way to check if there&#39;s more than one hit?</span>
+                <span class="k">raise</span> <span class="n">KeyNotUniqueError</span><span class="o">.</span><span class="n">raise_error</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="c1"># return PersistentDict(store, doc)</span>
+            <span class="k">return</span> <span class="n">doc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">single_value_fetch_without_unicity_validation</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># return PersistentDict(store, doc)</span>
+            <span class="k">return</span> <span class="n">doc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ObjOfData</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">all_docs_fetch</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">doc_collector</span><span class="o">=</span><span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># return doc_collector(map(lambda x: PersistentDict(x), cursor))</span>
+        <span class="k">return</span> <span class="n">doc_collector</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+
+
+<span class="n">WriteOpResult</span> <span class="o">=</span> <span class="n">TypedDict</span><span class="p">(</span><span class="s1">&#39;WriteOpResult&#39;</span><span class="p">,</span> <span class="n">ok</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span>
+
+<span class="n">DFLT_METHOD_NAMES_TO_NORMALIZE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;__setitem__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;__delitem__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;append&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extend&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;flush&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;commit&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="normalize_result"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.normalize_result">[docs]</a><span class="k">def</span> <span class="nf">normalize_result</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">method_names_to_normalize</span><span class="o">=</span><span class="n">DFLT_METHOD_NAMES_TO_NORMALIZE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorator to transform a pymongo result object to a WriteOpResult object.</span>
+
+<span class="sd">    :param func: [description]</span>
+<span class="sd">    :type func: [type]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;Should be callable: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">result_mapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">raw_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">:</span> <span class="n">WriteOpResult</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">raw_result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">InsertOneResult</span><span class="p">)</span> <span class="ow">and</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">)]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">InsertManyResult</span><span class="p">)</span> <span class="ow">and</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="p">(</span><span class="n">DeleteResult</span><span class="p">,</span> <span class="n">UpdateResult</span><span class="p">)):</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">raw_result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">BulkWriteResult</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_count</span>
+                    <span class="o">+</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">upserted_count</span>
+                    <span class="o">+</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">modified_count</span>
+                    <span class="o">+</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">deleted_count</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Interpretation of result type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">raw_result</span><span class="p">)</span><span class="si">}</span><span class="s1"> is not implemented.&#39;</span>
+                <span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ok&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">result_mapper</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># obj is a type</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="n">method_names_to_normalize</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="p">,</span>
+                    <span class="n">method_name</span><span class="p">,</span>
+                    <span class="n">normalize_result</span><span class="p">(</span>
+                        <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">),</span>
+                        <span class="n">method_names_to_normalize</span><span class="o">=</span><span class="n">method_names_to_normalize</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">mongodol</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NO COPYRIGHT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

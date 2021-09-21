@@ -3,9 +3,9 @@ from mongodol.stores import MongoStore
 
 def test_mongo_store(s=MongoStore(), k=None, v=None):
     if k is None:
-        k = {"_id": "foo"}
+        k = {'_id': 'foo'}
     if v is None:
-        v = {"val": "bar"}
+        v = {'val': 'bar'}
     if k in s:  # deleting all docs in tmp
         del s[k]
     assert (k in s) is False  # see that key is not in store (and testing __contains__)
