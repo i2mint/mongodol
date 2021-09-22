@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mongodol.base &#8212; mongodol 0.0.4 documentation</title>
+    <title>mongodol.base &#8212; mongodol 0.0.5 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -436,7 +436,11 @@
         <span class="o">**</span><span class="n">mgc_find_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span> <span class="n">iter_projection</span><span class="o">=</span><span class="n">iter_projection</span><span class="p">,</span> <span class="o">**</span><span class="n">mgc_find_kwargs</span><span class="p">,</span>
+            <span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span>
+            <span class="n">iter_projection</span><span class="o">=</span><span class="n">iter_projection</span><span class="p">,</span>
+            <span class="n">getitem_projection</span><span class="o">=</span><span class="n">getitem_projection</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">mgc_find_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_on_write_filter</span> <span class="o">=</span> <span class="n">on_write_filter</span>
 
