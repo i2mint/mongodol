@@ -401,7 +401,7 @@ class MongoCollectionPersister(MongoCollectionReader):
         **mgc_find_kwargs,
     ):
         super().__init__(
-            mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs,
+            mgc=mgc, filter=filter, iter_projection=iter_projection, getitem_projection=getitem_projection, **mgc_find_kwargs,
         )
         self._on_write_filter = on_write_filter
 
