@@ -1,8 +1,11 @@
+"""Util functions"""
+
 from functools import partial
 from operator import or_
 from typing import Union, Iterable, Mapping
 
 from pymongo.collection import Collection as PyMongoCollection
+from pymongo.database import Database
 from pymongo import MongoClient
 
 from linkup import key_aligned_val_op_with_forced_defaults
@@ -13,6 +16,10 @@ from mongodol.constants import (
     DFLT_TEST_DB,
     DFLT_TEST_COLLECTION,
 )
+
+
+def mk_dflt_client():
+    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)
 
 
 def mk_dflt_mgc():
@@ -166,7 +173,7 @@ def projection_union(
     return merge_projection_dicts(projection_1, projection_2)
 
 
-def get_mongo_collection_pymongo_obj(obj=None):
+def get_mongo_collection_pymongo_obj(obj=None, client_factory=mk_dflt_client):
     """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
 
     ```
@@ -185,7 +192,9 @@ def get_mongo_collection_pymongo_obj(obj=None):
                 'If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html'
             )
         database_name, collection_name = obj.split('/')
-        return PyMongoCollection()[database_name][collection_name]
+        # Note: Was (not working now) PyMongoCollection()[database_name][collection_name]
+        db = Database(client_factory(), name=database_name)
+        return PyMongoCollection(database=db, name=collection_name)
     elif hasattr(obj, '_mgc') and isinstance(obj._mgc, PyMongoCollection):
         obj = obj._mgc
     if not isinstance(obj, PyMongoCollection):
