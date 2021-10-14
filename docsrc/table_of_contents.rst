@@ -23,4 +23,5 @@
    module_docs/mongodol/tracking_methods
    module_docs/mongodol/trans
    module_docs/mongodol/util
+   module_docs/mongodol/utils
    module_docs/mongodol/utils/werk_local
