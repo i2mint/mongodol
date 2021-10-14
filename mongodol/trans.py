@@ -1,3 +1,5 @@
+"""Transformative functionality"""
+
 from copy import deepcopy
 from abc import ABC
 from typing import Mapping

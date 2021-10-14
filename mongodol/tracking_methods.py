@@ -1,3 +1,5 @@
+"""Tracking functionality"""
+
 from functools import wraps, partial, cached_property
 from inspect import signature
 from typing import Iterable, Callable

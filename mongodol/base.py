@@ -1,3 +1,5 @@
+"""Base mongoDB data object layers"""
+
 from functools import wraps, cached_property
 from typing import Mapping, Optional, Union, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView

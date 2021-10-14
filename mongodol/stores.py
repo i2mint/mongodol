@@ -1,3 +1,5 @@
+"""Some useful stores for mongoDB"""
+
 from functools import wraps, partial
 from typing import Collection, Mapping
 

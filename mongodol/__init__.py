@@ -1,3 +1,5 @@
+"""Access mongo through a Mapping interface"""
+
 from mongodol.base import (
     MongoClientReader,
     MongoDbReader,
@@ -15,5 +17,6 @@ from mongodol.stores import (
 from mongodol.util import (
     mk_dflt_mgc,
     normalize_projection,
+    get_mongo_collection_pymongo_obj
 )
 from mongodol.tests.util import get_test_collection_persister
