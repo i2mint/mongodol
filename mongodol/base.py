@@ -121,9 +121,11 @@ class MongoItemsView(ItemsView):
 
 
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
-    """A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
+    """A base class to read from a mongo collection, or subset thereof, with the Mapping
+    (i.e. dict-like) interface.
 
-    Some examples below. For examples using actual data (with setup and tear down) see the tests/ folder.
+    Some examples below. For examples using actual data (with setup and tear down)
+    see the tests/ folder.
 
     >>> from pymongo import MongoClient
     >>> s = MongoCollectionReader(MongoClient()['mongodol']['mongodol_test'])
@@ -223,11 +225,18 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
             filter=self._merge_with_filt(k), projection=self._getitem_projection,
         )
 
-    def keys(self):
-        return KeysView(self)
+    # delete once verified that it's unnecessary
+    # def keys(self):
+    #     return KeysView(self)
+
+    ValuesView = MongoValuesView
+    ItemsView = MongoItemsView
 
     def values(self) -> MongoValuesView:
         return MongoValuesView(self)
+
+    def items(self) -> MongoItemsView:
+        return MongoItemsView(self)
 
     @cached_property
     def _items_projection(self):
@@ -261,9 +270,6 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
                 for field in _getitem_projection
                 if _getitem_projection[field] is True
             )
-
-    def items(self) -> MongoItemsView:
-        return MongoItemsView(self)
 
     @classmethod
     def from_params(
