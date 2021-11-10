@@ -7,8 +7,7 @@ from collections import ChainMap
 
 from pymongo import MongoClient
 
-from dol import KvReader
-from dol import Collection as DolCollection
+from dol import KvReader, Collection as DolCollection, BaseValuesView, BaseItemsView
 
 from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor, DFLT_TEST_DB
 from mongodol.util import (
@@ -86,40 +85,6 @@ class MongoCollectionCollection(DolCollection):
         )
 
 
-class MongoValuesView(ValuesView):
-    def __contains__(self, v):
-        m = self._mapping
-        cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
-        return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def __iter__(self):
-        m = self._mapping
-        return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
-
-    # def distinct(self, key, filter=None, **kwargs):
-    #     m = self._mapping
-    #     # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-    #     return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
-    #
-    # unique = distinct
-
-
-class MongoItemsView(ItemsView):
-    def __contains__(self, item):
-        m = self._mapping
-        k, v = item
-        # TODO: How do we have cursor return no data (here still has _id)
-        cursor = m.mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
-        # return cursor
-        return next(cursor, end_of_cursor) is not end_of_cursor
-
-    def __iter__(self):
-        m = self._mapping
-        for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
-            key = {k: doc.pop(k) for k in m.key_fields}
-            yield key, doc
-
-
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping
     (i.e. dict-like) interface.
@@ -159,12 +124,9 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
     (specialized for mongo).
 
-    >>> type(s.keys()).__name__
-    'KeysView'
-    >>> type(s.values()).__name__
-    'MongoValuesView'
-    >>> type(s.items()).__name__
-    'MongoItemsView'
+    >>> assert type(s.keys()) == s.KeysView
+    >>> assert type(s.values()) == s.ValuesView
+    >>> assert type(s.items()) == s.ItemsView
 
     Recall that ``collections.abc.MappingViews`` have many set-like functionalities:
 
@@ -196,10 +158,38 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """
 
     _projections_are_flattened = False
-    _wrap_for_method = {
-        'values': MongoValuesView,
-        'items': MongoItemsView,
-    }
+
+    class ValuesView(BaseValuesView):
+        def __contains__(self, v):
+            m = self._mapping
+            cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
+            return next(cursor, end_of_cursor) is not end_of_cursor
+
+        def __iter__(self):
+            m = self._mapping
+            return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
+
+        # def distinct(self, key, filter=None, **kwargs):
+        #     m = self._mapping
+        #     # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
+        #     return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
+        #
+        # unique = distinct
+
+    class ItemsView(BaseItemsView):
+        def __contains__(self, item):
+            m = self._mapping
+            k, v = item
+            # TODO: How do we have cursor return no data (here still has _id)
+            cursor = m.mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
+            # return cursor
+            return next(cursor, end_of_cursor) is not end_of_cursor
+
+        def __iter__(self):
+            m = self._mapping
+            for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
+                key = {k: doc.pop(k) for k in m.key_fields}
+                yield key, doc
 
     def __init__(
         self,
@@ -224,19 +214,6 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         return self.mgc.find(
             filter=self._merge_with_filt(k), projection=self._getitem_projection,
         )
-
-    # delete once verified that it's unnecessary
-    # def keys(self):
-    #     return KeysView(self)
-
-    ValuesView = MongoValuesView
-    ItemsView = MongoItemsView
-
-    def values(self) -> MongoValuesView:
-        return MongoValuesView(self)
-
-    def items(self) -> MongoItemsView:
-        return MongoItemsView(self)
 
     @cached_property
     def _items_projection(self):

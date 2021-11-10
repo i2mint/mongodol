@@ -91,11 +91,10 @@ def test_mongo_collection_reader_without_test_data_dependencies(
     # ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
     # (specialized for mongo).
     from collections.abc import KeysView
-    from mongodol.base import MongoValuesView, MongoItemsView
 
     assert isinstance(s.keys(), KeysView)
-    assert isinstance(s.values(), MongoValuesView)
-    assert isinstance(s.items(), MongoItemsView)
+    assert isinstance(s.values(), s.ValuesView)
+    assert isinstance(s.items(), s.ItemsView)
 
     # Recall that ``collections.abc.MappingViews`` have many set-like functionalities:
 
