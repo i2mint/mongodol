@@ -100,10 +100,7 @@ def test_iterate_values(
     mgc = get_test_collection_object(collection_name=mgc_name)
     mgc_find_kwargs = mgc_find_kwargs or {}
     store = MongoCollectionReader(
-        mgc=mgc, 
-        filter=filt, 
-        getitem_projection=getitem_projection, 
-        **mgc_find_kwargs
+        mgc=mgc, filter=filt, getitem_projection=getitem_projection, **mgc_find_kwargs
     )
     assert list(store.values()) == expected_result
 
@@ -112,19 +109,44 @@ def test_iterate_values(
     'key_input_mapper, key_output_mapper, value_input_mapper, value_output_mapper, new_doc',
     [
         (
-            None, None, None, None,
-            {ID: 6, 'en': 'six', 'fr': 'six', 'sp': 'seis', 'so_far': [1, 2, 3, 4, 5, 6]}  # new_doc
+            None,
+            None,
+            None,
+            None,
+            {
+                ID: 6,
+                'en': 'six',
+                'fr': 'six',
+                'sp': 'seis',
+                'so_far': [1, 2, 3, 4, 5, 6],
+            },  # new_doc
         ),
         (
             lambda key: {ID: key // 10},  # key_input_mapper
             lambda key: key[ID] * 10,  # key_output_mapper
-            lambda value: {k: v.lower() if isinstance(v, str) else v for k, v in value.items()},  # value_input_mapper
-            lambda value: {k: v.upper() if isinstance(v, str) else v for k, v in value.items()},  # value_output_mapper
-            {ID: 6, 'en': 'SIX', 'fr': 'SIX', 'sp': 'SEIS', 'so_far': [1, 2, 3, 4, 5, 6]}  # new_doc
-        )
-    ]
+            lambda value: {
+                k: v.lower() if isinstance(v, str) else v for k, v in value.items()
+            },  # value_input_mapper
+            lambda value: {
+                k: v.upper() if isinstance(v, str) else v for k, v in value.items()
+            },  # value_output_mapper
+            {
+                ID: 6,
+                'en': 'SIX',
+                'fr': 'SIX',
+                'sp': 'SEIS',
+                'so_far': [1, 2, 3, 4, 5, 6],
+            },  # new_doc
+        ),
+    ],
 )
-def test_store_with_mappers(key_input_mapper, key_output_mapper, value_input_mapper, value_output_mapper, new_doc):
+def test_store_with_mappers(
+    key_input_mapper,
+    key_output_mapper,
+    value_input_mapper,
+    value_output_mapper,
+    new_doc,
+):
     def verify_new_doc_is_in_store():
         assert store[new_doc_id] == new_doc
         assert new_doc_id in store
@@ -168,8 +190,8 @@ def test_store_with_mappers(key_input_mapper, key_output_mapper, value_input_map
     assert list(store.values()) == [value_output_mapper(n) for n in nums_and_lans]
     assert list(store.items()) == [
         (
-            key_output_mapper({ID: n[ID]}), 
-            value_output_mapper({k: v for k, v in n.items() if k != ID})
-        ) 
+            key_output_mapper({ID: n[ID]}),
+            value_output_mapper({k: v for k, v in n.items() if k != ID}),
+        )
         for n in nums_and_lans
     ]

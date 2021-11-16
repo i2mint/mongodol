@@ -84,6 +84,7 @@ class MongoCollectionCollection(DolCollection):
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
 
+
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping
     (i.e. dict-like) interface.
@@ -199,26 +200,24 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def contains_value(self, v):
         cursor = self.mgc.find(
-            filter=self._merge_with_filt(v), 
-            projection=(), 
-            **self._mgc_find_kwargs
+            filter=self._merge_with_filt(v), projection=(), **self._mgc_find_kwargs
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def iter_values(self):
         return self.mgc.find(
-            filter=self.filter, 
-            projection=self._getitem_projection, 
-            **self._mgc_find_kwargs
+            filter=self.filter,
+            projection=self._getitem_projection,
+            **self._mgc_find_kwargs,
         )
 
     def contains_item(self, item):
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
         cursor = self.mgc.find(
-            filter=dict(v, **self._merge_with_filt(k)), 
-            projection=(), 
-            **self._mgc_find_kwargs
+            filter=dict(v, **self._merge_with_filt(k)),
+            projection=(),
+            **self._mgc_find_kwargs,
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
 
@@ -226,7 +225,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         cursor = self.mgc.find(
             filter=self.filter,
             projection=self._items_projection,
-            **self._mgc_find_kwargs
+            **self._mgc_find_kwargs,
         )
         for doc in cursor:
             key = {k: doc.pop(k) for k in self.key_fields}
@@ -549,7 +548,7 @@ class MongoBaseStore(Store):
 
     def iter_items(self):
         yield from (
-            (self._key_of_id(key), self._obj_of_data(doc)) 
+            (self._key_of_id(key), self._obj_of_data(doc))
             for key, doc in self.store.iter_items()
         )
 
