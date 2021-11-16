@@ -3,8 +3,9 @@
 from copy import deepcopy
 from abc import ABC
 from typing import Mapping
-from functools import wraps
+from functools import partial, wraps
 from typing import Iterable, Optional, TypedDict
+from dol import wrap_kvs as dol_wrap_kvs
 
 from pymongo.results import (
     BulkWriteResult,
@@ -19,6 +20,7 @@ from dol.trans import (
     double_up_as_factory,
     store_decorator,
 )
+from mongodol.base import MongoBaseStore
 from mongodol.util import KeyNotUniqueError
 
 
@@ -304,3 +306,6 @@ def normalize_result(obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORM
                     ),
                 )
         return cls
+
+
+wrap_kvs = partial(dol_wrap_kvs, wrapper=MongoBaseStore)

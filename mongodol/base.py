@@ -1,9 +1,9 @@
 """Base mongoDB data object layers"""
 
 from functools import wraps, cached_property
-from typing import Mapping, Optional, Union, Iterable
-from collections.abc import KeysView, ValuesView, ItemsView
+from typing import Mapping, Optional, Union
 from collections import ChainMap
+from dol.base import Store
 
 from pymongo import MongoClient
 
@@ -84,7 +84,6 @@ class MongoCollectionCollection(DolCollection):
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
 
-
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping
     (i.e. dict-like) interface.
@@ -161,44 +160,27 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     class ValuesView(BaseValuesView):
         def __contains__(self, v):
-            m = self._mapping
-            cursor = m.mgc.find(filter=m._merge_with_filt(v), projection=())
-            return next(cursor, end_of_cursor) is not end_of_cursor
+            return self._mapping.contains_value(v)
 
         def __iter__(self):
-            m = self._mapping
-            return m.mgc.find(filter=m.filter, projection=m._getitem_projection)
-
-        # def distinct(self, key, filter=None, **kwargs):
-        #     m = self._mapping
-        #     # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
-        #     return m.mgc.distinct(key, filter=m._merge_with_filt(filter), **kwargs)
-        #
-        # unique = distinct
+            return self._mapping.iter_values()
 
     class ItemsView(BaseItemsView):
         def __contains__(self, item):
-            m = self._mapping
-            k, v = item
-            # TODO: How do we have cursor return no data (here still has _id)
-            cursor = m.mgc.find(filter=dict(v, **m._merge_with_filt(k)), projection=())
-            # return cursor
-            return next(cursor, end_of_cursor) is not end_of_cursor
+            return self._mapping.contains_item(item)
 
         def __iter__(self):
-            m = self._mapping
-            for doc in m.mgc.find(filter=m.filter, projection=m._items_projection):
-                key = {k: doc.pop(k) for k in m.key_fields}
-                yield key, doc
+            return self._mapping.iter_items()
 
     def __init__(
         self,
         mgc: Union[PyMongoCollectionSpec, KvReader] = None,
         filter: Optional[dict] = None,
-        iter_projection: ProjectionSpec = (ID,),
+        iter_projection: ProjectionSpec = None,
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
     ):
+        iter_projection = iter_projection or (ID,)
         if not isinstance(iter_projection, dict):
             iter_projection = {k: True for k in iter_projection}
         assert iter_projection is not None, 'iter_projection cannot be None'
@@ -214,6 +196,41 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         return self.mgc.find(
             filter=self._merge_with_filt(k), projection=self._getitem_projection,
         )
+
+    def contains_value(self, v):
+        cursor = self.mgc.find(
+            filter=self._merge_with_filt(v), 
+            projection=(), 
+            **self._mgc_find_kwargs
+        )
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def iter_values(self):
+        return self.mgc.find(
+            filter=self.filter, 
+            projection=self._getitem_projection, 
+            **self._mgc_find_kwargs
+        )
+
+    def contains_item(self, item):
+        k, v = item
+        # TODO: How do we have cursor return no data (here still has _id)
+        cursor = self.mgc.find(
+            filter=dict(v, **self._merge_with_filt(k)), 
+            projection=(), 
+            **self._mgc_find_kwargs
+        )
+        return next(cursor, end_of_cursor) is not end_of_cursor
+
+    def iter_items(self):
+        cursor = self.mgc.find(
+            filter=self.filter,
+            projection=self._items_projection,
+            **self._mgc_find_kwargs
+        )
+        for doc in cursor:
+            key = {k: doc.pop(k) for k in self.key_fields}
+            yield (key, doc)
 
     @cached_property
     def _items_projection(self):
@@ -517,3 +534,27 @@ class MongoDbReader(KvReader):
 
     def __getitem__(self, k):
         return self.collection_store_cls(self.db[k])
+
+
+class MongoBaseStore(Store):
+    def contains_value(self, v):
+        return self.store.contains_value(self._data_of_obj(v))
+
+    def iter_values(self):
+        return map(self._obj_of_data, self.store.iter_values())
+
+    def contains_item(self, item):
+        k, v = item
+        return self.store.contains_item((self._id_of_key(k), self._data_of_obj(v)))
+
+    def iter_items(self):
+        yield from (
+            (self._key_of_id(key), self._obj_of_data(doc)) 
+            for key, doc in self.store.iter_items()
+        )
+
+    def append(self, v):
+        return self.store.append(self._data_of_obj(v))
+
+    def extend(self, values):
+        return self.store.extend(list(map(self._data_of_obj, values)))

@@ -1,16 +1,19 @@
 from functools import lru_cache
 
+from pymongo import MongoClient
+
+from mongodol.base import MongoCollectionPersister
+from mongodol.tests import (
+    data as test_data,
+    NUMBER_MGC_NAME,
+    FEATURE_CUBE_MGC_NAME,
+    BDFL_MGC_NAME,
+)
 from mongodol.constants import (
     DFLT_MONGO_CLIENT_ARGS,
     DFLT_TEST_DB,
     DFLT_TEST_COLLECTION,
 )
-from pymongo import MongoClient
-
-from mongodol.base import MongoCollectionPersister
-
-# from mongodol.util import mk_dflt_mgc
-from mongodol.tests import data as test_data
 
 
 @lru_cache(maxsize=1)
@@ -51,9 +54,9 @@ def init_db():
     for collection in db.list_collection_names():
         db[collection].delete_many({})
 
-    db.number.insert_many(test_data.nums_and_lans)
-    db.feature_cube.insert_many(test_data.feature_cube)
-    db.bdfl.insert_many(test_data.bdfl)
+    db[NUMBER_MGC_NAME].insert_many(test_data.nums_and_lans)
+    db[FEATURE_CUBE_MGC_NAME].insert_many(test_data.feature_cube)
+    db[BDFL_MGC_NAME].insert_many(test_data.bdfl)
 
 
 def populated_pymongo_collection(docs=test_data.nums_and_lans):
