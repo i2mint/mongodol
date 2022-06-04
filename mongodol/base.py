@@ -487,8 +487,8 @@ class MongoCollectionPersister(MongoCollectionReader):
 
 class MongoClientReader(KvReader):
     @wraps(MongoClient.__init__)
-    def __init__(self, **mongo_client_kwargs):
-        self._mongo_client = MongoClient(**mongo_client_kwargs)
+    def __init__(self, *mongo_client_args, **mongo_client_kwargs):
+        self._mongo_client = MongoClient(*mongo_client_args, **mongo_client_kwargs)
 
     def __iter__(self):
         yield from self._mongo_client.list_database_names()
