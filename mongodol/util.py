@@ -200,4 +200,3 @@ def get_mongo_collection_pymongo_obj(obj=None, client_factory=mk_dflt_client):
     if not isinstance(obj, PyMongoCollection):
         raise TypeError(f'Unknown pymongo collection specification: {obj}')
     return obj
-
