@@ -48,8 +48,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "thorwhalen1@gmail.com"
-          git config --global user.name "GitHub CI Runner"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -71,19 +71,24 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           isee update-setup-cfg
 
-      - name: Generate Documentation
-        run: isee generate-documentation
-
       - name: Package
         run: python setup.py sdist
 
       - name: Publish
         run: |
           twine upload dist/$PROJECT_NAME-$VERSION.tar.gz -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive  --skip-existing --disable-progress-bar
-          epythet make . github
 
       - name: Push Changes
         run: pack check-in "**CI** Formatted code + Updated version number and documentation. [skip ci]" --auto-choose-default-action --bypass-docstring-validation --bypass-tests --bypass-code-formatting --verbose
 
       - name: Tag Repository
         run: isee tag-repo $VERSION
+
+  github-pages:
+    name: Publish GitHub Pages
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: i2mint/epythet/actions/publish-github-pages@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
