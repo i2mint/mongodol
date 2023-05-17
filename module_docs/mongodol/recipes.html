@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.recipes &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mongodol.scrap.old01" href="scrap/old01.html" />
+    <link rel="prev" title="mongodol.errors" href="errors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">mongodol.errors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mongodol.recipes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/mongodol/recipes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mongodol.recipes">
+<span id="mongodol-recipes"></span><h1>mongodol.recipes<a class="headerlink" href="#module-mongodol.recipes" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="mongodol.recipes.WriteNotAllowedToThatKey">
+<em class="property">exception </em><code class="sig-prename descclassname">mongodol.recipes.</code><code class="sig-name descname">WriteNotAllowedToThatKey</code><a class="reference internal" href="../../_modules/mongodol/recipes.html#WriteNotAllowedToThatKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.recipes.WriteNotAllowedToThatKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>To indicate that once cannot write to some specific key one is trying to write to</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.recipes.disallow_sourced_interval_overlaps">
+<code class="sig-prename descclassname">mongodol.recipes.</code><code class="sig-name descname">disallow_sourced_interval_overlaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">store</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/recipes.html#disallow_sourced_interval_overlaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.recipes.disallow_sourced_interval_overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disallow writing to a key that shares the same “source” field value and overlapping (“bt”, “tt”) interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>store</strong> – <code class="docutils literal notranslate"><span class="pre">KvPersister</span></code> (instance or class) <code class="docutils literal notranslate"><span class="pre">s</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The same store, but where <cite>s[dict(source=source, bt=bt, tt=tt}] = v`</cite> writes are not permitted if
+there is another doc, with the same source, and an overlapping (bt, tt) interval.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mongodol.tests</span> <span class="kn">import</span> <span class="n">get_test_collection_persister</span><span class="p">,</span> <span class="n">clear_all_and_populate</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># We&#39;re going to take (make really) a store s with the two follwing documents:</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;dog&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;visual&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;dog&#39;</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Then try to do s[k] = v with the following (k, v) pairs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;cat&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Note here that (7, 10) overlaps with (6, 9) (in source=audio)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;cat&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>  <span class="c1"># Make a persister</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># empty it and populate it with the two data docs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>  <span class="c1"># yep, two docs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;annot&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;dog&#39;</span><span class="p">]</span>  <span class="c1"># and only has a dog</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>  <span class="c1"># Now has three docs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">&#39;cat&#39;</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;annot&#39;</span><span class="p">)</span>  <span class="c1"># has a cat now</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>  <span class="c1"># v2 was written, indeed</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Let&#39;s start over, usingour disallow_sourced_interval_overlaps decorator this time</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protected_s</span> <span class="o">=</span> <span class="n">disallow_sourced_interval_overlaps</span><span class="p">(</span><span class="n">get_test_collection_persister</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">protected_s</span><span class="p">)</span>  <span class="c1"># empty it and populate it with the two data docs</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># No problem! And see that you have a cat annot now!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">&#39;cat&#39;</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;annot&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># But this next one will not work since the (7, 10) overlaps with (6, 9) (in source=audio)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">protected_s</span><span class="p">[</span><span class="n">k2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v2</span>
+<span class="gp">... </span><span class="k">except</span> <span class="n">WriteNotAllowedToThatKey</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WriteNotAllowedToThatKey expected!&quot;</span><span class="p">)</span>
+<span class="go">WriteNotAllowedToThatKey expected!</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="errors.html" class="btn btn-neutral float-left" title="mongodol.errors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scrap/old01.html" class="btn btn-neutral float-right" title="mongodol.scrap.old01" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

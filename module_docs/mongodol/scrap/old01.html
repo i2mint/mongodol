@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.scrap.old01 &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/toggleprompt.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="mongodol.scrap.views_work" href="views_work.html" />
+    <link rel="prev" title="mongodol.recipes" href="../recipes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mongodol.scrap.old01</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/mongodol/scrap/old01.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mongodol.scrap.old01">
+<span id="mongodol-scrap-old01"></span><h1>mongodol.scrap.old01<a class="headerlink" href="#module-mongodol.scrap.old01" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="mongodol.scrap.old01.MongoCollectionPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoCollectionPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mgc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>pymongo.collection.Collection<span class="p">, </span>str<span class="p">, </span>dol.base.Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filt</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionPersister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p>
+<p># &gt;&gt;&gt; from pymongo import MongoClient
+# &gt;&gt;&gt; mongo_collection_obj = MongoClient()[DFLT_TEST_DB][‘test’]
+# &gt;&gt;&gt; s = MongoCollectionPersister(mongo_collection_obj)
+# &gt;&gt;&gt; for k in s:  # deleting all docs in default collection
+# …     del s[k]
+# &gt;&gt;&gt; k = {‘_id’: ‘foo’}
+# &gt;&gt;&gt; v = {‘val’: ‘bar’}
+# &gt;&gt;&gt; k in s  # see that key is not in store (and testing __contains__)
+# False
+# &gt;&gt;&gt; len(s)
+# 0
+# &gt;&gt;&gt; s[k] = v
+# &gt;&gt;&gt; len(s)
+# 1
+# &gt;&gt;&gt; list(s)
+# [{‘_id’: ‘foo’}]
+#
+# Since this is a base mongo store, the values are cursors, so to get an actual value, you need to fetch the first doc
+#
+# &gt;&gt;&gt; next(s[k])
+# {‘val’: ‘bar’}
+# &gt;&gt;&gt; next(s.get(k))
+# {‘val’: ‘bar’}
+# &gt;&gt;&gt; next(s.get({‘not’: ‘a key’}, {‘default’: ‘val’}))  # testing s.get with default
+# {‘default’: ‘val’}
+# &gt;&gt;&gt; list(s.values())
+# [{‘val’: ‘bar’}]
+# &gt;&gt;&gt; k in s  # testing __contains__ again
+# True
+# &gt;&gt;&gt; k in s.keys()  # test the contains capability of s.keys() (a MongoKeysView instance)
+# True
+# &gt;&gt;&gt; del s[k]
+# &gt;&gt;&gt; len(s)
+# 0
+#
+# &gt;&gt;&gt;
+# &gt;&gt;&gt; # Making a persister whose keys are 2-dimensional and values are 3-dimensional
+# &gt;&gt;&gt; s = MongoCollectionPersister.from_params(db_name=DFLT_TEST_DB, collection_name=’tmp’,
+# …                     key_fields=(‘first’, ‘last’), data_fields=(‘yob’, ‘proj’, ‘bdfl’))
+# &gt;&gt;&gt; for _id in s:  # deleting all docs in tmp
+# …     del s[_id]
+# &gt;&gt;&gt; # writing two items
+# &gt;&gt;&gt; s[{‘first’: ‘Guido’, ‘last’: ‘van Rossum’}] = {‘yob’: 1956, ‘proj’: ‘python’, ‘bdfl’: False}
+# &gt;&gt;&gt; s[{‘first’: ‘Vitalik’, ‘last’: ‘Buterin’}] = {‘yob’: 1994, ‘proj’: ‘ethereum’, ‘bdfl’: True}
+# &gt;&gt;&gt; # Seeing that those two items are there
+# &gt;&gt;&gt; for key, val in s.items():
+# …     print(f”{key} –&gt; {val}”)
+# {‘first’: ‘Guido’, ‘last’: ‘van Rossum’} –&gt; {‘yob’: 1956, ‘proj’: ‘python’, ‘bdfl’: False}
+# {‘first’: ‘Vitalik’, ‘last’: ‘Buterin’} –&gt; {‘yob’: 1994, ‘proj’: ‘ethereum’, ‘bdfl’: True}</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.scrap.old01.MongoCollectionReader">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoCollectionReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mgc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>pymongo.collection.Collection<span class="p">, </span>str<span class="p">, </span>dol.base.Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filt</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
+&gt;&gt;&gt; from mongodol import MongoCollectionReader
+&gt;&gt;&gt; from pymongo import MongoClient
+&gt;&gt;&gt; s = MongoCollectionReader(MongoClient()[DFLT_TEST_DB][‘test’])
+&gt;&gt;&gt; list_of_keys = list(s)
+&gt;&gt;&gt; fake_key = {‘_id’: ‘this key does not exist’}
+&gt;&gt;&gt; fake_key in s
+False</p>
+<p><code class="docutils literal notranslate"><span class="pre">s.keys()</span></code>, <code class="docutils literal notranslate"><span class="pre">s.values()</span></code>, and <code class="docutils literal notranslate"><span class="pre">s.items()</span></code> are <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> instances
+(specialized for mongo).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">&lt;class &#39;collections.abc.KeysView&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">&lt;class &#39;mongodol.base.MongoValuesView&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">&lt;class &#39;mongodol.base.MongoItemsView&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Recall that <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> have many set-like functionalities:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_list_of_fake_keys</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;fake_key&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;yet_another&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">a_list_of_fake_keys</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">a_list_of_fake_keys</span>
+<span class="go">set()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s2">&quot;this does not exist&quot;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="o">=</span> <span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="n">fake_value</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities
+might not work (complaints such as <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">unhashable</span> <span class="pre">type:</span> <span class="pre">'dict'</span></code>),
+such as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">|</span> <span class="n">a_list_of_fake_keys</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="gr">TypeError</span>: <span class="n">unhashable type: &#39;dict&#39;</span>
+</pre></div>
+</div>
+<p>But you can take care of that in higher level wrappers that have hashable keys and/or values.</p>
+<dl class="py method">
+<dt id="mongodol.scrap.old01.MongoCollectionReader.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s items<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mongodol.scrap.old01.MongoCollectionReader.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s keys<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mongodol.scrap.old01.MongoCollectionReader.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; an object providing a view on D’s values<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.scrap.old01.MongoItemsView">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoItemsView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mapping</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoItemsView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoItemsView" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.scrap.old01.OldMongoInsertPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">OldMongoInsertPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_name</span><span class="o">=</span><span class="default_value">'mongodol'</span></em>, <em class="sig-param"><span class="n">collection_name</span><span class="o">=</span><span class="default_value">'test'</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoInsertPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoInsertPersister" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.scrap.old01.OldMongoPersister">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">OldMongoPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_name</span><span class="o">=</span><span class="default_value">'mongodol'</span></em>, <em class="sig-param"><span class="n">collection_name</span><span class="o">=</span><span class="default_value">'test'</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoPersister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A basic mongo persister.
+Note that the mongo persister is designed not to overwrite the value of a key if the key already exists.
+You can subclass it and use update_one instead of insert_one if you want to be able to overwrite data.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">OldMongoPersister</span><span class="p">()</span>  <span class="c1"># just use defaults</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">_id</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># see that key is not in store (and testing __contains__)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">[{&#39;_id&#39;: &#39;foo&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="go">{&#39;val&#39;: &#39;bar&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="go">{&#39;val&#39;: &#39;bar&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">({</span><span class="s1">&#39;not&#39;</span><span class="p">:</span> <span class="s1">&#39;a key&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;val&#39;</span><span class="p">})</span>  <span class="c1"># testing s.get with default</span>
+<span class="go">{&#39;default&#39;: &#39;val&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">[{&#39;val&#39;: &#39;bar&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># testing __contains__ again</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Making a persister whose keys are 2-dimensional and values are 3-dimensional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">OldMongoPersister</span><span class="p">(</span><span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span> <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">key_fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">),</span> <span class="n">data_fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;yob&#39;</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">_id</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># writing two items</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="s1">&#39;Guido&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="s1">&#39;van Rossum&#39;</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;yob&#39;</span><span class="p">:</span> <span class="mi">1956</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="s1">&#39;Vitalik&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="s1">&#39;Buterin&#39;</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;yob&#39;</span><span class="p">:</span> <span class="mi">1994</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;ethereum&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Seeing that those two items are there</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">{&#39;first&#39;: &#39;Guido&#39;, &#39;last&#39;: &#39;van Rossum&#39;} --&gt; {&#39;yob&#39;: 1956, &#39;proj&#39;: &#39;python&#39;, &#39;bdfl&#39;: False}</span>
+<span class="go">{&#39;first&#39;: &#39;Vitalik&#39;, &#39;last&#39;: &#39;Buterin&#39;} --&gt; {&#39;yob&#39;: 1994, &#39;proj&#39;: &#39;ethereum&#39;, &#39;bdfl&#39;: True}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../recipes.html" class="btn btn-neutral float-left" title="mongodol.recipes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="views_work.html" class="btn btn-neutral float-right" title="mongodol.scrap.views_work" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

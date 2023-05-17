@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.utils.werk_local &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/toggleprompt.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mongodol.utils.werk_local</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mongodol.utils.werk_local</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Vendored from werkzeug&#39;s local.py module, edited to our needs.</span>
+<span class="sd">That single need is have a LocalProxy to subclass in making TrackedObj (see tracking_methods.py).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+
+<span class="k">class</span> <span class="nc">_ProxyLookup</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Descriptor that handles proxied attribute lookup for</span>
+<span class="sd">    :class:`LocalProxy`.</span>
+
+<span class="sd">    :param f: The built-in function this attribute is accessed through.</span>
+<span class="sd">        Instead of looking up the special method, the function call</span>
+<span class="sd">        is redone on the object.</span>
+<span class="sd">    :param fallback: Call this method if the proxy is unbound instead of</span>
+<span class="sd">        raising a :exc:`RuntimeError`.</span>
+<span class="sd">    :param class_value: Value to return when accessed from the class.</span>
+<span class="sd">        Used for ``__doc__`` so building docs still works.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bind_f&#39;</span><span class="p">,</span> <span class="s1">&#39;fallback&#39;</span><span class="p">,</span> <span class="s1">&#39;class_value&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">class_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;__get__&#39;</span><span class="p">):</span>
+            <span class="c1"># A Python function, can be turned into a bound method.</span>
+
+            <span class="k">def</span> <span class="nf">bind_f</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># A C function, use partial to bind the first argument.</span>
+
+            <span class="k">def</span> <span class="nf">bind_f</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Use getattr, which will produce a bound method.</span>
+            <span class="n">bind_f</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind_f</span> <span class="o">=</span> <span class="n">bind_f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fallback</span> <span class="o">=</span> <span class="n">fallback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_value</span> <span class="o">=</span> <span class="n">class_value</span>
+
+    <span class="k">def</span> <span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_value</span>
+
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_get_current_object</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fallback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fallback</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind_f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind_f</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;proxy </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Support calling unbound methods from the class. For example,</span>
+<span class="sd">        this happens with ``copy.copy``, which does</span>
+<span class="sd">        ``type(x).__copy__(x)``. ``type(x)`` can&#39;t be proxied, so it</span>
+<span class="sd">        returns the proxy type and descriptor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">instance</span><span class="p">))(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_ProxyIOp</span><span class="p">(</span><span class="n">_ProxyLookup</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look up an augmented assignment method on a proxied object. The</span>
+<span class="sd">    method is wrapped to return the proxy instead of the object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fallback</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">bind_f</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">i_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+                <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">instance</span>
+
+            <span class="k">return</span> <span class="n">i_op</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind_f</span> <span class="o">=</span> <span class="n">bind_f</span>
+
+
+<span class="k">def</span> <span class="nf">_l_to_r_op</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Swap the argument order to turn an l-op into an r-op.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">r_op</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">r_op</span>
+
+
+<div class="viewcode-block" id="LocalProxy"><a class="viewcode-back" href="../../../module_docs/mongodol/utils/werk_local.html#mongodol.utils.werk_local.LocalProxy">[docs]</a><span class="k">class</span> <span class="nc">LocalProxy</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A proxy to the object bound to a :class:`Local`. All operations</span>
+<span class="sd">    on the proxy are forwarded to the bound object. If no object is</span>
+<span class="sd">    bound, a :exc:`RuntimeError` is raised.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from werkzeug.local import Local</span>
+<span class="sd">        l = Local()</span>
+
+<span class="sd">        # a proxy to whatever l.user is set to</span>
+<span class="sd">        user = l(&quot;user&quot;)</span>
+
+<span class="sd">        from werkzeug.local import LocalStack</span>
+<span class="sd">        _request_stack = LocalStack()</span>
+
+<span class="sd">        # a proxy to _request_stack.top</span>
+<span class="sd">        request = _request_stack()</span>
+
+<span class="sd">        # a proxy to the session attribute of the request proxy</span>
+<span class="sd">        session = LocalProxy(lambda: request.session)</span>
+
+<span class="sd">    ``__repr__`` and ``__class__`` are forwarded, so ``repr(x)`` and</span>
+<span class="sd">    ``isinstance(x, cls)`` will look like the proxied object. Use</span>
+<span class="sd">    ``issubclass(type(x), LocalProxy)`` to check if an object is a</span>
+<span class="sd">    proxy.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        repr(user)  # &lt;User admin&gt;</span>
+<span class="sd">        isinstance(user, User)  # True</span>
+<span class="sd">        issubclass(type(user), LocalProxy)  # True</span>
+
+<span class="sd">    :param local: The :class:`Local` or callable that provides the</span>
+<span class="sd">        proxied object.</span>
+<span class="sd">    :param name: The attribute name to look up on a :class:`Local`. Not</span>
+<span class="sd">        used if a callable is given.</span>
+
+<span class="sd">    .. versionchanged:: 2.0</span>
+<span class="sd">        Updated proxied attributes and methods to reflect the current</span>
+<span class="sd">        data model.</span>
+
+<span class="sd">    .. versionchanged:: 0.6.1</span>
+<span class="sd">        The class can be instantiated with a callable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__local&#39;</span><span class="p">,</span> <span class="s1">&#39;__name&#39;</span><span class="p">,</span> <span class="s1">&#39;__wrapped__&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">local</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;Local&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">t</span><span class="o">.</span><span class="n">Any</span><span class="p">]],</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_LocalProxy__local&#39;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+        <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_LocalProxy__name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">local</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="s1">&#39;__release_local__&#39;</span><span class="p">):</span>
+            <span class="c1"># &quot;local&quot; is a callable that is not an instance of Local or</span>
+            <span class="c1"># LocalManager: mark it as a wrapped function.</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__wrapped__&#39;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_current_object</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the current object.  This is useful if you want the real</span>
+<span class="sd">        object behind the proxy at a time for performance reasons or because</span>
+<span class="sd">        you want to pass the object into a different context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__local</span><span class="p">,</span> <span class="s1">&#39;__release_local__&#39;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__local</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__local</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;no object bound to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="vm">__doc__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="n">class_value</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span>
+    <span class="p">)</span>
+    <span class="c1"># __del__ should only delete the proxy</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span>
+        <span class="nb">repr</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> unbound&gt;&#39;</span>
+    <span class="p">)</span>
+    <span class="fm">__str__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="fm">__bytes__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+    <span class="fm">__format__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="fm">__lt__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">lt</span><span class="p">)</span>
+    <span class="fm">__le__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">le</span><span class="p">)</span>
+    <span class="fm">__eq__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">eq</span><span class="p">)</span>
+    <span class="fm">__ne__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ne</span><span class="p">)</span>
+    <span class="fm">__gt__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">gt</span><span class="p">)</span>
+    <span class="fm">__ge__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ge</span><span class="p">)</span>
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="fm">__bool__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="fm">__getattr__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">getattr</span><span class="p">)</span>
+    <span class="c1"># __getattribute__ triggered through __getattr__</span>
+    <span class="fm">__setattr__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">setattr</span><span class="p">)</span>
+    <span class="fm">__delattr__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">delattr</span><span class="p">)</span>
+    <span class="fm">__dir__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">[])</span>  <span class="c1"># type: ignore</span>
+    <span class="c1"># __get__ (proxying descriptor not supported)</span>
+    <span class="c1"># __set__ (descriptor)</span>
+    <span class="c1"># __delete__ (descriptor)</span>
+    <span class="c1"># __set_name__ (descriptor)</span>
+    <span class="c1"># __objclass__ (descriptor)</span>
+    <span class="c1"># __slots__ used by proxy itself</span>
+    <span class="c1"># __dict__ (__getattr__)</span>
+    <span class="c1"># __weakref__ (__getattr__)</span>
+    <span class="c1"># __init_subclass__ (proxying metaclass not supported)</span>
+    <span class="c1"># __prepare__ (metaclass)</span>
+    <span class="vm">__class__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">fallback</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
+    <span class="fm">__instancecheck__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+    <span class="fm">__subclasscheck__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+    <span class="c1"># __class_getitem__ triggered through __getitem__</span>
+    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="fm">__len__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+    <span class="fm">__length_hint__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">length_hint</span><span class="p">)</span>
+    <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">getitem</span><span class="p">)</span>
+    <span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">setitem</span><span class="p">)</span>
+    <span class="fm">__delitem__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">delitem</span><span class="p">)</span>
+    <span class="c1"># __missing__ triggered through __getitem__</span>
+    <span class="fm">__iter__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
+    <span class="fm">__next__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">next</span><span class="p">)</span>
+    <span class="fm">__reversed__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">reversed</span><span class="p">)</span>
+    <span class="fm">__contains__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">contains</span><span class="p">)</span>
+    <span class="fm">__add__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">)</span>
+    <span class="fm">__sub__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">sub</span><span class="p">)</span>
+    <span class="fm">__mul__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">)</span>
+    <span class="fm">__matmul__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">matmul</span><span class="p">)</span>
+    <span class="fm">__truediv__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">truediv</span><span class="p">)</span>
+    <span class="fm">__floordiv__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">floordiv</span><span class="p">)</span>
+    <span class="fm">__mod__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mod</span><span class="p">)</span>
+    <span class="fm">__divmod__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">divmod</span><span class="p">)</span>
+    <span class="fm">__pow__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">pow</span><span class="p">)</span>
+    <span class="fm">__lshift__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">lshift</span><span class="p">)</span>
+    <span class="fm">__rshift__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">rshift</span><span class="p">)</span>
+    <span class="fm">__and__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">and_</span><span class="p">)</span>
+    <span class="fm">__xor__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">xor</span><span class="p">)</span>
+    <span class="fm">__or__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">)</span>
+    <span class="fm">__radd__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">))</span>
+    <span class="fm">__rsub__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">sub</span><span class="p">))</span>
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">))</span>
+    <span class="fm">__rmatmul__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">matmul</span><span class="p">))</span>
+    <span class="fm">__rtruediv__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">truediv</span><span class="p">))</span>
+    <span class="fm">__rfloordiv__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">floordiv</span><span class="p">))</span>
+    <span class="fm">__rmod__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mod</span><span class="p">))</span>
+    <span class="fm">__rdivmod__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="nb">divmod</span><span class="p">))</span>
+    <span class="fm">__rpow__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="nb">pow</span><span class="p">))</span>
+    <span class="fm">__rlshift__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">lshift</span><span class="p">))</span>
+    <span class="fm">__rrshift__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">rshift</span><span class="p">))</span>
+    <span class="fm">__rand__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">and_</span><span class="p">))</span>
+    <span class="fm">__rxor__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">xor</span><span class="p">))</span>
+    <span class="fm">__ror__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">_l_to_r_op</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">))</span>
+    <span class="fm">__iadd__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">iadd</span><span class="p">)</span>
+    <span class="fm">__isub__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">isub</span><span class="p">)</span>
+    <span class="fm">__imul__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">imul</span><span class="p">)</span>
+    <span class="fm">__imatmul__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">imatmul</span><span class="p">)</span>
+    <span class="fm">__itruediv__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">itruediv</span><span class="p">)</span>
+    <span class="fm">__ifloordiv__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ifloordiv</span><span class="p">)</span>
+    <span class="fm">__imod__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">imod</span><span class="p">)</span>
+    <span class="fm">__ipow__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ipow</span><span class="p">)</span>
+    <span class="fm">__ilshift__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ilshift</span><span class="p">)</span>
+    <span class="fm">__irshift__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">irshift</span><span class="p">)</span>
+    <span class="fm">__iand__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">iand</span><span class="p">)</span>
+    <span class="fm">__ixor__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ixor</span><span class="p">)</span>
+    <span class="fm">__ior__</span> <span class="o">=</span> <span class="n">_ProxyIOp</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">ior</span><span class="p">)</span>
+    <span class="fm">__neg__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">neg</span><span class="p">)</span>
+    <span class="fm">__pos__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+    <span class="fm">__abs__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">abs</span><span class="p">)</span>
+    <span class="fm">__invert__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">invert</span><span class="p">)</span>
+    <span class="fm">__complex__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="fm">__int__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="fm">__float__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="fm">__index__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="fm">__round__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="nb">round</span><span class="p">)</span>
+    <span class="n">__trunc__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">trunc</span><span class="p">)</span>
+    <span class="n">__floor__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">)</span>
+    <span class="n">__ceil__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">)</span>
+    <span class="fm">__enter__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__exit__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__await__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__aiter__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__anext__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__aenter__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="fm">__aexit__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">()</span>
+    <span class="n">__copy__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
+    <span class="n">__deepcopy__</span> <span class="o">=</span> <span class="n">_ProxyLookup</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">)</span></div>
+    <span class="c1"># __getnewargs_ex__ (pickle through proxy not supported)</span>
+    <span class="c1"># __getnewargs__ (pickle)</span>
+    <span class="c1"># __getstate__ (pickle)</span>
+    <span class="c1"># __setstate__ (pickle)</span>
+    <span class="c1"># __reduce__ (pickle)</span>
+    <span class="c1"># __reduce_ex__ (pickle)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

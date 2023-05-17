@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.tracking_methods &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mongodol.trans" href="trans.html" />
+    <link rel="prev" title="mongodol.tests.util" href="tests/util.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mongodol.tracking_methods</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/mongodol/tracking_methods.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mongodol.tracking_methods">
+<span id="mongodol-tracking-methods"></span><h1>mongodol.tracking_methods<a class="headerlink" href="#module-mongodol.tracking_methods" title="Permalink to this headline">¶</a></h1>
+<p>Tracking functionality</p>
+<dl class="py class">
+<dt id="mongodol.tracking_methods.MongoBulkWritesMixin">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.tracking_methods.</code><code class="sig-name descname">MongoBulkWritesMixin</code><a class="reference internal" href="../../_modules/mongodol/tracking_methods.html#MongoBulkWritesMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.tracking_methods.MongoBulkWritesMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to accumulate write operations and execute them in bulk, efficiently</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mongodol.tracking_methods.TrackableMixin">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.tracking_methods.</code><code class="sig-name descname">TrackableMixin</code><a class="reference internal" href="../../_modules/mongodol/tracking_methods.html#TrackableMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.tracking_methods.TrackableMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin that provides a container for method call tracking, execution,
+and a context manager that will execute tracks and empty them.</p>
+<p>TrackableMixin is used as the default tracking_mixin in track_method_calls.</p>
+<p>It uses list as the collection for tracks, and implements a basic execute_tracks
+(which loops through tracks, executes them, and accumulates results in a list which it returns).</p>
+<p>TrackableMixin is meant to be subclassed and execute_tracks overwritten by a custom handler.</p>
+<dl class="py attribute">
+<dt id="mongodol.tracking_methods.TrackableMixin.tracks_factory">
+<code class="sig-name descname">tracks_factory</code><a class="headerlink" href="#mongodol.tracking_methods.TrackableMixin.tracks_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">builtins.list</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.tracking_methods.add_tracked_methods">
+<code class="sig-prename descclassname">mongodol.tracking_methods.</code><code class="sig-name descname">add_tracked_methods</code><span class="sig-paren">(</span><em class="sig-param">tracked_methods: Iterable[str] = frozenset({})</em>, <em class="sig-param">calls_tracker: Callable = &lt;function track_calls_of_method&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/tracking_methods.html#add_tracked_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.tracking_methods.add_tracked_methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory of decorators to add method call tracking to a class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tracked_methods</strong> – Method name or iterable of method names to track</p></li>
+<li><p><strong>tracking_mixin</strong> – The mixin class to use to inject the _tracks attribute, and other tracking utils (flush…)</p></li>
+<li><p><strong>calls_tracker</strong> – The method decorator that implements the actual tracking</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.tracking_methods.track_method_calls">
+<code class="sig-prename descclassname">mongodol.tracking_methods.</code><code class="sig-name descname">track_method_calls</code><span class="sig-paren">(</span><em class="sig-param">obj=None</em>, <em class="sig-param">*</em>, <em class="sig-param">tracked_methods: Iterable[str] = frozenset({})</em>, <em class="sig-param">tracking_mixin: type = &lt;class 'mongodol.tracking_methods.TrackableMixin'&gt;</em>, <em class="sig-param">calls_tracker: Callable = &lt;function track_calls_of_method&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/tracking_methods.html#track_method_calls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.tracking_methods.track_method_calls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapping objects (classes or instances) so that specific method calls are tracked
+(i.e. a list of (method_func, args, kwargs) is maintained)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>tracked_methods</strong> – Method name or iterable of method names to track</p></li>
+<li><p><strong>tracking_mixin</strong> – The mixin class to use to inject the _tracks attribute, and other tracking utils (flush…)</p></li>
+<li><p><strong>calls_tracker</strong> – The method decorator that implements the actual tracking</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@track_method_calls</span><span class="p">(</span><span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__setitem__&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">repr</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;{&#39;a&#39;: 1, &#39;b&#39;: [1, 2], &#39;c&#39;: {&#39;hello&#39;: &#39;world&#39;}}&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span> <span class="o">==</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span>  <span class="c1"># accessing &#39;a&#39; didn&#39;t make any tracks</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># verifying that dd[&#39;a&#39;] is now 42</span>
+<span class="go">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span>  <span class="c1"># see that dd._tracks is now non-empty</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span>
+<span class="go">[(&lt;slot wrapper &#39;__setitem__&#39; of &#39;dict&#39; objects&gt;, (&#39;a&#39;, 42), {})]</span>
+</pre></div>
+</div>
+<p>A common use of <code class="docutils literal notranslate"><span class="pre">track_method_calls</span></code> is to accumulate method calls without executing them,
+so as to be able to change the way they’re called. For example, making the calls differently
+(e.g. in a parallel process) or aggregating several operations and running them in bulk
+(e.g. data base writes).</p>
+<p>If you want to reuse your tracker decorator, it’s a good idea of use partial to make a
+decorator with the settings you want, like this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_write_tracker</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">track_method_calls</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__setitem__&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">calls_tracker</span><span class="o">=</span><span class="n">track_calls_without_executing</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let’s decorate a dict type with it.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@my_write_tracker</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>The suggested use is to do write operations in a with block. This will have the effect of
+automatically executing the calls accumulated in tracks and clearing the tracks when you exit the with
+block.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">d</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># still in the with block, so the operation hasn&#39;t executed yet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># but now that we exited the block, we have d[&#39;a&#39;] == 21</span>
+<span class="go">21</span>
+</pre></div>
+</div>
+<p>But if you really need/want to, you can perform these operations manually.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span> <span class="o">==</span> <span class="p">[]</span>  <span class="c1"># see that we have no _tracks (these are deleted when we exit the with block</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">21</span>  <span class="c1"># verifying that dd[&#39;a&#39;] is STILL 21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># but dd._tracks is now non-empty</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;[(&lt;slot wrapper &#39;__setitem__&#39; of &#39;dict&#39; objects&gt;, (&#39;a&#39;, 42), </span><span class="si">{}</span><span class="s2">)]&quot;</span>
+</pre></div>
+</div>
+<p>To execute the command in _tracks, you can use the <code class="docutils literal notranslate"><span class="pre">.flush()</span></code> method
+&gt;&gt;&gt; _ = d.flush()
+&gt;&gt;&gt; # See that the setitem call was indeed made
+&gt;&gt;&gt; assert d[‘a’] == 42
+&gt;&gt;&gt; assert len(d._tracks) == 0</p>
+<p>Here’s what’s happening behind the scenes:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># write to &#39;b&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># but it&#39;s not actually written</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># the tracks now has a (func, args, kwargs) triple</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># if we cann that function on the instance (and *args, **kwargs)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># Not the write is actually performed and d[&#39;b&#39;] becomes [3, 4]</span>
+</pre></div>
+</div>
+<p>Above, we were wrapping a class, but you can also wrap an instance!</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">track_method_calls</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__getitem__&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># TypeError: __getitem__() takes exactly one argument (2 given)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># you got the value alright!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">_tracks</span>
+<span class="go">[(proxy __getitem__, (&#39;a&#39;,), {})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># It&#39;s a weird name for the function, but the function still works:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.tracking_methods.with_bulk_writes">
+<code class="sig-prename descclassname">mongodol.tracking_methods.</code><code class="sig-name descname">with_bulk_writes</code><span class="sig-paren">(</span><em class="sig-param">obj=None</em>, <em class="sig-param">*</em>, <em class="sig-param">tracked_methods: Iterable[str] = frozenset({})</em>, <em class="sig-param">tracking_mixin: type = &lt;class 'mongodol.tracking_methods.MongoBulkWritesMixin'&gt;</em>, <em class="sig-param">calls_tracker: Callable = &lt;function track_calls_without_executing&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.tracking_methods.with_bulk_writes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapping objects (classes or instances) so that specific method calls are tracked
+(i.e. a list of (method_func, args, kwargs) is maintained)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>tracked_methods</strong> – Method name or iterable of method names to track</p></li>
+<li><p><strong>tracking_mixin</strong> – The mixin class to use to inject the _tracks attribute, and other tracking utils (flush…)</p></li>
+<li><p><strong>calls_tracker</strong> – The method decorator that implements the actual tracking</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@track_method_calls</span><span class="p">(</span><span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__setitem__&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">repr</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;{&#39;a&#39;: 1, &#39;b&#39;: [1, 2], &#39;c&#39;: {&#39;hello&#39;: &#39;world&#39;}}&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span> <span class="o">==</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span>  <span class="c1"># accessing &#39;a&#39; didn&#39;t make any tracks</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># verifying that dd[&#39;a&#39;] is now 42</span>
+<span class="go">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span>  <span class="c1"># see that dd._tracks is now non-empty</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span>
+<span class="go">[(&lt;slot wrapper &#39;__setitem__&#39; of &#39;dict&#39; objects&gt;, (&#39;a&#39;, 42), {})]</span>
+</pre></div>
+</div>
+<p>A common use of <code class="docutils literal notranslate"><span class="pre">track_method_calls</span></code> is to accumulate method calls without executing them,
+so as to be able to change the way they’re called. For example, making the calls differently
+(e.g. in a parallel process) or aggregating several operations and running them in bulk
+(e.g. data base writes).</p>
+<p>If you want to reuse your tracker decorator, it’s a good idea of use partial to make a
+decorator with the settings you want, like this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_write_tracker</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">track_method_calls</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__setitem__&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">calls_tracker</span><span class="o">=</span><span class="n">track_calls_without_executing</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let’s decorate a dict type with it.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@my_write_tracker</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>The suggested use is to do write operations in a with block. This will have the effect of
+automatically executing the calls accumulated in tracks and clearing the tracks when you exit the with
+block.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">d</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># still in the with block, so the operation hasn&#39;t executed yet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># but now that we exited the block, we have d[&#39;a&#39;] == 21</span>
+<span class="go">21</span>
+</pre></div>
+</div>
+<p>But if you really need/want to, you can perform these operations manually.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span> <span class="o">==</span> <span class="p">[]</span>  <span class="c1"># see that we have no _tracks (these are deleted when we exit the with block</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">21</span>  <span class="c1"># verifying that dd[&#39;a&#39;] is STILL 21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># but dd._tracks is now non-empty</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;[(&lt;slot wrapper &#39;__setitem__&#39; of &#39;dict&#39; objects&gt;, (&#39;a&#39;, 42), </span><span class="si">{}</span><span class="s2">)]&quot;</span>
+</pre></div>
+</div>
+<p>To execute the command in _tracks, you can use the <code class="docutils literal notranslate"><span class="pre">.flush()</span></code> method
+&gt;&gt;&gt; _ = d.flush()
+&gt;&gt;&gt; # See that the setitem call was indeed made
+&gt;&gt;&gt; assert d[‘a’] == 42
+&gt;&gt;&gt; assert len(d._tracks) == 0</p>
+<p>Here’s what’s happening behind the scenes:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># write to &#39;b&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># but it&#39;s not actually written</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># the tracks now has a (func, args, kwargs) triple</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># if we cann that function on the instance (and *args, **kwargs)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># Not the write is actually performed and d[&#39;b&#39;] becomes [3, 4]</span>
+</pre></div>
+</div>
+<p>Above, we were wrapping a class, but you can also wrap an instance!</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">track_method_calls</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">tracked_methods</span><span class="o">=</span><span class="s1">&#39;__getitem__&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># TypeError: __getitem__() takes exactly one argument (2 given)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># you got the value alright!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">_tracks</span>
+<span class="go">[(proxy __getitem__, (&#39;a&#39;,), {})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># It&#39;s a weird name for the function, but the function still works:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">_tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tests/util.html" class="btn btn-neutral float-left" title="mongodol.tests.util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trans.html" class="btn btn-neutral float-right" title="mongodol.trans" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

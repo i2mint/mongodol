@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.add_ons &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mongodol.base" href="base.html" />
+    <link rel="prev" title="mongodol" href="../mongodol.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mongodol.html">mongodol</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mongodol.add_ons</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/mongodol/add_ons.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mongodol.add_ons">
+<span id="mongodol-add-ons"></span><h1>mongodol.add_ons<a class="headerlink" href="#module-mongodol.add_ons" title="Permalink to this headline">¶</a></h1>
+<p>Add-ons
+<a class="reference external" href="https://github.com/i2mint/mongodol/issues/3">https://github.com/i2mint/mongodol/issues/3</a></p>
+<dl class="py class">
+<dt id="mongodol.add_ons.Addons">
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.add_ons.</code><code class="sig-name descname">Addons</code><a class="reference internal" href="../../_modules/mongodol/add_ons.html#Addons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.add_ons.Addons" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of add-on methods. Addons can’t (and is not meant to) be instantiated.
+It’s just to group add-on functions (meant to be injected in stores) in one place</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.add_ons.add_clear_method">
+<code class="sig-prename descclassname">mongodol.add_ons.</code><code class="sig-name descname">add_clear_method</code><span class="sig-paren">(</span><em class="sig-param">store</em>, <em class="sig-param">*</em>, <em class="sig-param">clear_method=&lt;function Addons.clear&gt;</em>, <em class="sig-param">validator=&lt;function _clear_method_injection_validator&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/add_ons.html#add_clear_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.add_ons.add_clear_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a clear method to a store that doesn’t have one</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>store</strong> – </p></li>
+<li><p><strong>clear_method</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dol.util</span> <span class="kn">import</span> <span class="n">has_enabled_clear_method</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">MongoCollectionPersister</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mongodol.tests</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">populated_pymongo_collection</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">whole_store</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">populated_pymongo_collection</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">feature_cube</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">whole_length_before_clear</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">whole_store</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">whole_length_before_clear</span> <span class="o">==</span> <span class="mi">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reds</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">whole_store</span><span class="o">.</span><span class="n">mgc</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_reds</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">n_reds</span> <span class="o">==</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">reds</span></code> doesn’t have a clear method</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="ow">not</span> <span class="n">has_enabled_clear_method</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So let’s give it one</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reds_with_clear</span> <span class="o">=</span> <span class="n">add_clear_method</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">has_enabled_clear_method</span><span class="p">(</span><span class="n">reds_with_clear</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And it’s one that works too!</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">reds_with_clear</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">reds_with_clear</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>It’s the data that was deleted, not just the view. See what reds and whole_store say:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">whole_store</span><span class="p">)</span> <span class="o">==</span> <span class="n">whole_length_before_clear</span> <span class="o">-</span> <span class="n">n_reds</span> <span class="o">==</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.add_ons.has_exactly_one_non_defaulted_input">
+<code class="sig-prename descclassname">mongodol.add_ons.</code><code class="sig-name descname">has_exactly_one_non_defaulted_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/add_ons.html#has_exactly_one_non_defaulted_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.add_ons.has_exactly_one_non_defaulted_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True iff function has exactly one argument without defaults</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.add_ons.number_of_non_defaulted_arguments">
+<code class="sig-prename descclassname">mongodol.add_ons.</code><code class="sig-name descname">number_of_non_defaulted_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/add_ons.html#number_of_non_defaulted_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.add_ons.number_of_non_defaulted_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of arguments that don’t have defaults in it’s signature</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../mongodol.html" class="btn btn-neutral float-left" title="mongodol" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="base.html" class="btn btn-neutral float-right" title="mongodol.base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

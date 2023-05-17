@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.tests.data &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/toggleprompt.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mongodol.tests.data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mongodol.tests.data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;A module containing datas that will be used for tests&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">ID</span>
+
+
+<div class="viewcode-block" id="mk_kvs_versions"><a class="viewcode-back" href="../../../module_docs/mongodol/tests/data.html#mongodol.tests.data.mk_kvs_versions">[docs]</a><span class="k">def</span> <span class="nf">mk_kvs_versions</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Makes dict_kvs and tuple_kvs versions of the data referenced by name</span>
+<span class="sd">    By kvs we mean &quot;key value expressions&quot;, i.e. (key, value) pairs.</span>
+<span class="sd">    A dict_kvs is one where the key and value are both dicts (e.g. ({&#39;_id&#39;: 2}, {&#39;name&#39;: &quot;yoda&quot;, &#39;age&#39;: 800}))</span>
+<span class="sd">    A tuple_kvs is one where the key is a tuple (e.g. ((2,), {&#39;name&#39;: &quot;yoda&quot;, &#39;age&#39;: 800}))</span>
+
+<span class="sd">    mk_kvs_versions reads and writes in the globals()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">global_vars</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
+    <span class="n">seed_docs</span> <span class="o">=</span> <span class="n">global_vars</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="n">dict_kvs_1_docs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">({</span><span class="n">ID</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="n">ID</span><span class="p">]},</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">-</span> <span class="p">{</span><span class="n">ID</span><span class="p">}})</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">seed_docs</span>
+    <span class="p">]</span>
+    <span class="n">global_vars</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict_kvs_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_kvs_1_docs</span>
+
+    <span class="n">dict_tuple_kvs_1</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">[</span><span class="n">ID</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_kvs_1_docs</span><span class="p">]</span>
+    <span class="n">global_vars</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_tuple_kvs_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_tuple_kvs_1</span></div>
+
+
+<span class="c1"># Simple with one field having a repeated value</span>
+<span class="n">three_simple_docs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+<span class="p">]</span>
+<span class="n">mk_kvs_versions</span><span class="p">(</span><span class="s1">&#39;three_simple_docs&#39;</span><span class="p">)</span>
+
+<span class="c1"># Schema not &quot;perfect&quot;: Some missing fields here and there.</span>
+<span class="c1"># Good to test no-sql cases</span>
+<span class="n">nums_and_lans</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">:</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">:</span> <span class="s1">&#39;un&#39;</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">:</span> <span class="s1">&#39;uno&#39;</span><span class="p">,</span> <span class="s1">&#39;so_far&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">:</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">:</span> <span class="s1">&#39;deux&#39;</span><span class="p">,</span> <span class="s1">&#39;so_far&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]},</span>  <span class="c1"># sp missing</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">:</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">:</span> <span class="s1">&#39;trois&#39;</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">:</span> <span class="s1">&#39;tres&#39;</span><span class="p">,</span> <span class="s1">&#39;so_far&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">:</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">:</span> <span class="s1">&#39;quatre&#39;</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">:</span> <span class="s1">&#39;cuatro&#39;</span><span class="p">,</span> <span class="s1">&#39;so_far&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">:</span> <span class="s1">&#39;five&#39;</span><span class="p">,</span> <span class="s1">&#39;sp&#39;</span><span class="p">:</span> <span class="s1">&#39;cinco&#39;</span><span class="p">,</span> <span class="s1">&#39;so_far&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],},</span>  <span class="c1"># fr missing</span>
+<span class="p">]</span>
+<span class="n">mk_kvs_versions</span><span class="p">(</span><span class="s1">&#39;nums_and_lans&#39;</span><span class="p">)</span>
+
+<span class="c1"># Stable schema</span>
+<span class="c1"># Groupby possibilities (see number: Several unique values) -- this allows to test filtering more naturally</span>
+<span class="n">feature_cube</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}},</span>
+    <span class="p">{</span><span class="n">ID</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;dims&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span>
+<span class="p">]</span>
+<span class="n">mk_kvs_versions</span><span class="p">(</span><span class="s1">&#39;feature_cube&#39;</span><span class="p">)</span>
+
+<span class="c1"># Sequence Annotations</span>
+<span class="c1"># Demoing stream annotations with source and time interval</span>
+<span class="n">sequence_annots</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;cat&#39;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+        <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="s1">&#39;barks and chases cat away&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;visual&#39;</span><span class="p">,</span> <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;cat&#39;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;visual&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;bt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+        <span class="s1">&#39;annot&#39;</span><span class="p">:</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="s1">&#39;dog remains in view after bark ceases&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+
+
+<span class="c1">####### Rock bands #####################################################################################################</span>
+
+<span class="n">rock_bands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;pink_floyd_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pink Floyd&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;members&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Roger&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Waters&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Nick&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Mason&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Syd&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Barrett&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Richard&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Write&#39;</span><span class="p">},</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;the_doors_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;The Doors&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;members&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Jim&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Morrison&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Ray&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Manzarek&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;Robby&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Krieger&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;John&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Densmore&#39;</span><span class="p">},</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+<span class="n">mk_kvs_versions</span><span class="p">(</span><span class="s1">&#39;rock_bands&#39;</span><span class="p">)</span>
+
+
+<span class="c1">####### BDFLs ##########################################################################################################</span>
+<span class="c1"># ubtained with:</span>
+<span class="c1"># from scrapyng.tables import get_tables_from_url (if no scrapyng, use ut.webscrape.tables)</span>
+<span class="c1"># t = get_tables_from_url(&#39;https://en.wikipedia.org/wiki/Benevolent_dictator_for_life&#39;)[0]</span>
+<span class="c1"># t = t[[&#39;Name&#39;, &#39;Project&#39;, &#39;Type&#39;]].to_dict(orient=&#39;records&#39;)</span>
+
+<span class="n">bdfl</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Sylvain Benner&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Spacemacs&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Community-driven Emacs distribution&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Vitalik Buterin&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Ethereum&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Blockchain-based cryptocurrency&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Dries Buytaert&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Drupal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Content management framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Haoyuan Li&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Alluxio&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Data Orchestration System&#39;</span><span class="p">,},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Evan Czaplicki&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Elm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Front-end web programming language&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;David Heinemeier Hansson&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Ruby on Rails&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Web framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Rich Hickey&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Clojure&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">,},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Adrian Holovaty and Jacob Kaplan-Moss&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Django&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Web framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Laurent Destailleur&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Dolibarr ERP CRM&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Software suite for Enterprise Resource Planning and Customer &#39;</span>
+        <span class="s1">&#39;Relationship Management&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Francois Chollet&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Keras&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Deep learning framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Xavier Leroy&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;OCaml&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">,},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Yukihiro Matsumoto (Matz)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Ruby&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Wes McKinney&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Pandas&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Python data analysis library&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Bram Moolenaar&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Vim&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Text editor&#39;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Matt Mullenweg [a]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;WordPress&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Content management framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Martin Odersky&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Scala&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">,},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Taylor Otwell&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Laravel&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Web framework&#39;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Theo de Raadt&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;OpenBSD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;A Unix-like operating system&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Ton Roosendaal[b]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Blender&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;3D computer graphics software&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Sébastien Ros&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Orchard Project&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Content management system&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mark Shuttleworth[c]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Ubuntu&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Linux distribution&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Don Syme[d]&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;F#&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Linus Torvalds[e]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Linux&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Operating system kernel&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;José Valim&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Elixir&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">,},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pauli Virtanen&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;SciPy&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Python library used for scientific and technical computing&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Patrick Volkerding&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Slackware&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;GNU/Linux distribution&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Nathan Voxland&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Liquibase&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Database schema management&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Shaun Walker&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;DotNetNuke&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Web application framework&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Larry Wall&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Perl&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Programming language&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Jeremy Soller[37]&#39;</span><span class="p">,</span> <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Redox&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Operating system&#39;</span><span class="p">,},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Eugen Rochko&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;Mastodon&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;open source, decentralized social network&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Dylan Araps&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;KISS Linux&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;a bare-bones Linux distribution based on musl libc and BusyBox&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;Gavin Mendel-Gleason[f]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="s1">&#39;TerminusDB&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="s1">&#39;Open-source graph database for knowledge graph representation&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+<span class="n">bdfl_dict_kvs_3</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">({</span><span class="n">ID</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]},</span> <span class="p">{</span><span class="s1">&#39;Project&#39;</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;Project&#39;</span><span class="p">],</span> <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]})</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">bdfl</span>
+<span class="p">]</span>
+<span class="n">bdfl_tuple_kvs_3</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">[</span><span class="n">ID</span><span class="p">],</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;Project&#39;</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bdfl_dict_kvs_3</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

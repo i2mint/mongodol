@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.recipes &mdash; mongodol 0.0.19 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mongodol.recipes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mongodol.recipes</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">dol</span> <span class="kn">import</span> <span class="n">wrap_kvs</span>
+<span class="kn">from</span> <span class="nn">dol.trans</span> <span class="kn">import</span> <span class="n">wrap_kvs</span><span class="p">,</span> <span class="n">store_decorator</span>
+
+
+<div class="viewcode-block" id="WriteNotAllowedToThatKey"><a class="viewcode-back" href="../../module_docs/mongodol/recipes.html#mongodol.recipes.WriteNotAllowedToThatKey">[docs]</a><span class="k">class</span> <span class="nc">WriteNotAllowedToThatKey</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;To indicate that once cannot write to some specific key one is trying to write to&quot;&quot;&quot;</span></div>
+
+
+<span class="k">def</span> <span class="nf">_disallow_sourced_interval_overlaps</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="n">source</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="n">tt</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="s1">&#39;bt&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="s1">&#39;tt&#39;</span><span class="p">]</span>  <span class="c1"># extract bt and tt</span>
+    <span class="n">existing_docs_that_overlap_with_that_interval</span> <span class="o">=</span> <span class="n">store</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">bt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;$lte&#39;</span><span class="p">:</span> <span class="n">tt</span><span class="p">},</span> <span class="n">tt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;$gte&#39;</span><span class="p">:</span> <span class="n">bt</span><span class="p">})</span>
+    <span class="p">]</span>
+    <span class="n">there_are_such_overlaps</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">existing_docs_that_overlap_with_that_interval</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">there_are_such_overlaps</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WriteNotAllowedToThatKey</span><span class="p">(</span>
+            <span class="s2">&quot;There was a doc whose (bt,tt) key overlaps with the key you&#39;re trying to write to.&quot;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n\t</span><span class="s1">Your key is </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">.&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n\t</span><span class="s1">The existing doc is </span><span class="si">{</span><span class="n">there_are_such_overlaps</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+
+<span class="c1"># Note: Equivalent to disallow_sourced_interval_overlaps = partial(wrap_kvs, preset=_disallow_sourced_interval_overlaps)</span>
+<span class="c1">#   Defining as below to be able to have doctests</span>
+<div class="viewcode-block" id="disallow_sourced_interval_overlaps"><a class="viewcode-back" href="../../module_docs/mongodol/recipes.html#mongodol.recipes.disallow_sourced_interval_overlaps">[docs]</a><span class="k">def</span> <span class="nf">disallow_sourced_interval_overlaps</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Disallow writing to a key that shares the same &quot;source&quot; field value and overlapping (&quot;bt&quot;, &quot;tt&quot;) interval.</span>
+
+<span class="sd">    :param store: ``KvPersister`` (instance or class) ``s``</span>
+<span class="sd">    :return: The same store, but where `s[dict(source=source, bt=bt, tt=tt}] = v`` writes are not permitted if</span>
+<span class="sd">        there is another doc, with the same source, and an overlapping (bt, tt) interval.</span>
+
+<span class="sd">    &gt;&gt;&gt; from mongodol.tests import get_test_collection_persister, clear_all_and_populate</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # We&#39;re going to take (make really) a store s with the two follwing documents:</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; data = [</span>
+<span class="sd">    ...     {&#39;source&#39;: &#39;audio&#39;, &#39;bt&#39;: 6, &#39;tt&#39;: 9, &#39;annot&#39;: &#39;dog&#39;},</span>
+<span class="sd">    ...     {&#39;source&#39;: &#39;visual&#39;, &#39;bt&#39;: 6, &#39;tt&#39;: 15, &#39;annot&#39;: &#39;dog&#39;}</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Then try to do s[k] = v with the following (k, v) pairs.</span>
+<span class="sd">    &gt;&gt;&gt; k1 = {&#39;source&#39;: &#39;audio&#39;, &#39;bt&#39;: 12, &#39;tt&#39;: 16}</span>
+<span class="sd">    &gt;&gt;&gt; v1 = {&#39;annot&#39;: &#39;cat&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; # Note here that (7, 10) overlaps with (6, 9) (in source=audio)</span>
+<span class="sd">    &gt;&gt;&gt; k2 = {&#39;source&#39;: &#39;audio&#39;, &#39;bt&#39;: 7, &#39;tt&#39;: 10}</span>
+<span class="sd">    &gt;&gt;&gt; v2 = {&#39;annot&#39;: &#39;cat&#39;}</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s = get_test_collection_persister()  # Make a persister</span>
+<span class="sd">    &gt;&gt;&gt; clear_all_and_populate(data,s)  # empty it and populate it with the two data docs</span>
+<span class="sd">    &gt;&gt;&gt; assert len(s) == 2  # yep, two docs</span>
+<span class="sd">    &gt;&gt;&gt; assert s.distinct(&#39;annot&#39;) == [&#39;dog&#39;]  # and only has a dog</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s[k1] = v1</span>
+<span class="sd">    &gt;&gt;&gt; assert len(s) == 3  # Now has three docs</span>
+<span class="sd">    &gt;&gt;&gt; assert &#39;cat&#39; in s.distinct(&#39;annot&#39;)  # has a cat now</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s[k2] = v2</span>
+<span class="sd">    &gt;&gt;&gt; assert len(s) == 4  # v2 was written, indeed</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Let&#39;s start over, usingour disallow_sourced_interval_overlaps decorator this time</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; protected_s = disallow_sourced_interval_overlaps(get_test_collection_persister())</span>
+<span class="sd">    &gt;&gt;&gt; clear_all_and_populate(data,protected_s)  # empty it and populate it with the two data docs</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s[k1] = v1</span>
+<span class="sd">    &gt;&gt;&gt; # No problem! And see that you have a cat annot now!</span>
+<span class="sd">    &gt;&gt;&gt; assert &#39;cat&#39; in s.distinct(&#39;annot&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; # But this next one will not work since the (7, 10) overlaps with (6, 9) (in source=audio)</span>
+<span class="sd">    &gt;&gt;&gt; try:</span>
+<span class="sd">    ...     protected_s[k2] = v2</span>
+<span class="sd">    ... except WriteNotAllowedToThatKey:</span>
+<span class="sd">    ...     print(&quot;WriteNotAllowedToThatKey expected!&quot;)</span>
+<span class="sd">    WriteNotAllowedToThatKey expected!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="n">_disallow_sourced_interval_overlaps</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
