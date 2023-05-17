@@ -1,4 +1,0 @@
-mongodol
-========
-.. automodule:: mongodol
-   :members:
