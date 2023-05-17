@@ -1,3 +1,4 @@
+"""Mongodol Recipes"""
 from functools import partial
 from dol import wrap_kvs
 from dol.trans import wrap_kvs, store_decorator
