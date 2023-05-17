@@ -28,6 +28,11 @@ jobs:
       - name: Format source code
         run: black  --line-length=88 .
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+
       - name: Validate docstrings
         run: pylint ./$PROJECT_NAME --ignore=tests,scrap --disable=all --enable=C0114
 
