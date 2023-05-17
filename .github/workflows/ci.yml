@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8]
+        mongodb-version: [5.0]
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
