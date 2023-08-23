@@ -13,6 +13,7 @@ from mongodol.constants import (
     DFLT_MONGO_CLIENT_ARGS,
     DFLT_TEST_DB,
     DFLT_TEST_COLLECTION,
+    ID,
 )
 
 
@@ -35,9 +36,11 @@ def get_test_collection_persister(
     mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
     db_name=DFLT_TEST_DB,
     collection_name=DFLT_TEST_COLLECTION,
+    *,
+    iter_projection=(ID,),
 ):
     mgc = get_test_collection_object(mongo_client_args, db_name, collection_name)
-    return MongoCollectionPersister(mgc)
+    return MongoCollectionPersister(mgc, iter_projection=iter_projection)
 
 
 # TODO: Add some protection to clearing all store?

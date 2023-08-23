@@ -177,14 +177,12 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         self,
         mgc: Union[PyMongoCollectionSpec, KvReader] = None,
         filter: Optional[dict] = None,
-        iter_projection: ProjectionSpec = None,
+        iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
     ):
-        iter_projection = iter_projection or (ID,)
-        if not isinstance(iter_projection, dict):
+        if iter_projection is not None and not isinstance(iter_projection, dict):
             iter_projection = {k: True for k in iter_projection}
-        assert iter_projection is not None, 'iter_projection cannot be None'
         super().__init__(
             mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs,
         )
