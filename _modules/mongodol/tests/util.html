@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.tests.util &mdash; mongodol 0.0.21 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>mongodol.tests.util &mdash; mongodol 0.0.22 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -109,6 +109,7 @@
     <span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">DFLT_TEST_DB</span><span class="p">,</span>
     <span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
+    <span class="n">ID</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -131,9 +132,11 @@
     <span class="n">mongo_client_args</span><span class="o">=</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span>
     <span class="n">collection_name</span><span class="o">=</span><span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">iter_projection</span><span class="o">=</span><span class="p">(</span><span class="n">ID</span><span class="p">,),</span>
 <span class="p">):</span>
     <span class="n">mgc</span> <span class="o">=</span> <span class="n">get_test_collection_object</span><span class="p">(</span><span class="n">mongo_client_args</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">collection_name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mgc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mgc</span><span class="p">,</span> <span class="n">iter_projection</span><span class="o">=</span><span class="n">iter_projection</span><span class="p">)</span>
 
 
 <span class="c1"># TODO: Add some protection to clearing all store?</span>
