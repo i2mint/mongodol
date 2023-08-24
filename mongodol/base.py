@@ -316,7 +316,6 @@ class MongoCollectionFieldsReader(MongoCollectionReader):
         key_fields: ProjectionSpec = (ID,),
         val_fields: ProjectionSpec = None,
     ):
-        iter_projection = normalize_projection(key_fields)
         super().__init__(
             mgc=mgc,
             filter=filter,
