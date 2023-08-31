@@ -1,13 +1,14 @@
 """Some useful stores for mongoDB"""
 
-from functools import wraps, partial
+from functools import lru_cache, wraps, partial
 from typing import Collection, Mapping
+
+from i2 import Sig
 
 from dol import Store, wrap_kvs
 from dol.util import lazyprop
 
-from mongodol.constants import DFLT_TEST_DB
-from mongodol.base import MongoCollectionReader, MongoCollectionPersister
+from mongodol.base import MongoClientReader, MongoCollectionReader, MongoCollectionPersister
 from mongodol.trans import PostGet, ObjOfData, normalize_result
 
 single_value_fetch_with_unicity_validation = partial(
@@ -111,13 +112,12 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
         return self._mgc.insert_many([self._build_doc(k, vi) for vi in _v])
 
 
-from mongodol.scrap.old01 import OldMongoPersister
-
-
 class MongoStore(Store):
-    @wraps(OldMongoPersister.__init__)
-    def __init__(self, *args, **kwargs):
-        persister = OldMongoPersister(*args, **kwargs)
+    @wraps(MongoCollectionUniqueDocPersister.__init__)
+    def __init__(self, *args, host, db_name, collection_name, mongo_client_kwargs=None, **kwargs):
+        mongo_client_kwargs = mongo_client_kwargs or {}
+        mgc = _get_mgc(collection_name, db_name, host, **mongo_client_kwargs)
+        persister = MongoCollectionUniqueDocPersister(*args, mgc=mgc, **kwargs)
         super().__init__(persister)
 
 
@@ -130,75 +130,102 @@ class MongoStore(Store):
 #     from_params = MongoCollectionPersister.from_params
 
 
-class MongoTupleKeyStore(MongoStore):
+# class MongoTupleKeyStore(MongoStore):
+#     """
+#     MongoStore using tuple keys.
+
+#     >>> from mongodol.constants import DFLT_TEST_COLLECTION, DFLT_TEST_DB, DFLT_TEST_HOST
+#     >>> from mongodol.util import normalize_projection
+#     >>> s = MongoTupleKeyStore(
+#     ...     host=DFLT_TEST_HOST,
+#     ...     db_name=DFLT_TEST_DB,
+#     ...     collection_name=DFLT_TEST_COLLECTION,
+#     ...     iter_projection=normalize_projection(['_id', 'user'])
+#     ... )
+#     >>> for k in s: del s[k]
+#     >>> k = (1234, 'user')
+#     >>> v = {'name': 'bob', 'age': 42}
+#     >>> if k in s:  # deleting all docs in tmp
+#     ...     del s[k]
+#     >>> assert (k in s) == False  # see that key is not in store (and testing __contains__)
+#     >>> orig_length = len(s)
+#     >>> s[k] = v
+#     >>> assert len(s) == orig_length + 1
+#     >>> assert k in list(s)
+#     >>> assert s[k] == v
+#     >>> assert s.get(k) == v
+#     >>> assert v in list(s.values())
+#     >>> assert (k in s) == True # testing __contains__ again
+#     >>> del s[k]
+#     >>> assert len(s) == orig_length
+#     """
+
+#     @lazyprop
+#     def _key_fields(self):
+#         return iter(k for k, v in self.store._iter_projection.items() if v)
+
+#     def _id_of_key(self, k):
+#         return {field: field_val for field, field_val in zip(self._key_fields, k)}
+
+#     def _key_of_id(self, _id):
+#         return tuple(_id[x] for x in self._key_fields)
+
+
+# # TODO: Finish
+# class MongoAnyKeyStore(MongoStore):
+#     """
+#     MongoStore using tuple keys.
+
+#     >>> s = MongoAnyKeyStore(db_name=DFLT_TEST_DB, collection_name='tmp', )
+#     >>> for k in s: del s[k]
+#     >>> s['foo'] = {'must': 'be', 'a': 'dict'}
+#     >>> s['foo']
+#     {'must': 'be', 'a': 'dict'}
+#     """
+
+#     @wraps(MongoStore.__init__)
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         assert isinstance(
+#             self._key_fields, tuple
+#         ), 'key_fields should be a tuple or a string'
+#         assert (
+#             len(self._key_fields) == 1
+#         ), 'key_fields must have one and only one element (a string)'
+#         self._key_field = self._key_fields[0]
+
+#     @lazyprop
+#     def _key_fields(self):
+#         return self.store._key_fields
+
+#     def _id_of_key(self, k):
+#         return {self._key_field: k}
+
+#     def _key_of_id(self, _id):
+#         return _id[self._key_field]
+
+#     def __setitem__(self, k, v):
+#         if k in self:
+#             del self[k]
+#         super().__setitem__(k, v)
+
+    
+@lru_cache
+def _get_db(db_name, host, **mongo_client_kwargs):
     """
-    MongoStore using tuple keys.
-
-    >>> s = MongoTupleKeyStore(db_name=DFLT_TEST_DB, collection_name='tmp', key_fields=('_id', 'user'))
-    >>> _ = s._mgc.remove({})
-    >>> k = (1234, 'user')
-    >>> v = {'name': 'bob', 'age': 42}
-    >>> if k in s:  # deleting all docs in tmp
-    ...     if k in s:
-    ...         del s[k]
-    >>> assert (k in s) == False  # see that key is not in store (and testing __contains__)
-    >>> orig_length = len(s)
-    >>> s[k] = v
-    >>> assert len(s) == orig_length + 1
-    >>> assert k in list(s)
-    >>> assert s[k] == v
-    >>> assert s.get(k) == v
-    >>> assert v in list(s.values())
-    >>> assert (k in s) == True # testing __contains__ again
-    >>> del s[k]
-    >>> assert len(s) == orig_length
+    Get a mongo database object from a db_name and host.
+    
+    The `host` parameter can be a full `mongodb URI
+    <http://dochub.mongodb.org/core/connections>`_, in addition to
+    a simple hostname. It can also be a list of hostnames or
+    URIs.
     """
-
-    @lazyprop
-    def _key_fields(self):
-        return self.store._key_fields
-
-    def _id_of_key(self, k):
-        return {field: field_val for field, field_val in zip(self._key_fields, k)}
-
-    def _key_of_id(self, _id):
-        return tuple(_id[x] for x in self._key_fields)
+    client = MongoClientReader(host=host, **mongo_client_kwargs)
+    return client[db_name].db
 
 
-# TODO: Finish
-class MongoAnyKeyStore(MongoStore):
-    """
-    MongoStore using tuple keys.
-
-    >>> s = MongoAnyKeyStore(db_name=DFLT_TEST_DB, collection_name='tmp', )
-    >>> for k in s: del s[k]
-    >>> s['foo'] = {'must': 'be', 'a': 'dict'}
-    >>> s['foo']
-    {'must': 'be', 'a': 'dict'}
-    """
-
-    @wraps(MongoStore.__init__)
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        assert isinstance(
-            self._key_fields, tuple
-        ), 'key_fields should be a tuple or a string'
-        assert (
-            len(self._key_fields) == 1
-        ), 'key_fields must have one and only one element (a string)'
-        self._key_field = self._key_fields[0]
-
-    @lazyprop
-    def _key_fields(self):
-        return self.store._key_fields
-
-    def _id_of_key(self, k):
-        return {self._key_field: k}
-
-    def _key_of_id(self, _id):
-        return _id[self._key_field]
-
-    def __setitem__(self, k, v):
-        if k in self:
-            del self[k]
-        super().__setitem__(k, v)
+@lru_cache
+def _get_mgc(collection_name, db_name, host, **mongo_client_kwargs):
+    """Get a mongo collection object from a collection_name, db_name, and host."""
+    db = _get_db(db_name, host, **mongo_client_kwargs)
+    return db[collection_name]
