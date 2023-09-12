@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.trans &mdash; mongodol 0.0.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>mongodol.trans &mdash; mongodol 0.0.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/trans_test.html">mongodol.tests.trans_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.trans</a></li>
@@ -248,6 +249,24 @@ has been made.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mongodol.trans.set_key_and_data_fields">
+<code class="sig-prename descclassname">mongodol.trans.</code><code class="sig-name descname">set_key_and_data_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">store</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>Iterable<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>Iterable<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__module__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__name__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__qualname__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__doc__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__annotations__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__defaults__</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">__kwdefaults__</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/trans.html#set_key_and_data_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.trans.set_key_and_data_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to set key_fields and data_fields on a store.</p>
+<p>This is to make it easier to get from an interface like this</p>
+<dl class="field-list simple">
+<dt class="field-odd">Code</dt>
+<dd class="field-odd"><p><cite>store[{‘folder’: ‘path’, ‘file’: ‘name’}] = {‘field1’: ‘value1’, ‘field2’: ‘value2’}</cite></p>
+</dd>
+</dl>
+<p>to an interface like this:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Code</dt>
+<dd class="field-odd"><p><cite>store[‘path’, ‘name’] = (‘value1’, ‘value2’)</cite></p>
 </dd>
 </dl>
 </dd></dl>

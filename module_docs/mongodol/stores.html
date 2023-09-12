@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.stores &mdash; mongodol 0.0.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>mongodol.stores &mdash; mongodol 0.0.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/not_working.html">mongodol.tests.not_working</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/trans_test.html">mongodol.tests.trans_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
@@ -99,19 +100,6 @@
   <section id="module-mongodol.stores">
 <span id="mongodol-stores"></span><h1>mongodol.stores<a class="headerlink" href="#module-mongodol.stores" title="Permalink to this headline">¶</a></h1>
 <p>Some useful stores for mongoDB</p>
-<dl class="py class">
-<dt id="mongodol.stores.MongoAnyKeyStore">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoAnyKeyStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoAnyKeyStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoAnyKeyStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>MongoStore using tuple keys.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoAnyKeyStore</span><span class="p">(</span><span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span> <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span> <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span> <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;must&#39;</span><span class="p">:</span> <span class="s1">&#39;be&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;dict&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
-<span class="go">{&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="py class">
 <dt id="mongodol.stores.MongoCollectionFirstDocPersister">
 <em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoCollectionFirstDocPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoCollectionFirstDocPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoCollectionFirstDocPersister" title="Permalink to this definition">¶</a></dt>
@@ -188,34 +176,8 @@ so though getting the value for {‘s’: ‘a’} won’t be a problem:</p>
 
 <dl class="py class">
 <dt id="mongodol.stores.MongoStore">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoStore" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">host</span></em>, <em class="sig-param"><span class="n">db_name</span></em>, <em class="sig-param"><span class="n">collection_name</span></em>, <em class="sig-param"><span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoStore" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="py class">
-<dt id="mongodol.stores.MongoTupleKeyStore">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.stores.</code><code class="sig-name descname">MongoTupleKeyStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/stores.html#MongoTupleKeyStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.stores.MongoTupleKeyStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>MongoStore using tuple keys.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoTupleKeyStore</span><span class="p">(</span><span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span> <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span> <span class="n">key_fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">remove</span><span class="p">({})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1234</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span>  <span class="c1"># see that key is not in store (and testing __contains__)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">orig_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">orig_length</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">v</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="n">v</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span> <span class="c1"># testing __contains__ again</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">orig_length</span>
-</pre></div>
-</div>
-</dd></dl>
 
 </section>
 

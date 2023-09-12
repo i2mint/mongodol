@@ -19,6 +19,7 @@
    module_docs/mongodol/tests/int_tests/conftest
    module_docs/mongodol/tests/not_working
    module_docs/mongodol/tests/stores_test
+   module_docs/mongodol/tests/trans_test
    module_docs/mongodol/tests/util
    module_docs/mongodol/tracking_methods
    module_docs/mongodol/trans

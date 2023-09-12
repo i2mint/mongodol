@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.stores &mdash; mongodol 0.0.23 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>mongodol.stores &mdash; mongodol 0.0.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -61,6 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
@@ -96,14 +97,15 @@
   <h1>Source code for mongodol.stores</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Some useful stores for mongoDB&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span><span class="p">,</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Mapping</span>
+
+<span class="kn">from</span> <span class="nn">i2</span> <span class="kn">import</span> <span class="n">Sig</span>
 
 <span class="kn">from</span> <span class="nn">dol</span> <span class="kn">import</span> <span class="n">Store</span><span class="p">,</span> <span class="n">wrap_kvs</span>
 <span class="kn">from</span> <span class="nn">dol.util</span> <span class="kn">import</span> <span class="n">lazyprop</span>
 
-<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="n">DFLT_TEST_DB</span>
-<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">MongoCollectionReader</span><span class="p">,</span> <span class="n">MongoCollectionPersister</span>
+<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">MongoClientReader</span><span class="p">,</span> <span class="n">MongoCollectionReader</span><span class="p">,</span> <span class="n">MongoCollectionPersister</span>
 <span class="kn">from</span> <span class="nn">mongodol.trans</span> <span class="kn">import</span> <span class="n">PostGet</span><span class="p">,</span> <span class="n">ObjOfData</span><span class="p">,</span> <span class="n">normalize_result</span>
 
 <span class="n">single_value_fetch_with_unicity_validation</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
@@ -207,13 +209,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">vi</span><span class="p">)</span> <span class="k">for</span> <span class="n">vi</span> <span class="ow">in</span> <span class="n">_v</span><span class="p">])</span></div>
 
 
-<span class="kn">from</span> <span class="nn">mongodol.scrap.old01</span> <span class="kn">import</span> <span class="n">OldMongoPersister</span>
-
-
 <div class="viewcode-block" id="MongoStore"><a class="viewcode-back" href="../../module_docs/mongodol/stores.html#mongodol.stores.MongoStore">[docs]</a><span class="k">class</span> <span class="nc">MongoStore</span><span class="p">(</span><span class="n">Store</span><span class="p">):</span>
-    <span class="nd">@wraps</span><span class="p">(</span><span class="n">OldMongoPersister</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">persister</span> <span class="o">=</span> <span class="n">OldMongoPersister</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">MongoCollectionUniqueDocPersister</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">collection_name</span><span class="p">,</span> <span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">mongo_client_kwargs</span> <span class="o">=</span> <span class="n">mongo_client_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">mgc</span> <span class="o">=</span> <span class="n">_get_mgc</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">mongo_client_kwargs</span><span class="p">)</span>
+        <span class="n">persister</span> <span class="o">=</span> <span class="n">MongoCollectionUniqueDocPersister</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mgc</span><span class="o">=</span><span class="n">mgc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">persister</span><span class="p">)</span></div>
 
 
@@ -226,78 +227,105 @@
 <span class="c1">#     from_params = MongoCollectionPersister.from_params</span>
 
 
-<div class="viewcode-block" id="MongoTupleKeyStore"><a class="viewcode-back" href="../../module_docs/mongodol/stores.html#mongodol.stores.MongoTupleKeyStore">[docs]</a><span class="k">class</span> <span class="nc">MongoTupleKeyStore</span><span class="p">(</span><span class="n">MongoStore</span><span class="p">):</span>
+<span class="c1"># class MongoTupleKeyStore(MongoStore):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     MongoStore using tuple keys.</span>
+
+<span class="c1">#     &gt;&gt;&gt; from mongodol.constants import DFLT_TEST_COLLECTION, DFLT_TEST_DB, DFLT_TEST_HOST</span>
+<span class="c1">#     &gt;&gt;&gt; from mongodol.util import normalize_projection</span>
+<span class="c1">#     &gt;&gt;&gt; s = MongoTupleKeyStore(</span>
+<span class="c1">#     ...     host=DFLT_TEST_HOST,</span>
+<span class="c1">#     ...     db_name=DFLT_TEST_DB,</span>
+<span class="c1">#     ...     collection_name=DFLT_TEST_COLLECTION,</span>
+<span class="c1">#     ...     iter_projection=normalize_projection([&#39;_id&#39;, &#39;user&#39;])</span>
+<span class="c1">#     ... )</span>
+<span class="c1">#     &gt;&gt;&gt; for k in s: del s[k]</span>
+<span class="c1">#     &gt;&gt;&gt; k = (1234, &#39;user&#39;)</span>
+<span class="c1">#     &gt;&gt;&gt; v = {&#39;name&#39;: &#39;bob&#39;, &#39;age&#39;: 42}</span>
+<span class="c1">#     &gt;&gt;&gt; if k in s:  # deleting all docs in tmp</span>
+<span class="c1">#     ...     del s[k]</span>
+<span class="c1">#     &gt;&gt;&gt; assert (k in s) == False  # see that key is not in store (and testing __contains__)</span>
+<span class="c1">#     &gt;&gt;&gt; orig_length = len(s)</span>
+<span class="c1">#     &gt;&gt;&gt; s[k] = v</span>
+<span class="c1">#     &gt;&gt;&gt; assert len(s) == orig_length + 1</span>
+<span class="c1">#     &gt;&gt;&gt; assert k in list(s)</span>
+<span class="c1">#     &gt;&gt;&gt; assert s[k] == v</span>
+<span class="c1">#     &gt;&gt;&gt; assert s.get(k) == v</span>
+<span class="c1">#     &gt;&gt;&gt; assert v in list(s.values())</span>
+<span class="c1">#     &gt;&gt;&gt; assert (k in s) == True # testing __contains__ again</span>
+<span class="c1">#     &gt;&gt;&gt; del s[k]</span>
+<span class="c1">#     &gt;&gt;&gt; assert len(s) == orig_length</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     @lazyprop</span>
+<span class="c1">#     def _key_fields(self):</span>
+<span class="c1">#         return iter(k for k, v in self.store._iter_projection.items() if v)</span>
+
+<span class="c1">#     def _id_of_key(self, k):</span>
+<span class="c1">#         return {field: field_val for field, field_val in zip(self._key_fields, k)}</span>
+
+<span class="c1">#     def _key_of_id(self, _id):</span>
+<span class="c1">#         return tuple(_id[x] for x in self._key_fields)</span>
+
+
+<span class="c1"># # TODO: Finish</span>
+<span class="c1"># class MongoAnyKeyStore(MongoStore):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     MongoStore using tuple keys.</span>
+
+<span class="c1">#     &gt;&gt;&gt; s = MongoAnyKeyStore(db_name=DFLT_TEST_DB, collection_name=&#39;tmp&#39;, )</span>
+<span class="c1">#     &gt;&gt;&gt; for k in s: del s[k]</span>
+<span class="c1">#     &gt;&gt;&gt; s[&#39;foo&#39;] = {&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
+<span class="c1">#     &gt;&gt;&gt; s[&#39;foo&#39;]</span>
+<span class="c1">#     {&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     @wraps(MongoStore.__init__)</span>
+<span class="c1">#     def __init__(self, *args, **kwargs):</span>
+<span class="c1">#         super().__init__(*args, **kwargs)</span>
+<span class="c1">#         assert isinstance(</span>
+<span class="c1">#             self._key_fields, tuple</span>
+<span class="c1">#         ), &#39;key_fields should be a tuple or a string&#39;</span>
+<span class="c1">#         assert (</span>
+<span class="c1">#             len(self._key_fields) == 1</span>
+<span class="c1">#         ), &#39;key_fields must have one and only one element (a string)&#39;</span>
+<span class="c1">#         self._key_field = self._key_fields[0]</span>
+
+<span class="c1">#     @lazyprop</span>
+<span class="c1">#     def _key_fields(self):</span>
+<span class="c1">#         return self.store._key_fields</span>
+
+<span class="c1">#     def _id_of_key(self, k):</span>
+<span class="c1">#         return {self._key_field: k}</span>
+
+<span class="c1">#     def _key_of_id(self, _id):</span>
+<span class="c1">#         return _id[self._key_field]</span>
+
+<span class="c1">#     def __setitem__(self, k, v):</span>
+<span class="c1">#         if k in self:</span>
+<span class="c1">#             del self[k]</span>
+<span class="c1">#         super().__setitem__(k, v)</span>
+
+    
+<span class="nd">@lru_cache</span>
+<span class="k">def</span> <span class="nf">_get_db</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">mongo_client_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    MongoStore using tuple keys.</span>
-
-<span class="sd">    &gt;&gt;&gt; s = MongoTupleKeyStore(db_name=DFLT_TEST_DB, collection_name=&#39;tmp&#39;, key_fields=(&#39;_id&#39;, &#39;user&#39;))</span>
-<span class="sd">    &gt;&gt;&gt; _ = s._mgc.remove({})</span>
-<span class="sd">    &gt;&gt;&gt; k = (1234, &#39;user&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; v = {&#39;name&#39;: &#39;bob&#39;, &#39;age&#39;: 42}</span>
-<span class="sd">    &gt;&gt;&gt; if k in s:  # deleting all docs in tmp</span>
-<span class="sd">    ...     if k in s:</span>
-<span class="sd">    ...         del s[k]</span>
-<span class="sd">    &gt;&gt;&gt; assert (k in s) == False  # see that key is not in store (and testing __contains__)</span>
-<span class="sd">    &gt;&gt;&gt; orig_length = len(s)</span>
-<span class="sd">    &gt;&gt;&gt; s[k] = v</span>
-<span class="sd">    &gt;&gt;&gt; assert len(s) == orig_length + 1</span>
-<span class="sd">    &gt;&gt;&gt; assert k in list(s)</span>
-<span class="sd">    &gt;&gt;&gt; assert s[k] == v</span>
-<span class="sd">    &gt;&gt;&gt; assert s.get(k) == v</span>
-<span class="sd">    &gt;&gt;&gt; assert v in list(s.values())</span>
-<span class="sd">    &gt;&gt;&gt; assert (k in s) == True # testing __contains__ again</span>
-<span class="sd">    &gt;&gt;&gt; del s[k]</span>
-<span class="sd">    &gt;&gt;&gt; assert len(s) == orig_length</span>
+<span class="sd">    Get a mongo database object from a db_name and host.</span>
+<span class="sd">    </span>
+<span class="sd">    The `host` parameter can be a full `mongodb URI</span>
+<span class="sd">    &lt;http://dochub.mongodb.org/core/connections&gt;`_, in addition to</span>
+<span class="sd">    a simple hostname. It can also be a list of hostnames or</span>
+<span class="sd">    URIs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nd">@lazyprop</span>
-    <span class="k">def</span> <span class="nf">_key_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">_key_fields</span>
-
-    <span class="k">def</span> <span class="nf">_id_of_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">field</span><span class="p">:</span> <span class="n">field_val</span> <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">field_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">,</span> <span class="n">k</span><span class="p">)}</span>
-
-    <span class="k">def</span> <span class="nf">_key_of_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_id</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">)</span></div>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">MongoClientReader</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">mongo_client_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span><span class="o">.</span><span class="n">db</span>
 
 
-<span class="c1"># TODO: Finish</span>
-<div class="viewcode-block" id="MongoAnyKeyStore"><a class="viewcode-back" href="../../module_docs/mongodol/stores.html#mongodol.stores.MongoAnyKeyStore">[docs]</a><span class="k">class</span> <span class="nc">MongoAnyKeyStore</span><span class="p">(</span><span class="n">MongoStore</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    MongoStore using tuple keys.</span>
-
-<span class="sd">    &gt;&gt;&gt; s = MongoAnyKeyStore(db_name=DFLT_TEST_DB, collection_name=&#39;tmp&#39;, )</span>
-<span class="sd">    &gt;&gt;&gt; for k in s: del s[k]</span>
-<span class="sd">    &gt;&gt;&gt; s[&#39;foo&#39;] = {&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
-<span class="sd">    &gt;&gt;&gt; s[&#39;foo&#39;]</span>
-<span class="sd">    {&#39;must&#39;: &#39;be&#39;, &#39;a&#39;: &#39;dict&#39;}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nd">@wraps</span><span class="p">(</span><span class="n">MongoStore</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">,</span> <span class="nb">tuple</span>
-        <span class="p">),</span> <span class="s1">&#39;key_fields should be a tuple or a string&#39;</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="p">),</span> <span class="s1">&#39;key_fields must have one and only one element (a string)&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_key_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="nd">@lazyprop</span>
-    <span class="k">def</span> <span class="nf">_key_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">_key_fields</span>
-
-    <span class="k">def</span> <span class="nf">_id_of_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_field</span><span class="p">:</span> <span class="n">k</span><span class="p">}</span>
-
-    <span class="k">def</span> <span class="nf">_key_of_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_id</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_field</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
+<span class="nd">@lru_cache</span>
+<span class="k">def</span> <span class="nf">_get_mgc</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">mongo_client_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a mongo collection object from a collection_name, db_name, and host.&quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">_get_db</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">mongo_client_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">db</span><span class="p">[</span><span class="n">collection_name</span><span class="p">]</span>
 </pre></div>
 
            </div>
