@@ -4,15 +4,15 @@ from mongodol.util import normalize_projection
 
 
 def test_mongo_store(
-        s=MongoStore(
-            host=DFLT_TEST_HOST,
-            db_name=DFLT_TEST_DB,
-            collection_name=DFLT_TEST_COLLECTION,
-            getitem_projection=normalize_projection(['val']),
-        ),
-        k=None,
-        v=None
-    ):
+    s=MongoStore(
+        host=DFLT_TEST_HOST,
+        db_name=DFLT_TEST_DB,
+        collection_name=DFLT_TEST_COLLECTION,
+        getitem_projection=normalize_projection(['val']),
+    ),
+    k=None,
+    v=None,
+):
 
     # Empty collection
     for k in s:

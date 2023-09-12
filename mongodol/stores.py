@@ -8,7 +8,11 @@ from i2 import Sig
 from dol import Store, wrap_kvs
 from dol.util import lazyprop
 
-from mongodol.base import MongoClientReader, MongoCollectionReader, MongoCollectionPersister
+from mongodol.base import (
+    MongoClientReader,
+    MongoCollectionReader,
+    MongoCollectionPersister,
+)
 from mongodol.trans import PostGet, ObjOfData, normalize_result
 
 single_value_fetch_with_unicity_validation = partial(
@@ -114,7 +118,9 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
 
 class MongoStore(Store):
     @wraps(MongoCollectionUniqueDocPersister.__init__)
-    def __init__(self, *args, host, db_name, collection_name, mongo_client_kwargs=None, **kwargs):
+    def __init__(
+        self, *args, host, db_name, collection_name, mongo_client_kwargs=None, **kwargs
+    ):
         mongo_client_kwargs = mongo_client_kwargs or {}
         mgc = _get_mgc(collection_name, db_name, host, **mongo_client_kwargs)
         persister = MongoCollectionUniqueDocPersister(*args, mgc=mgc, **kwargs)
@@ -209,7 +215,7 @@ class MongoStore(Store):
 #             del self[k]
 #         super().__setitem__(k, v)
 
-    
+
 @lru_cache
 def _get_db(db_name, host, **mongo_client_kwargs):
     """
