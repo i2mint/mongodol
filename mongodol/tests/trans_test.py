@@ -2,8 +2,9 @@
 
 
 def test_set_key_and_data_fields():
-    from dol.base import MongoCollectionCollection, MongoCollectionFirstDocPersister
-    from dol.trans import set_key_and_data_fields
+    from mongodol.base import MongoCollectionCollection
+    from mongodol.stores import MongoCollectionFirstDocPersister
+    from mongodol.trans import set_key_and_data_fields
     
     def delete_all_keys(store):
         for k in store:
@@ -33,7 +34,7 @@ def test_set_key_and_data_fields():
     ss["456"] = ("Jane", 43)
     assert list(ss) == ["123", "456"]
     assert (ss['123'], ss['456'])  == (('John', 42), ('Jane', 43))
-    # assert list(ss.values()) == [("John", 42), ("Jane", 43)]  # TODO: fix this (.values() broken!!)
+    assert list(ss.values()) == [("John", 42), ("Jane", 43)]
 
     # What was actually persisted:
     assert list(raw) == [

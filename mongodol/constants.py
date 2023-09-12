@@ -13,5 +13,6 @@ end_of_cursor = type('end_of_cursor', (object,), {})()
 end_of_cursor.__doc__ = 'Sentinel used to signal that the cursor has no more data'
 
 DFLT_MONGO_CLIENT_ARGS = ()
+DFLT_TEST_HOST = 'mongodb://localhost:27017'
 DFLT_TEST_DB = 'mongodol'
 DFLT_TEST_COLLECTION = 'mongodol_test'

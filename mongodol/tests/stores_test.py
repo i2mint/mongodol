@@ -1,7 +1,23 @@
+from mongodol.constants import DFLT_TEST_COLLECTION, DFLT_TEST_DB, DFLT_TEST_HOST
 from mongodol.stores import MongoStore
+from mongodol.util import normalize_projection
 
 
-def test_mongo_store(s=MongoStore(), k=None, v=None):
+def test_mongo_store(
+        s=MongoStore(
+            host=DFLT_TEST_HOST,
+            db_name=DFLT_TEST_DB,
+            collection_name=DFLT_TEST_COLLECTION,
+            getitem_projection=normalize_projection(['val']),
+        ),
+        k=None,
+        v=None
+    ):
+
+    # Empty collection
+    for k in s:
+        del s[k]
+
     if k is None:
         k = {'_id': 'foo'}
     if v is None:
