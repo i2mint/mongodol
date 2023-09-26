@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.trans &mdash; mongodol 0.0.24 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>mongodol.trans &mdash; mongodol 0.0.25 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -319,7 +319,7 @@
             <span class="c1"># return PersistentDict(store, doc)</span>
             <span class="k">return</span> <span class="n">doc</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">single_value_fetch_without_unicity_validation</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
@@ -328,7 +328,7 @@
             <span class="c1"># return PersistentDict(store, doc)</span>
             <span class="k">return</span> <span class="n">doc</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">ObjOfData</span><span class="p">:</span>
@@ -338,15 +338,19 @@
         <span class="k">return</span> <span class="n">doc_collector</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
 
 
-<span class="n">WriteOpResult</span> <span class="o">=</span> <span class="n">TypedDict</span><span class="p">(</span><span class="s2">&quot;WriteOpResult&quot;</span><span class="p">,</span> <span class="n">ok</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span>
+<div class="viewcode-block" id="WriteOpResult"><a class="viewcode-back" href="../../module_docs/mongodol/trans.html#mongodol.trans.WriteOpResult">[docs]</a><span class="k">class</span> <span class="nc">WriteOpResult</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">ok</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span></div>
+
 
 <span class="n">DFLT_METHOD_NAMES_TO_NORMALIZE</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;__setitem__&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;__delitem__&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;append&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;extend&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;flush&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;commit&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;__setitem__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;__delitem__&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;append&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extend&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;flush&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;commit&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -358,25 +362,25 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Should be callable: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;Should be callable: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span>
 
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">result_mapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">raw_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">result</span><span class="p">:</span> <span class="n">WriteOpResult</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="n">result</span><span class="p">:</span> <span class="n">WriteOpResult</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">raw_result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">InsertOneResult</span><span class="p">)</span> <span class="ow">and</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">:</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">)]</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">)]</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">InsertManyResult</span><span class="p">)</span> <span class="ow">and</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">:</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">)</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_ids</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="p">(</span><span class="n">DeleteResult</span><span class="p">,</span> <span class="n">UpdateResult</span><span class="p">)):</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">raw_result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">raw_result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_result</span><span class="p">,</span> <span class="n">BulkWriteResult</span><span class="p">):</span>
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">raw_result</span><span class="o">.</span><span class="n">inserted_count</span>
                     <span class="o">+</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">upserted_count</span>
                     <span class="o">+</span> <span class="n">raw_result</span><span class="o">.</span><span class="n">modified_count</span>
@@ -384,9 +388,9 @@
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Interpretation of result type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">raw_result</span><span class="p">)</span><span class="si">}</span><span class="s2"> is not implemented.&quot;</span>
+                    <span class="sa">f</span><span class="s1">&#39;Interpretation of result type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">raw_result</span><span class="p">)</span><span class="si">}</span><span class="s1"> is not implemented.&#39;</span>
                 <span class="p">)</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;ok&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
             <span class="k">return</span> <span class="n">result</span>
 
         <span class="k">return</span> <span class="n">result_mapper</span>
