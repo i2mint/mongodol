@@ -241,7 +241,11 @@ class ObjOfData:
         return doc_collector(cursor)
 
 
-WriteOpResult = TypedDict("WriteOpResult", ok=bool, n=int, ids=Optional[Iterable[str]])
+class WriteOpResult(TypedDict):
+    ok: bool
+    n: int
+    ids: Optional[Iterable[str]]
+
 
 DFLT_METHOD_NAMES_TO_NORMALIZE = (
     "__setitem__",
