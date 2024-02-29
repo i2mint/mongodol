@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.scrap.old01 &mdash; mongodol 0.0.26 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <title>mongodol.scrap.old01 &mdash; mongodol 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-        <script src="../../../_static/toggleprompt.js"></script>
-        <script src="../../../_static/clipboard.min.js"></script>
-        <script src="../../../_static/copybutton.js"></script>
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -45,7 +49,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../mongodol.html">mongodol</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../add_ons.html">mongodol.add_ons</a></li>
@@ -53,7 +57,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">mongodol.constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../errors.html">mongodol.errors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../recipes.html">mongodol.recipes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.scrap.old01</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.scrap.old01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.old01.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.old01.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.old01.MongoCollectionReader.items"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.items()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.old01.MongoCollectionReader.keys"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.old01.MongoCollectionReader.values"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.old01.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.old01.OldMongoInsertPersister"><code class="docutils literal notranslate"><span class="pre">OldMongoInsertPersister</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.old01.OldMongoPersister"><code class="docutils literal notranslate"><span class="pre">OldMongoPersister</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="views_work.html">mongodol.scrap.views_work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stores.html">mongodol.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tests.html">mongodol.tests</a></li>
@@ -98,10 +114,10 @@
            <div itemprop="articleBody">
              
   <section id="module-mongodol.scrap.old01">
-<span id="mongodol-scrap-old01"></span><h1>mongodol.scrap.old01<a class="headerlink" href="#module-mongodol.scrap.old01" title="Permalink to this headline">¶</a></h1>
+<span id="mongodol-scrap-old01"></span><h1>mongodol.scrap.old01<a class="headerlink" href="#module-mongodol.scrap.old01" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt id="mongodol.scrap.old01.MongoCollectionPersister">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoCollectionPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mgc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>pymongo.collection.Collection<span class="p">, </span>str<span class="p">, </span>dol.base.Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filt</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionPersister" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoCollectionPersister">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.old01.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionPersister" title="Link to this definition"></a></dt>
 <dd><p>A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p>
 <p># &gt;&gt;&gt; from pymongo import MongoClient
 # &gt;&gt;&gt; mongo_collection_obj = MongoClient()[DFLT_TEST_DB][‘test’]
@@ -155,8 +171,8 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="mongodol.scrap.old01.MongoCollectionReader">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoCollectionReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mgc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>pymongo.collection.Collection<span class="p">, </span>str<span class="p">, </span>dol.base.Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filt</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoCollectionReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.old01.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader" title="Link to this definition"></a></dt>
 <dd><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.
 &gt;&gt;&gt; from mongodol import MongoCollectionReader
 &gt;&gt;&gt; from pymongo import MongoClient
@@ -204,35 +220,35 @@ such as:</p>
 </div>
 <p>But you can take care of that in higher level wrappers that have hashable keys and/or values.</p>
 <dl class="py method">
-<dt id="mongodol.scrap.old01.MongoCollectionReader.items">
-<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s items<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoCollectionReader.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.items" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="mongodol.scrap.old01.MongoCollectionReader.keys">
-<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s keys<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoCollectionReader.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.keys" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="mongodol.scrap.old01.MongoCollectionReader.values">
-<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; an object providing a view on D’s values<a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoCollectionReader.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">an</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">values</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoCollectionReader.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoCollectionReader.values" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="mongodol.scrap.old01.MongoItemsView">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">MongoItemsView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mapping</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoItemsView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoItemsView" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.MongoItemsView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.old01.</span></span><span class="sig-name descname"><span class="pre">MongoItemsView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#MongoItemsView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.MongoItemsView" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
-<dt id="mongodol.scrap.old01.OldMongoInsertPersister">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">OldMongoInsertPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_name</span><span class="o">=</span><span class="default_value">'mongodol'</span></em>, <em class="sig-param"><span class="n">collection_name</span><span class="o">=</span><span class="default_value">'test'</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoInsertPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoInsertPersister" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.OldMongoInsertPersister">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.old01.</span></span><span class="sig-name descname"><span class="pre">OldMongoInsertPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mongodol'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mongo_client_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoInsertPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoInsertPersister" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
-<dt id="mongodol.scrap.old01.OldMongoPersister">
-<em class="property">class </em><code class="sig-prename descclassname">mongodol.scrap.old01.</code><code class="sig-name descname">OldMongoPersister</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_name</span><span class="o">=</span><span class="default_value">'mongodol'</span></em>, <em class="sig-param"><span class="n">collection_name</span><span class="o">=</span><span class="default_value">'test'</span></em>, <em class="sig-param"><span class="n">key_fields</span><span class="o">=</span><span class="default_value">('_id')</span></em>, <em class="sig-param"><span class="n">data_fields</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoPersister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoPersister" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mongodol.scrap.old01.OldMongoPersister">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.old01.</span></span><span class="sig-name descname"><span class="pre">OldMongoPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mongodol'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mongo_client_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/old01.html#OldMongoPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.old01.OldMongoPersister" title="Link to this definition"></a></dt>
 <dd><p>A basic mongo persister.
 Note that the mongo persister is designed not to overwrite the value of a key if the key already exists.
 You can subclass it and use update_one instead of insert_one if you want to be able to overwrite data.</p>
