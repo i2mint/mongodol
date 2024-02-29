@@ -6,6 +6,8 @@ Tools to create data abstractions over mongoDB data.
 
 To install:	```pip install mongodol```
 
+And of course, you need to [install MongoDB](https://www.mongodb.com/docs/manual/installation/)
+
 
 # The base objects
 
