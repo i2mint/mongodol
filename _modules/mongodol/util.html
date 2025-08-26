@@ -1,27 +1,25 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.util &mdash; mongodol 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+  <title>mongodol.util &mdash; mongodol 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -101,17 +99,17 @@
   <h1>Source code for mongodol.util</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Util functions&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">or_</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">or_</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
 
-<span class="kn">from</span> <span class="nn">pymongo.collection</span> <span class="kn">import</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">PyMongoCollection</span>
-<span class="kn">from</span> <span class="nn">pymongo.database</span> <span class="kn">import</span> <span class="n">Database</span>
-<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo.collection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">PyMongoCollection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
 
-<span class="kn">from</span> <span class="nn">linkup</span> <span class="kn">import</span> <span class="n">key_aligned_val_op_with_forced_defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">linkup</span><span class="w"> </span><span class="kn">import</span> <span class="n">key_aligned_val_op_with_forced_defaults</span>
 
-<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ID</span><span class="p">,</span>
     <span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">DFLT_TEST_DB</span><span class="p">,</span>
@@ -119,21 +117,21 @@
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">mk_dflt_client</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mk_dflt_client</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">MongoClient</span><span class="p">(</span><span class="o">*</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">mk_dflt_mgc</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mk_dflt_mgc</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">MongoClient</span><span class="p">(</span><span class="o">*</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">)[</span><span class="n">DFLT_TEST_DB</span><span class="p">][</span><span class="n">DFLT_TEST_COLLECTION</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="KeyNotUniqueError">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.KeyNotUniqueError">[docs]</a>
-<span class="k">class</span> <span class="nc">KeyNotUniqueError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeyNotUniqueError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a key was expected to be unique, but wasn&#39;t (i.e. cursor has more than one match)&quot;&quot;&quot;</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">raise_error</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">raise_error</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">KeyNotUniqueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s1">&#39;Key was not unique (i.e. cursor has more than one match): </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="p">)</span></div>
@@ -144,7 +142,7 @@
 <span class="n">ProjectionSpec</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">get_key_value_specs</span><span class="p">(</span><span class="n">key_fields</span><span class="p">,</span> <span class="n">data_fields</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_key_value_specs</span><span class="p">(</span><span class="n">key_fields</span><span class="p">,</span> <span class="n">data_fields</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key_fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">key_fields</span> <span class="o">=</span> <span class="p">(</span><span class="n">key_fields</span><span class="p">,)</span>
     <span class="k">if</span> <span class="n">data_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -169,7 +167,7 @@
 
 <div class="viewcode-block" id="flatten_dict_items">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.flatten_dict_items">[docs]</a>
-<span class="k">def</span> <span class="nf">flatten_dict_items</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten_dict_items</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a &quot;flat&quot; dict from a nested one. A flat dict&#39;s keys are the dot-paths of the input dict.</span>
 
@@ -204,7 +202,7 @@
 
 <div class="viewcode-block" id="normalize_projection">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.normalize_projection">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_projection</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_projection</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Iterable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,...</span>
 <span class="sd">    (or None if projection is None to start with).</span>
 
@@ -261,7 +259,7 @@
 
 <div class="viewcode-block" id="projection_union">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.projection_union">[docs]</a>
-<span class="k">def</span> <span class="nf">projection_union</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">projection_union</span><span class="p">(</span>
     <span class="n">projection_1</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">projection_2</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">already_flattened</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -288,7 +286,7 @@
 
 <div class="viewcode-block" id="get_mongo_collection_pymongo_obj">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.get_mongo_collection_pymongo_obj">[docs]</a>
-<span class="k">def</span> <span class="nf">get_mongo_collection_pymongo_obj</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_factory</span><span class="o">=</span><span class="n">mk_dflt_client</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mongo_collection_pymongo_obj</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_factory</span><span class="o">=</span><span class="n">mk_dflt_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a pymongo.collection.Collection object for a mongo collection, flexibly.</span>
 
 <span class="sd">    ```</span>

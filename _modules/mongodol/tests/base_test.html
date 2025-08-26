@@ -1,27 +1,25 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.tests.base_test &mdash; mongodol 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+  <title>mongodol.tests.base_test &mdash; mongodol 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -103,16 +101,16 @@
 <span class="sd">Remember to test FEATURES, not OBJECTS!!</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="n">DFLT_TEST_DB</span>
-<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">MongoCollectionCollection</span><span class="p">,</span> <span class="n">MongoCollectionReader</span>
-<span class="kn">from</span> <span class="nn">mongodol.tests.util</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFLT_TEST_DB</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">MongoCollectionCollection</span><span class="p">,</span> <span class="n">MongoCollectionReader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.tests.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">clear_all_and_populate</span><span class="p">,</span>
     <span class="n">get_test_collection_persister</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">mongodol.tests.data</span> <span class="kn">import</span> <span class="n">feature_cube</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.tests.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">feature_cube</span>
 
 
-<span class="k">def</span> <span class="nf">test_mongo_collection_collection</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_mongo_collection_collection</span><span class="p">(</span>
     <span class="n">mongo_collection_collection_cls</span><span class="o">=</span><span class="n">MongoCollectionCollection</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">persister</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
@@ -177,14 +175,14 @@
 
 <div class="viewcode-block" id="test_mongo_collection_reader_without_test_data_dependencies">
 <a class="viewcode-back" href="../../../module_docs/mongodol/tests/base_test.html#mongodol.tests.base_test.test_mongo_collection_reader_without_test_data_dependencies">[docs]</a>
-<span class="k">def</span> <span class="nf">test_mongo_collection_reader_without_test_data_dependencies</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_mongo_collection_reader_without_test_data_dependencies</span><span class="p">(</span>
     <span class="n">collection_kvreader_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests reader functionality that doesn&#39;t need specific data to be injected in the data base.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">collection_kvreader_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">mongodol</span> <span class="kn">import</span> <span class="n">MongoCollectionReader</span> <span class="k">as</span> <span class="n">collection_kvreader_cls</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mongodol</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoCollectionReader</span> <span class="k">as</span> <span class="n">collection_kvreader_cls</span>
 
-    <span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
 
     <span class="n">s</span> <span class="o">=</span> <span class="n">collection_kvreader_cls</span><span class="p">(</span><span class="n">MongoClient</span><span class="p">()[</span><span class="n">DFLT_TEST_DB</span><span class="p">][</span><span class="s1">&#39;test&#39;</span><span class="p">])</span>
     <span class="n">list_of_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -193,7 +191,7 @@
 
     <span class="c1"># ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances</span>
     <span class="c1"># (specialized for mongo).</span>
-    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">KeysView</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeysView</span>
 
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">KeysView</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">ValuesView</span><span class="p">)</span>
@@ -231,7 +229,7 @@
     <span class="c1"># But you can take care of that in higher level wrappers that have hashable keys and/or values.</span>
 
 
-<span class="k">def</span> <span class="nf">test_basic_mongo_kvreader_functionality</span><span class="p">(</span><span class="n">mongo_reader_cls</span><span class="o">=</span><span class="n">MongoCollectionReader</span><span class="p">,):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_basic_mongo_kvreader_functionality</span><span class="p">(</span><span class="n">mongo_reader_cls</span><span class="o">=</span><span class="n">MongoCollectionReader</span><span class="p">,):</span>
     <span class="n">test_persister</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
     <span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">feature_cube</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">test_persister</span><span class="p">)</span>
     <span class="n">test_mgc</span> <span class="o">=</span> <span class="n">test_persister</span><span class="o">.</span><span class="n">mgc</span>
@@ -335,7 +333,7 @@
 
     <span class="c1"># The list(...) is needed because in fact, ``s[key]`` gives you a mongo CURSOR, that needs to be &quot;consumed&quot;.</span>
 
-    <span class="kn">from</span> <span class="nn">pymongo.cursor</span> <span class="kn">import</span> <span class="n">Cursor</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pymongo.cursor</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cursor</span>
 
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">[{}],</span> <span class="n">Cursor</span><span class="p">)</span>
 

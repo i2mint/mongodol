@@ -1,27 +1,25 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.scrap.old01 &mdash; mongodol 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+  <title>mongodol.scrap.old01 &mdash; mongodol 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -99,21 +97,21 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mongodol.scrap.old01</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">KeysView</span><span class="p">,</span> <span class="n">ValuesView</span><span class="p">,</span> <span class="n">ItemsView</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeysView</span><span class="p">,</span> <span class="n">ValuesView</span><span class="p">,</span> <span class="n">ItemsView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
 
-<span class="kn">from</span> <span class="nn">dol</span> <span class="kn">import</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">DolCollection</span><span class="p">,</span> <span class="n">KvPersister</span>
-<span class="kn">from</span> <span class="nn">dol</span> <span class="kn">import</span> <span class="n">KvReader</span>
-<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">DolCollection</span><span class="p">,</span> <span class="n">KvPersister</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">KvReader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
 
-<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">PyMongoCollectionSpec</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">,</span> <span class="n">DFLT_TEST_DB</span>
-<span class="kn">from</span> <span class="nn">mongodol.util</span> <span class="kn">import</span> <span class="n">get_mongo_collection_pymongo_obj</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">PyMongoCollectionSpec</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">,</span> <span class="n">DFLT_TEST_DB</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_mongo_collection_pymongo_obj</span>
 
 
 <span class="c1"># TODO: Consider dataclass use</span>
 <div class="viewcode-block" id="MongoCollectionReader">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionReader">[docs]</a>
-<span class="k">class</span> <span class="nc">MongoCollectionReader</span><span class="p">(</span><span class="n">KvReader</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoCollectionReader</span><span class="p">(</span><span class="n">KvReader</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</span>
 <span class="sd">    &gt;&gt;&gt; from mongodol import MongoCollectionReader</span>
 <span class="sd">    &gt;&gt;&gt; from pymongo import MongoClient</span>
@@ -162,7 +160,7 @@
 <span class="sd">    But you can take care of that in higher level wrappers that have hashable keys and/or values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mgc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PyMongoCollectionSpec</span><span class="p">,</span> <span class="n">DolCollection</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">key_fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_id&#39;</span><span class="p">,),</span>
@@ -199,7 +197,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filt</span> <span class="o">=</span> <span class="n">filt</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_params</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_params</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">db_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_TEST_DB</span><span class="p">,</span>
         <span class="n">collection_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span>
@@ -220,7 +218,7 @@
             <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">k</span><span class="p">,</span> <span class="n">Mapping</span>
         <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;k (key) must be a mapping (typically a dictionary). Was:</span><span class="se">\n\t</span><span class="s1">k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -228,36 +226,36 @@
             <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_fields</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_filt</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_projection</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">count_documents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filt</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="c1"># TODO: How do we have cursor return no data (here still has _id)</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">end_of_cursor</span>
 
 <div class="viewcode-block" id="MongoCollectionReader.keys">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionReader.keys">[docs]</a>
-    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">KeysView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MongoCollectionReader.items">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionReader.items">[docs]</a>
-    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">MongoItemsView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MongoCollectionReader.values">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionReader.values">[docs]</a>
-    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">MongoValuesView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_merge_with_filt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_merge_with_filt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filt</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
@@ -268,21 +266,21 @@
 
 
 
-<span class="k">class</span> <span class="nc">MongoValuesView</span><span class="p">(</span><span class="n">ValuesView</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoValuesView</span><span class="p">(</span><span class="n">ValuesView</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">end_of_cursor</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span>
         <span class="k">yield from</span> <span class="n">m</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_filt</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_data_fields</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="MongoItemsView">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoItemsView">[docs]</a>
-<span class="k">class</span> <span class="nc">MongoItemsView</span><span class="p">(</span><span class="n">ItemsView</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoItemsView</span><span class="p">(</span><span class="n">ItemsView</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span>
         <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span>
         <span class="c1"># TODO: How do we have cursor return no data (here still has _id)</span>
@@ -290,7 +288,7 @@
         <span class="c1"># return cursor</span>
         <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">end_of_cursor</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span>
         <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_filt</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_items_projection</span><span class="p">):</span>
             <span class="n">key</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">_key_fields</span><span class="p">}</span>
@@ -300,7 +298,7 @@
 
 <div class="viewcode-block" id="MongoCollectionPersister">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionPersister">[docs]</a>
-<span class="k">class</span> <span class="nc">MongoCollectionPersister</span><span class="p">(</span><span class="n">MongoCollectionReader</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoCollectionPersister</span><span class="p">(</span><span class="n">MongoCollectionReader</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</span>
 
 <span class="sd">    # &gt;&gt;&gt; from pymongo import MongoClient</span>
@@ -355,7 +353,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span>
         <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;k (key) and v (value) must both be mappings (often dictionaries). Were:</span><span class="se">\n\t</span><span class="s1">k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n\t</span><span class="s1">v=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -365,33 +363,33 @@
             <span class="n">upsert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You can&#39;t remove that key: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span>
         <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39; v (value) must be a mapping (often a dictionary). Were:</span><span class="se">\n\t</span><span class="s1">v=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
             <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
         <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39; values must be mappings (often dictionaries)&#39;</span>
         <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">persist_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">persist_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">({</span><span class="n">ID</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">ID</span><span class="p">]},</span> <span class="n">data</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="OldMongoPersister">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.OldMongoPersister">[docs]</a>
-<span class="k">class</span> <span class="nc">OldMongoPersister</span><span class="p">(</span><span class="n">KvPersister</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OldMongoPersister</span><span class="p">(</span><span class="n">KvPersister</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A basic mongo persister.</span>
 <span class="sd">    Note that the mongo persister is designed not to overwrite the value of a key if the key already exists.</span>
@@ -440,7 +438,7 @@
 <span class="sd">    {&#39;first&#39;: &#39;Vitalik&#39;, &#39;last&#39;: &#39;Buterin&#39;} --&gt; {&#39;yob&#39;: 1994, &#39;proj&#39;: &#39;ethereum&#39;, &#39;bdfl&#39;: True}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span>
         <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
@@ -473,34 +471,34 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_fields</span> <span class="o">=</span> <span class="n">data_fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_key_fields</span> <span class="o">=</span> <span class="n">key_fields</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_fields</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">doc</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No document found for query: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">v</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You can&#39;t removed that key: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_projection</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">count_documents</span><span class="p">({})</span></div>
 
 
 
 <div class="viewcode-block" id="OldMongoInsertPersister">
 <a class="viewcode-back" href="../../../module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.OldMongoInsertPersister">[docs]</a>
-<span class="k">class</span> <span class="nc">OldMongoInsertPersister</span><span class="p">(</span><span class="n">OldMongoPersister</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OldMongoInsertPersister</span><span class="p">(</span><span class="n">OldMongoPersister</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span>
         <span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
@@ -515,10 +513,10 @@
             <span class="n">mongo_client_kwargs</span><span class="o">=</span><span class="n">mongo_client_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">items</span><span class="p">)</span></div>
 
 </pre></div>

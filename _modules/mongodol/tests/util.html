@@ -1,27 +1,25 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.tests.util &mdash; mongodol 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+  <title>mongodol.tests.util &mdash; mongodol 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -99,18 +97,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mongodol.tests.util</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 
-<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
 
-<span class="kn">from</span> <span class="nn">mongodol.base</span> <span class="kn">import</span> <span class="n">MongoCollectionPersister</span>
-<span class="kn">from</span> <span class="nn">mongodol.tests</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoCollectionPersister</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.tests</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">data</span> <span class="k">as</span> <span class="n">test_data</span><span class="p">,</span>
     <span class="n">NUMBER_MGC_NAME</span><span class="p">,</span>
     <span class="n">FEATURE_CUBE_MGC_NAME</span><span class="p">,</span>
     <span class="n">BDFL_MGC_NAME</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">mongodol.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">DFLT_TEST_DB</span><span class="p">,</span>
     <span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
@@ -119,12 +117,12 @@
 
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_test_database</span><span class="p">(</span><span class="n">mongo_client_args</span><span class="o">=</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span> <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_test_database</span><span class="p">(</span><span class="n">mongo_client_args</span><span class="o">=</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span> <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">MongoClient</span><span class="p">(</span><span class="o">*</span><span class="n">mongo_client_args</span><span class="p">)[</span><span class="n">db_name</span><span class="p">]</span>
 
 
 <span class="nd">@lru_cache</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">get_test_collection_object</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_test_collection_object</span><span class="p">(</span>
     <span class="n">mongo_client_args</span><span class="o">=</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span>
     <span class="n">collection_name</span><span class="o">=</span><span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
@@ -133,7 +131,7 @@
     <span class="k">return</span> <span class="n">db</span><span class="p">[</span><span class="n">collection_name</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">get_test_collection_persister</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_test_collection_persister</span><span class="p">(</span>
     <span class="n">mongo_client_args</span><span class="o">=</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">,</span>
     <span class="n">db_name</span><span class="o">=</span><span class="n">DFLT_TEST_DB</span><span class="p">,</span>
     <span class="n">collection_name</span><span class="o">=</span><span class="n">DFLT_TEST_COLLECTION</span><span class="p">,</span>
@@ -145,14 +143,14 @@
 
 
 <span class="c1"># TODO: Add some protection to clearing all store?</span>
-<span class="k">def</span> <span class="nf">clear_all_and_populate</span><span class="p">(</span><span class="n">docs</span><span class="o">=</span><span class="p">(),</span> <span class="n">test_store</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clear_all_and_populate</span><span class="p">(</span><span class="n">docs</span><span class="o">=</span><span class="p">(),</span> <span class="n">test_store</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">test_store</span> <span class="o">=</span> <span class="n">test_store</span> <span class="ow">or</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">test_store</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">test_store</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="n">test_store</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">init_db</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">init_db</span><span class="p">():</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="o">*</span><span class="n">DFLT_MONGO_CLIENT_ARGS</span><span class="p">)</span>
     <span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="n">DFLT_TEST_DB</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">():</span>
@@ -165,7 +163,7 @@
 
 <div class="viewcode-block" id="populated_pymongo_collection">
 <a class="viewcode-back" href="../../../module_docs/mongodol/tests/util.html#mongodol.tests.util.populated_pymongo_collection">[docs]</a>
-<span class="k">def</span> <span class="nf">populated_pymongo_collection</span><span class="p">(</span><span class="n">docs</span><span class="o">=</span><span class="n">test_data</span><span class="o">.</span><span class="n">nums_and_lans</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">populated_pymongo_collection</span><span class="p">(</span><span class="n">docs</span><span class="o">=</span><span class="n">test_data</span><span class="o">.</span><span class="n">nums_and_lans</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a pymongo collection that has been populated with docs.&quot;&quot;&quot;</span>
     <span class="n">test_store</span> <span class="o">=</span> <span class="n">get_test_collection_persister</span><span class="p">()</span>
     <span class="n">clear_all_and_populate</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">test_store</span><span class="p">)</span>
