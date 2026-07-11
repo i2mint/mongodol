@@ -2,7 +2,7 @@
 
 from functools import wraps, partial, cached_property
 from inspect import signature
-from typing import Iterable, Callable
+from collections.abc import Iterable, Callable
 from i2.signatures import Sig
 
 import pymongo

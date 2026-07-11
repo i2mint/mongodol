@@ -1,7 +1,7 @@
 """Some useful stores for mongoDB"""
 
 from functools import lru_cache, wraps, partial
-from typing import Collection, Mapping
+from collections.abc import Collection, Mapping
 
 from i2 import Sig
 

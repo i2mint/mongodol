@@ -2,9 +2,10 @@
 
 from copy import deepcopy
 from abc import ABC
-from typing import Mapping
+from collections.abc import Mapping
 from functools import partial, wraps
-from typing import Iterable, Optional, TypedDict
+from typing import Optional, TypedDict
+from collections.abc import Iterable
 from dol import wrap_kvs as dol_wrap_kvs
 
 from pymongo.results import (
@@ -244,7 +245,7 @@ class ObjOfData:
 class WriteOpResult(TypedDict):
     ok: bool
     n: int
-    ids: Optional[Iterable[str]]
+    ids: Iterable[str] | None
 
 
 DFLT_METHOD_NAMES_TO_NORMALIZE = (

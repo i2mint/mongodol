@@ -1,5 +1,6 @@
 from collections.abc import KeysView, ValuesView, ItemsView
-from typing import Mapping, Optional, Union, Iterable
+from typing import Optional, Union
+from collections.abc import Mapping, Iterable
 
 from dol import Collection as DolCollection, KvPersister
 from dol import KvReader
@@ -61,10 +62,10 @@ class MongoCollectionReader(KvReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
+        mgc: PyMongoCollectionSpec | DolCollection = None,
         key_fields=('_id',),
-        data_fields: Optional[Iterable] = None,
-        filt: Optional[dict] = None,
+        data_fields: Iterable | None = None,
+        filt: dict | None = None,
     ):
 
         self._mgc = get_mongo_collection_pymongo_obj(mgc)
@@ -101,9 +102,9 @@ class MongoCollectionReader(KvReader):
         db_name: str = DFLT_TEST_DB,
         collection_name: str = 'test',
         key_fields: Iterable = (ID,),
-        data_fields: Optional[Iterable] = None,
-        filt: Optional[dict] = None,
-        mongo_client: Optional[dict] = None,
+        data_fields: Iterable | None = None,
+        filt: dict | None = None,
+        mongo_client: dict | None = None,
     ):
         if mongo_client is None:
             mongo_client = MongoClient()

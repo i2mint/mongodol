@@ -3,7 +3,7 @@ https://github.com/i2mint/mongodol/issues/3
 """
 from abc import ABC
 from inspect import signature, Parameter
-from typing import Callable
+from collections.abc import Callable
 
 from dol.util import has_enabled_clear_method
 from dol.trans import add_store_method

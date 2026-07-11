@@ -1,5 +1,6 @@
 from functools import wraps, cached_property
-from typing import Mapping, Optional, Union, Iterable
+from typing import Optional, Union
+from collections.abc import Mapping, Iterable
 from collections.abc import KeysView, ValuesView, ItemsView
 from collections import ChainMap
 
@@ -16,9 +17,9 @@ from mongodol.util import (
     get_mongo_collection_pymongo_obj,
 )
 
-from collections import Mapping
+from collections.abc import Mapping
 from dol import KvReader
-from collections import (
+from collections.abc import (
     KeysView as BaseKeysView,
     ValuesView as BaseValuesView,
     ItemsView as BaseItemsView,
@@ -58,9 +59,9 @@ class SpecialMapping(BaseMapping):
 class MongoCollectionCollection(DolCollection):
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-        filter: Optional[dict] = None,
-        iter_projection: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | DolCollection = None,
+        filter: dict | None = None,
+        iter_projection: dict | None = None,
         **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
@@ -235,8 +236,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | KvReader = None,
+        filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
@@ -296,8 +297,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         cls,
         db_name: str = DFLT_TEST_DB,
         collection_name: str = 'test',
-        mongo_client: Optional[dict] = None,
-        filter: Optional[dict] = None,
+        mongo_client: dict | None = None,
+        filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
@@ -335,8 +336,8 @@ class MongoCollectionFieldsReader(MongoCollectionReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | KvReader = None,
+        filter: dict | None = None,
         key_fields: ProjectionSpec = (ID,),
         val_fields: ProjectionSpec = None,
     ):

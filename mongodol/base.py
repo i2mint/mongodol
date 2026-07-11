@@ -1,7 +1,8 @@
 """Base mongoDB data object layers"""
 
 from functools import wraps, cached_property
-from typing import Mapping, Optional, Union
+from typing import Optional, Union
+from collections.abc import Mapping
 from collections import ChainMap
 from dol.base import Store
 
@@ -23,9 +24,9 @@ from mongodol.util import (
 class MongoCollectionCollection(DolCollection):
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, DolCollection] = None,
-        filter: Optional[dict] = None,
-        iter_projection: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | DolCollection = None,
+        filter: dict | None = None,
+        iter_projection: dict | None = None,
         **mgc_find_kwargs,
     ):
         self.mgc = get_mongo_collection_pymongo_obj(mgc)
@@ -175,8 +176,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | KvReader = None,
+        filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
@@ -267,8 +268,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         cls,
         db_name: str = DFLT_TEST_DB,
         collection_name: str = 'test',
-        mongo_client: Optional[dict] = None,
-        filter: Optional[dict] = None,
+        mongo_client: dict | None = None,
+        filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
@@ -311,8 +312,8 @@ class MongoCollectionFieldsReader(MongoCollectionReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | KvReader = None,
+        filter: dict | None = None,
         key_fields: ProjectionSpec = (ID,),
         val_fields: ProjectionSpec = None,
     ):
@@ -391,9 +392,9 @@ class MongoCollectionPersister(MongoCollectionReader):
 
     def __init__(
         self,
-        mgc: Union[PyMongoCollectionSpec, KvReader] = None,
-        filter: Optional[dict] = None,
-        on_write_filter: Optional[dict] = None,
+        mgc: PyMongoCollectionSpec | KvReader = None,
+        filter: dict | None = None,
+        on_write_filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,

@@ -22,7 +22,7 @@ def get_test_database(mongo_client_args=DFLT_MONGO_CLIENT_ARGS, db_name=DFLT_TES
     return MongoClient(*mongo_client_args)[db_name]
 
 
-@lru_cache()
+@lru_cache
 def get_test_collection_object(
     mongo_client_args=DFLT_MONGO_CLIENT_ARGS,
     db_name=DFLT_TEST_DB,

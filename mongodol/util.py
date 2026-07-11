@@ -2,7 +2,8 @@
 
 from functools import partial
 from operator import or_
-from typing import Union, Iterable, Mapping
+from typing import Union
+from collections.abc import Iterable, Mapping
 
 from pymongo.collection import Collection as PyMongoCollection
 from pymongo.database import Database
@@ -95,7 +96,7 @@ merge_projection_dicts = partial(
 )
 
 
-def normalize_projection(projection: Union[Iterable, None]):
+def normalize_projection(projection: Iterable | None):
     """Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,...
     (or None if projection is None to start with).
 
