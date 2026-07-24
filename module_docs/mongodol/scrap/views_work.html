@@ -6,18 +6,18 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.scrap.views_work &mdash; mongodol 0.1.1 documentation</title>
+  <title>mongodol.scrap.views_work &mdash; mongodol 0.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -56,7 +56,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../errors.html">mongodol.errors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../recipes.html">mongodol.recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="old01.html">mongodol.scrap.old01</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.scrap.views_work</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoClientReader"><code class="docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionCollection"><code class="docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionFieldsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionReader.items"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.items()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionReader.keys"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongodol.scrap.views_work.MongoCollectionReader.values"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoDbReader"><code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.scrap.views_work.SpecialKeysView"><code class="docutils literal notranslate"><span class="pre">SpecialKeysView</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../stores.html">mongodol.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tests.html">mongodol.tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
@@ -99,8 +114,194 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="mongodol-scrap-views-work">
-<h1>mongodol.scrap.views_work<a class="headerlink" href="#mongodol-scrap-views-work" title="Link to this heading"></a></h1>
+  <section id="module-mongodol.scrap.views_work">
+<span id="mongodol-scrap-views-work"></span><h1>mongodol.scrap.views_work<a class="headerlink" href="#module-mongodol.scrap.views_work" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoClientReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoClientReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'dict'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tz_aware</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoClientReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoClientReader" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionCollection">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionCollection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionFieldsReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionFieldsReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">KvReader</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionFieldsReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionFieldsReader" title="Link to this definition"></a></dt>
+<dd><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</p>
+<p>An “easier” interface for the common case where we just want to specify fixed fields for keys and vals.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionPersister">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">KvReader</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionPersister" title="Link to this definition"></a></dt>
+<dd><p>base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_dflt_mgc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mongo_collection_obj</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mongo_collection_obj</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in default collection</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># see that key is not in store (and testing __contains__)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">[{&#39;_id&#39;: &#39;foo&#39;}]</span>
+</pre></div>
+</div>
+<p>Since this is a base mongo store, the values are cursors, so to get an actual value, you need to fetch the first doc</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="go">{&#39;val&#39;: &#39;bar&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="go">{&#39;val&#39;: &#39;bar&#39;}</span>
+</pre></div>
+</div>
+<p>Remember (see <code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code> docs) that <code class="docutils literal notranslate"><span class="pre">s.get</span></code> will never reach its default since
+the reader will always return a cursor (possibly empty).
+So in the following case, we should get an empty cursor (not a default value)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">({</span><span class="s1">&#39;not&#39;</span><span class="p">:</span> <span class="s1">&#39;a key&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;val&#39;</span><span class="p">}))</span>  <span class="c1"># testing s.get with default</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">[{&#39;val&#39;: &#39;bar&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># testing __contains__ again</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>  <span class="c1"># test the contains capability of s.keys() (a MongoKeysView instance)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Making a persister whose keys are 2-dimensional and values are 3-dimensional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalize_projection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mongo_collection_obj</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">iter_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+<span class="gp">... </span>                    <span class="n">getitem_projection</span><span class="o">=</span><span class="n">normalize_projection</span><span class="p">((</span><span class="s1">&#39;yob&#39;</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">_id</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># writing two items</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="s1">&#39;Guido&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="s1">&#39;van Rossum&#39;</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;yob&#39;</span><span class="p">:</span> <span class="mi">1956</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="s1">&#39;Vitalik&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="s1">&#39;Buterin&#39;</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;yob&#39;</span><span class="p">:</span> <span class="mi">1994</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;ethereum&#39;</span><span class="p">,</span> <span class="s1">&#39;bdfl&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Seeing that those two items are there</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">{&#39;first&#39;: &#39;Guido&#39;, &#39;last&#39;: &#39;van Rossum&#39;} --&gt; {&#39;yob&#39;: 1956, &#39;proj&#39;: &#39;python&#39;, &#39;bdfl&#39;: False}</span>
+<span class="go">{&#39;first&#39;: &#39;Vitalik&#39;, &#39;last&#39;: &#39;Buterin&#39;} --&gt; {&#39;yob&#39;: 1994, &#39;proj&#39;: &#39;ethereum&#39;, &#39;bdfl&#39;: True}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">KvReader</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionReader" title="Link to this definition"></a></dt>
+<dd><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</p>
+<p>Some examples below. For examples using actual data (with setup and tear down) see the tests/ folder.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionReader</span><span class="p">(</span><span class="n">MongoClient</span><span class="p">()[</span><span class="s1">&#39;mongodol&#39;</span><span class="p">][</span><span class="s1">&#39;mongodol_test&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_of_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;this key does not exist&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="ow">in</span> <span class="n">s</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>It’s important to note that <code class="docutils literal notranslate"><span class="pre">s[k]</span></code> (for any base MongoCollectionReader instance <code class="docutils literal notranslate"><span class="pre">s</span></code>) returns a Cursor,
+and will always return a Cursor, no matter what key <code class="docutils literal notranslate"><span class="pre">k</span></code> you ask for
+– as long as the key is a valid mapping (dict usually).
+This cursor is a (pymongo) object that is used to iterate over the results of the <code class="docutils literal notranslate"><span class="pre">k</span></code> lookup.
+It may yield no results what-so-ever, or one, or many.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">fake_key</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">&#39;Cursor&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>  <span class="c1"># but the cursor yields no results</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<p>Indeed, <code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code> is really meant to provide a low level key-value interface to a mongo collection
+that is really meant to be wrapped in order to produce the actual key-value interfaces one needs.
+You shouldn’t think of it’s instances as a normal dict where any request for the value under a key,
+for a key that doesn’t exist, will result in a <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.
+Note that this means that <cite>s.get(k, default)</cite> will never result in the default being returned,
+since there are no missing keys here; only empty results (cursors that don’t yield anything).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;the&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="o">!=</span> <span class="p">{</span><span class="s1">&#39;the&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">s.keys()</span></code>, <code class="docutils literal notranslate"><span class="pre">s.values()</span></code>, and <code class="docutils literal notranslate"><span class="pre">s.items()</span></code> are <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> instances
+(specialized for mongo).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">&#39;KeysView&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">&#39;MongoValuesView&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">&#39;MongoItemsView&#39;</span>
+</pre></div>
+</div>
+<p>Recall that <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> have many set-like functionalities:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_list_of_fake_keys</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;fake_key&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;yet_another&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">a_list_of_fake_keys</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">a_list_of_fake_keys</span>
+<span class="go">set()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s2">&quot;this does not exist&quot;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="o">=</span> <span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="n">fake_value</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities
+might not work (complaints such as <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">unhashable</span> <span class="pre">type:</span> <span class="pre">'dict'</span></code>),
+such as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">|</span> <span class="n">a_list_of_fake_keys</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="gr">TypeError</span>: <span class="n">unhashable type: &#39;dict&#39;</span>
+</pre></div>
+</div>
+<p>But you can take care of that in higher level wrappers that have hashable keys and/or values.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionReader.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionReader.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionReader.items" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionReader.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionReader.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionReader.keys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoCollectionReader.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">an</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">values</span></span></span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoCollectionReader.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoCollectionReader.values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoDbReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoDbReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mongodol'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mk_collection_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'mongodol.scrap.views_work.MongoCollectionReader'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mongo_client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**mongo_client_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoDbReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoDbReader" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.MongoItemsView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">MongoItemsView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#MongoItemsView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.MongoItemsView" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.scrap.views_work.SpecialKeysView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.scrap.views_work.</span></span><span class="sig-name descname"><span class="pre">SpecialKeysView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mongodol/scrap/views_work.html#SpecialKeysView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.scrap.views_work.SpecialKeysView" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 
 
@@ -114,7 +315,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
