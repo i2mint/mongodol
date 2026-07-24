@@ -223,7 +223,7 @@ class PostGet:
             # return PersistentDict(store, doc)
             return doc
         else:
-            raise KeyError(f'No document found for query: {k}')
+            raise KeyError(f"No document found for query: {k}")
 
     @staticmethod
     def single_value_fetch_without_unicity_validation(store, k, cursor):
@@ -232,7 +232,7 @@ class PostGet:
             # return PersistentDict(store, doc)
             return doc
         else:
-            raise KeyError(f'No document found for query: {k}')
+            raise KeyError(f"No document found for query: {k}")
 
 
 class ObjOfData:
@@ -249,12 +249,12 @@ class WriteOpResult(TypedDict):
 
 
 DFLT_METHOD_NAMES_TO_NORMALIZE = (
-    '__setitem__',
-    '__delitem__',
-    'append',
-    'extend',
-    'flush',
-    'commit',
+    "__setitem__",
+    "__delitem__",
+    "append",
+    "extend",
+    "flush",
+    "commit",
 )
 
 
@@ -266,25 +266,25 @@ def normalize_result(obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORM
     """
 
     if not isinstance(obj, type):
-        assert callable(obj), f'Should be callable: {obj}'
+        assert callable(obj), f"Should be callable: {obj}"
         func = obj
 
         @wraps(func)
         def result_mapper(*args, **kwargs):
             raw_result = func(*args, **kwargs)
-            result: WriteOpResult = {'n': 0}
+            result: WriteOpResult = {"n": 0}
             if raw_result is None:
                 return None
             if isinstance(raw_result, InsertOneResult) and raw_result.inserted_id:
-                result['n'] = 1
-                result['ids'] = [str(raw_result.inserted_id)]
+                result["n"] = 1
+                result["ids"] = [str(raw_result.inserted_id)]
             elif isinstance(raw_result, InsertManyResult) and raw_result.inserted_ids:
-                result['n'] = len(raw_result.inserted_ids)
-                result['ids'] = raw_result.inserted_ids
+                result["n"] = len(raw_result.inserted_ids)
+                result["ids"] = raw_result.inserted_ids
             elif isinstance(raw_result, (DeleteResult, UpdateResult)):
-                result['n'] = raw_result.raw_result['n']
+                result["n"] = raw_result.raw_result["n"]
             elif isinstance(raw_result, BulkWriteResult):
-                result['n'] = (
+                result["n"] = (
                     raw_result.inserted_count
                     + raw_result.upserted_count
                     + raw_result.modified_count
@@ -292,9 +292,9 @@ def normalize_result(obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORM
                 )
             else:
                 raise NotImplementedError(
-                    f'Interpretation of result type {type(raw_result)} is not implemented.'
+                    f"Interpretation of result type {type(raw_result)} is not implemented."
                 )
-            result['ok'] = result['n'] > 0
+            result["ok"] = result["n"] > 0
             return result
 
         return result_mapper
@@ -348,7 +348,7 @@ def set_key_and_data_fields(
     store: Mapping = None, *, key_fields: Fields = None, data_fields: Fields = None
 ):
     """Decorator to set key_fields and data_fields on a store.
-    
+
     This is to make it easier to get from an interface like this
 
     :code: `store[{'folder': 'path', 'file': 'name'}] = {'field1': 'value1', 'field2': 'value2'}`

@@ -105,12 +105,14 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
     """
 
     def __setitem__(self, k, v):
-        assert isinstance(
-            k, Mapping
-        ), f'k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}'
+        assert isinstance(k, Mapping), (
+            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        )
         assert isinstance(v, Mapping) or (
             isinstance(v, Collection) and all([isinstance(i, Mapping) for i in v])
-        ), f'v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}'
+        ), (
+            f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
+        )
         self._mgc.delete_many(self._merge_with_filt(k))
         _v = v if isinstance(v, Collection) else [v]
         return self._mgc.insert_many([self._build_doc(k, vi) for vi in _v])
@@ -220,7 +222,7 @@ class MongoStore(Store):
 def _get_db(db_name, host, **mongo_client_kwargs):
     """
     Get a mongo database object from a db_name and host.
-    
+
     The `host` parameter can be a full `mongodb URI
     <http://dochub.mongodb.org/core/connections>`_, in addition to
     a simple hostname. It can also be a list of hostnames or

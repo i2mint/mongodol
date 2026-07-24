@@ -1,4 +1,5 @@
 """Mongodol Recipes"""
+
 from functools import partial
 from dol import wrap_kvs
 from dol.trans import wrap_kvs, store_decorator
@@ -9,16 +10,16 @@ class WriteNotAllowedToThatKey(KeyError):
 
 
 def _disallow_sourced_interval_overlaps(store, k, v):
-    source, bt, tt = k['source'], k['bt'], k['tt']  # extract bt and tt
+    source, bt, tt = k["source"], k["bt"], k["tt"]  # extract bt and tt
     existing_docs_that_overlap_with_that_interval = store[
-        dict(source=source, bt={'$lte': tt}, tt={'$gte': bt})
+        dict(source=source, bt={"$lte": tt}, tt={"$gte": bt})
     ]
     there_are_such_overlaps = next(existing_docs_that_overlap_with_that_interval, False)
     if there_are_such_overlaps:
         raise WriteNotAllowedToThatKey(
             "There was a doc whose (bt,tt) key overlaps with the key you're trying to write to."
-            f'\n\tYour key is {k}.'
-            f'\n\tThe existing doc is {there_are_such_overlaps}'
+            f"\n\tYour key is {k}."
+            f"\n\tThe existing doc is {there_are_such_overlaps}"
         )
     else:
         return v

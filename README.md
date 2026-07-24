@@ -13,7 +13,13 @@ And of course, you need to [install MongoDB](https://www.mongodb.com/docs/manual
 
 
 ```python
-from mongodol import MongoClientReader, MongoDbReader, MongoCollectionReaderBase, MongoCollectionReader, MongoCollectionPersister
+from mongodol import (
+    MongoClientReader,
+    MongoDbReader,
+    MongoCollectionReaderBase,
+    MongoCollectionReader,
+    MongoCollectionPersister,
+)
 ```
 
 `MongoClientReader` gives you access to the databases for a mongoDB host (default is localhost). 
@@ -37,7 +43,7 @@ The keys of db objects are collection names...
 
 
 ```python
-db = client['py2store']
+db = client["py2store"]
 list(db)
 ```
 
@@ -52,7 +58,7 @@ list(db)
 
 
 ```python
-mgc = db['test']
+mgc = db["test"]
 len(mgc)
 ```
 
@@ -70,7 +76,7 @@ Here, we show how you can write by appending data:
 
 ```python
 writable_mgc = MongoCollectionPersister(mgc)
-writable_mgc.append({'mongo': 'uses', 'json': 'data'})
+writable_mgc.append({"mongo": "uses", "json": "data"})
 ```
 
 
@@ -116,7 +122,9 @@ Let's say you want it now. Just "consume" the cursor. If you're expecting just o
 
 
 ```python
-v = next(mgc[k], None)  # the None is there as a sentinel -- it will be used to indicate if mgc[k] has no data for you.
+v = next(
+    mgc[k], None
+)  # the None is there as a sentinel -- it will be used to indicate if mgc[k] has no data for you.
 v
 ```
 
@@ -133,10 +141,13 @@ You can also use extend to write in bulk.
 
 
 ```python
-writable_mgc.extend([{'kind': 'example', 'data': 2}, 
-                     {'kind': 'example', 'data': [1, 2, 3]},
-                     {'kind': 'example', 'data': {'nested': 'dict'}}
-                    ])
+writable_mgc.extend(
+    [
+        {"kind": "example", "data": 2},
+        {"kind": "example", "data": [1, 2, 3]},
+        {"kind": "example", "data": {"nested": "dict"}},
+    ]
+)
 ```
 
 
@@ -172,7 +183,7 @@ But you can also write data to a key of your choice. With the base persister whi
 
 
 ```python
-writable_mgc[{'_id': 'my_id'}] = {'my': 'data'}
+writable_mgc[{"_id": "my_id"}] = {"my": "data"}
 list(mgc)
 ```
 
@@ -189,7 +200,7 @@ list(mgc)
 
 
 ```python
-mgc[{'_id': 'my_id'}]
+mgc[{"_id": "my_id"}]
 ```
 
 
@@ -203,7 +214,7 @@ You can delete data given a key:
 
 
 ```python
-del writable_mgc[{'_id': 'my_id'}]
+del writable_mgc[{"_id": "my_id"}]
 ```
 
 
@@ -245,19 +256,21 @@ from bson import ObjectId
 from py2store import wrap_kvs
 from mongodol import MongoCollectionReaderBase
 
-@wrap_kvs(id_of_key=lambda x: {'_id': ObjectId(x)}, 
-          key_of_id=lambda x: str(x['_id']), 
-          obj_of_data=lambda doc: next(doc, None)['data'])
+
+@wrap_kvs(
+    id_of_key=lambda x: {"_id": ObjectId(x)},
+    key_of_id=lambda x: str(x["_id"]),
+    obj_of_data=lambda doc: next(doc, None)["data"],
+)
 class MyStore(MongoCollectionReaderBase):
     """my special store"""
 ```
 
 
 ```python
-s = MyStore(mgc=mgc, 
-            key_fields=('_id',), 
-            data_fields=('data',), 
-            filt={'kind': 'example'})
+s = MyStore(
+    mgc=mgc, key_fields=("_id",), data_fields=("data",), filt={"kind": "example"}
+)
 ```
 
 
@@ -276,7 +289,7 @@ list(s)
 
 
 ```python
-s['60359ac193b7670664918664']
+s["60359ac193b7670664918664"]
 ```
 
 

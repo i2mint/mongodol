@@ -33,7 +33,7 @@ class KeyNotUniqueError(RuntimeError):
     @staticmethod
     def raise_error(k):
         raise KeyNotUniqueError(
-            f'Key was not unique (i.e. cursor has more than one match): {k}'
+            f"Key was not unique (i.e. cursor has more than one match): {k}"
         )
 
 
@@ -47,7 +47,7 @@ def get_key_value_specs(key_fields, data_fields):
     if data_fields is None:
         pass
     key_projection = {k: True for k in key_fields}
-    if '_id' not in key_fields:
+    if "_id" not in key_fields:
         key_projection.update(
             _id=False
         )  # need to explicitly specify this since mongo includes _id by dflt
@@ -56,15 +56,15 @@ def get_key_value_specs(key_fields, data_fields):
         items_projection = None
     elif not isinstance(data_fields, dict):
         data_fields = {k: True for k in data_fields}
-        if '_id' not in data_fields:
-            data_fields['_id'] = False
+        if "_id" not in data_fields:
+            data_fields["_id"] = False
         items_projection = {k for k, v in data_fields.items() if v} | {
             k for k, v in key_projection.items() if v
         }
     return key_fields, data_fields, key_projection, items_projection
 
 
-def flatten_dict_items(d: Mapping, prefix=''):
+def flatten_dict_items(d: Mapping, prefix=""):
     """
     Computes a "flat" dict from a nested one. A flat dict's keys are the dot-paths of the input dict.
 
@@ -85,7 +85,7 @@ def flatten_dict_items(d: Mapping, prefix=''):
         if not isinstance(v, dict):
             yield prefix + k, v
         else:
-            yield from flatten_dict_items(v, prefix + k + '.')
+            yield from flatten_dict_items(v, prefix + k + ".")
 
 
 merge_projection_dicts = partial(
@@ -151,7 +151,9 @@ def normalize_projection(projection: Iterable | None):
 
 
 def projection_union(
-    projection_1: ProjectionDict, projection_2: ProjectionDict, already_flattened=False,
+    projection_1: ProjectionDict,
+    projection_2: ProjectionDict,
+    already_flattened=False,
 ):
     """
 
@@ -187,17 +189,17 @@ def get_mongo_collection_pymongo_obj(obj=None, client_factory=mk_dflt_client):
     if obj is None:
         obj = mk_dflt_mgc()
     elif isinstance(obj, str):
-        if obj.startswith('mongodb://'):
+        if obj.startswith("mongodb://"):
             raise ValueError(
-                'No support (yet) for URI access. '
-                'If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html'
+                "No support (yet) for URI access. "
+                "If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html"
             )
-        database_name, collection_name = obj.split('/')
+        database_name, collection_name = obj.split("/")
         # Note: Was (not working now) PyMongoCollection()[database_name][collection_name]
         db = Database(client_factory(), name=database_name)
         return PyMongoCollection(database=db, name=collection_name)
-    elif hasattr(obj, '_mgc') and isinstance(obj._mgc, PyMongoCollection):
+    elif hasattr(obj, "_mgc") and isinstance(obj._mgc, PyMongoCollection):
         obj = obj._mgc
     if not isinstance(obj, PyMongoCollection):
-        raise TypeError(f'Unknown pymongo collection specification: {obj}')
+        raise TypeError(f"Unknown pymongo collection specification: {obj}")
     return obj

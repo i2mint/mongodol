@@ -50,7 +50,7 @@ class MongoCollectionCollection(DolCollection):
         {'$and': [{'a': 3, 'b': {'$in': [1, 2, 3]}}, {'b': 4}]}
         """
         # return {"$and": [self.filter, *args]}  # in case we want to move to handling several elements to merge
-        return {'$and': [self.filter, m]}
+        return {"$and": [self.filter, m]}
 
     def __iter__(self):
         return self.mgc.find(
@@ -71,17 +71,17 @@ class MongoCollectionCollection(DolCollection):
         search_map = ChainMap(self._mgc_find_kwargs, dict(filter=self.filter))
         return {
             x: search_map[x]
-            for x in ['filter', 'skip', 'limit', 'hint']
+            for x in ["filter", "skip", "limit", "hint"]
             if x in search_map
         }
 
     @cached_property
     def mgc_repr(self):
-        return f'<{self.mgc.database.name}/{self.mgc.name}>'
+        return f"<{self.mgc.database.name}/{self.mgc.name}>"
 
     def __repr__(self):
         return (
-            f'{type(self).__name__}(mgc={self.mgc_repr}, filter={self.filter}, iter_projection={self._iter_projection}'
+            f"{type(self).__name__}(mgc={self.mgc_repr}, filter={self.filter}, iter_projection={self._iter_projection}"
             f"{', '.join(f'{k}={v}' for k, v in self._mgc_find_kwargs.items())})"
         )
 
@@ -185,16 +185,20 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         if iter_projection is not None and not isinstance(iter_projection, dict):
             iter_projection = {k: True for k in iter_projection}
         super().__init__(
-            mgc=mgc, filter=filter, iter_projection=iter_projection, **mgc_find_kwargs,
+            mgc=mgc,
+            filter=filter,
+            iter_projection=iter_projection,
+            **mgc_find_kwargs,
         )
         self._getitem_projection = getitem_projection
 
     def __getitem__(self, k):
-        assert isinstance(
-            k, Mapping
-        ), f'k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}'
+        assert isinstance(k, Mapping), (
+            f"k (key) must be a mapping (typically a dictionary). Was:\n\tk={k}"
+        )
         return self.mgc.find(
-            filter=self._merge_with_filt(k), projection=self._getitem_projection,
+            filter=self._merge_with_filt(k),
+            projection=self._getitem_projection,
         )
 
     def contains_value(self, v):
@@ -267,7 +271,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     def from_params(
         cls,
         db_name: str = DFLT_TEST_DB,
-        collection_name: str = 'test',
+        collection_name: str = "test",
         mongo_client: dict | None = None,
         filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
@@ -297,7 +301,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     def aggregate(self, pipeline, **kwargs):
         _pipeline = pipeline.copy()
-        _pipeline.insert(0, {'$match': self.filter})
+        _pipeline.insert(0, {"$match": self.filter})
         return self.mgc.aggregate(_pipeline, **kwargs)
 
 
@@ -409,9 +413,9 @@ class MongoCollectionPersister(MongoCollectionReader):
         self._on_write_filter = on_write_filter
 
     def __setitem__(self, k, v):
-        assert isinstance(k, Mapping) and isinstance(
-            v, Mapping
-        ), f'k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}'
+        assert isinstance(k, Mapping) and isinstance(v, Mapping), (
+            f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
+        )
         return self.mgc.replace_one(
             filter=self._merge_with_filt(k),
             replacement=self._build_doc(k, v),
@@ -419,24 +423,24 @@ class MongoCollectionPersister(MongoCollectionReader):
         )
 
     def __delitem__(self, k):
-        assert isinstance(
-            k, Mapping
-        ), f'k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}'
+        assert isinstance(k, Mapping), (
+            f"k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}"
+        )
         if len(k) > 0:
             return self.mgc.delete_one(self._merge_with_filt(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
-        assert isinstance(
-            v, Mapping
-        ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
+        assert isinstance(v, Mapping), (
+            f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+        )
         return self.mgc.insert_one(self._build_doc(v))
 
     def extend(self, values):
-        assert all(
-            [isinstance(v, Mapping) for v in values]
-        ), f' values must be mappings (often dictionaries)'
+        assert all([isinstance(v, Mapping) for v in values]), (
+            f" values must be mappings (often dictionaries)"
+        )
         if values:
             return self.mgc.insert_many([self._build_doc(v) for v in values])
 
@@ -446,9 +450,9 @@ class MongoCollectionPersister(MongoCollectionReader):
             for v in args:
                 if v is None:
                     v = {}
-                assert isinstance(
-                    v, Mapping
-                ), f' v (value) must be a mapping (often a dictionary). Were:\n\tv={v}'
+                assert isinstance(v, Mapping), (
+                    f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
+                )
                 d = dict(d, **v)
             return d
 
@@ -459,13 +463,13 @@ class MongoCollectionPersister(MongoCollectionReader):
                     x
                     for x in doc.values()
                     if isinstance(x, Mapping)
-                    and len([k for k in x.keys() if '$' in k]) > 0
+                    and len([k for k in x.keys() if "$" in k]) > 0
                 ]
             )
             > 0
         )
         if is_invalid:
-            raise ValueError('The doc contains some query-specific values.')
+            raise ValueError("The doc contains some query-specific values.")
         return doc
 
     def persist_data(self, data):

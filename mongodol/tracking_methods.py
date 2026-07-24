@@ -204,9 +204,12 @@ def track_method_calls(
 
         @add_tracked_methods(tracked_methods, calls_tracker)
         class TrackedObj(tracking_mixin, LocalProxy):
-            def __init__(self, local,) -> None:
-                object.__setattr__(self, '_TrackedObj__local', local)
-                object.__setattr__(self, '__wrapped__', local)
+            def __init__(
+                self,
+                local,
+            ) -> None:
+                object.__setattr__(self, "_TrackedObj__local", local)
+                object.__setattr__(self, "__wrapped__", local)
 
             def _get_current_object(self):
                 return self.__local
@@ -229,7 +232,7 @@ def add_tracked_methods(
     """
 
     def _add_tracked_methods(cls):
-        assert hasattr(cls, '_tracks')
+        assert hasattr(cls, "_tracks")
         for method_name in tracked_methods:
             method_to_track = getattr(cls, method_name)
             setattr(cls, method_name, calls_tracker(method_to_track))
@@ -252,21 +255,21 @@ class MongoBulkWritesMixin(TrackableMixin):
                 None, *args, **kwargs
             )  # First None value to ignore the 'self' parameter
             func_name = func.__name__
-            k = _kwargs.get('k', {})
-            v = _kwargs.get('v')
-            if func_name == '__setitem__':
-                k = _kwargs.get('k', {})
+            k = _kwargs.get("k", {})
+            v = _kwargs.get("v")
+            if func_name == "__setitem__":
+                k = _kwargs.get("k", {})
                 return pymongo.ReplaceOne(
                     filter=self._merge_with_filt(k),
                     replacement=self._build_doc(k, v),
                     upsert=True,
                 )
-            elif func_name == '__delitem__':
+            elif func_name == "__delitem__":
                 return pymongo.DeleteOne(filter=self._merge_with_filt(k))
-            elif func_name == 'append':
+            elif func_name == "append":
                 return pymongo.InsertOne(document=self._build_doc(v))
-            elif func_name == 'extend':
-                values = _kwargs.get('values')
+            elif func_name == "extend":
+                values = _kwargs.get("values")
                 return [
                     pymongo.InsertOne(document=self._build_doc(value))
                     for value in values

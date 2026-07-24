@@ -1,6 +1,7 @@
 """Add-ons
 https://github.com/i2mint/mongodol/issues/3
 """
+
 from abc import ABC
 from inspect import signature, Parameter
 from collections.abc import Callable
@@ -16,7 +17,7 @@ from mongodol.errors import MethodNameAlreadyExists, SetattrNotAllowed
 
 def disallow_if_name_exists_already(store, method_name):
     if hasattr(store, method_name):
-        raise MethodNameAlreadyExists(f'Method name already exists: {method_name}')
+        raise MethodNameAlreadyExists(f"Method name already exists: {method_name}")
 
 
 def number_of_non_defaulted_arguments(func):
@@ -44,7 +45,7 @@ class Addons(ABC):
     def clear_after_checking_with_user(self: MongoCollectionCollection):
         n = len(self)
         answer = input(
-            f'Are you sure you want to delete all {n} docs matching the filter: {self.filter}?\n'
+            f"Are you sure you want to delete all {n} docs matching the filter: {self.filter}?\n"
             "To confirm, type the number of docs you're deleting: "
         )
         try:
@@ -56,7 +57,7 @@ class Addons(ABC):
                     f"You typed {number}, but {n} is the correct number, so I won't delete anything"
                 )
         except:
-            print(f'Okay, I will NOT delete anything')
+            print(f"Okay, I will NOT delete anything")
 
     dflt_clear_method = clear
 
@@ -116,5 +117,5 @@ def add_clear_method(
     """
     """Add a clear method to the store"""
     return add_store_method(
-        store, method_func=clear_method, method_name='clear', validator=validator
+        store, method_func=clear_method, method_name="clear", validator=validator
     )
