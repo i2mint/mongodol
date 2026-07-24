@@ -17,8 +17,6 @@ Two responsibilities:
 import os
 import pathlib
 
-import pytest
-
 from mongodol.constants import DFLT_TEST_HOST
 
 #: Directory whose contents must never be collected.
@@ -76,12 +74,20 @@ def _requires_mongo(item):
 
 
 def pytest_collection_modifyitems(config, items):
-    """Skip MongoDB-dependent items when no server is reachable."""
+    """Drop MongoDB-dependent items when no server is reachable.
+
+    Uses *deselection* rather than a skip marker: some MongoDB-store classes are
+    built dynamically (via dol store decorators), so their doctest items have no
+    resolvable source line, and pytest >= 9 raises an ``INTERNALERROR`` while
+    building a *skip report* for such an item. Deselected items never reach
+    report generation, so this keeps CI green without a server and is robust
+    across pytest versions.
+    """
     if _mongo_available():
         return
-    skip_no_mongo = pytest.mark.skip(
-        reason="No live MongoDB reachable; skipping MongoDB-dependent items"
-    )
+    kept, deselected = [], []
     for item in items:
-        if _requires_mongo(item):
-            item.add_marker(skip_no_mongo)
+        (deselected if _requires_mongo(item) else kept).append(item)
+    if deselected:
+        config.hook.pytest_deselected(items=deselected)
+        items[:] = kept
