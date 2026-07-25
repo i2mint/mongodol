@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.tracking_methods &mdash; mongodol 0.1.2 documentation</title>
+  <title>mongodol.tracking_methods &mdash; mongodol 0.1.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -308,9 +308,12 @@
 
         <span class="nd">@add_tracked_methods</span><span class="p">(</span><span class="n">tracked_methods</span><span class="p">,</span> <span class="n">calls_tracker</span><span class="p">)</span>
         <span class="k">class</span><span class="w"> </span><span class="nc">TrackedObj</span><span class="p">(</span><span class="n">tracking_mixin</span><span class="p">,</span> <span class="n">LocalProxy</span><span class="p">):</span>
-            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_TrackedObj__local&#39;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
-                <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__wrapped__&#39;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">local</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_TrackedObj__local&quot;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+                <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
 
             <span class="k">def</span><span class="w"> </span><span class="nf">_get_current_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__local</span>
@@ -336,7 +339,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_add_tracked_methods</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_tracks&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;_tracks&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="n">tracked_methods</span><span class="p">:</span>
             <span class="n">method_to_track</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">calls_tracker</span><span class="p">(</span><span class="n">method_to_track</span><span class="p">))</span>
@@ -362,21 +365,21 @@
                 <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>  <span class="c1"># First None value to ignore the &#39;self&#39; parameter</span>
             <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s1">&#39;__setitem__&#39;</span><span class="p">:</span>
-                <span class="n">k</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;__setitem__&quot;</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="p">{})</span>
                 <span class="k">return</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ReplaceOne</span><span class="p">(</span>
                     <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">),</span>
                     <span class="n">replacement</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span>
                     <span class="n">upsert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s1">&#39;__delitem__&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;__delitem__&quot;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">DeleteOne</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s1">&#39;append&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;append&quot;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">InsertOne</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s1">&#39;extend&#39;</span><span class="p">:</span>
-                <span class="n">values</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;values&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;extend&quot;</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;values&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="p">[</span>
                     <span class="n">pymongo</span><span class="o">.</span><span class="n">InsertOne</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
                     <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span>

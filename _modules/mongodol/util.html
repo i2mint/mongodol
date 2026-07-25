@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.util &mdash; mongodol 0.1.2 documentation</title>
+  <title>mongodol.util &mdash; mongodol 0.1.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -134,7 +134,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">raise_error</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">KeyNotUniqueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Key was not unique (i.e. cursor has more than one match): </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="sa">f</span><span class="s2">&quot;Key was not unique (i.e. cursor has more than one match): </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span></div>
 
 
@@ -149,7 +149,7 @@
     <span class="k">if</span> <span class="n">data_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="n">key_projection</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">}</span>
-    <span class="k">if</span> <span class="s1">&#39;_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">:</span>
         <span class="n">key_projection</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="n">_id</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>  <span class="c1"># need to explicitly specify this since mongo includes _id by dflt</span>
@@ -158,8 +158,8 @@
         <span class="n">items_projection</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">data_fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="p">}</span>
-        <span class="k">if</span> <span class="s1">&#39;_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="p">:</span>
-            <span class="n">data_fields</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="p">:</span>
+            <span class="n">data_fields</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">items_projection</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span>
             <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">key_projection</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span>
         <span class="p">}</span>
@@ -168,7 +168,7 @@
 
 <div class="viewcode-block" id="flatten_dict_items">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.flatten_dict_items">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">flatten_dict_items</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten_dict_items</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a &quot;flat&quot; dict from a nested one. A flat dict&#39;s keys are the dot-paths of the input dict.</span>
 
@@ -189,7 +189,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">yield from</span> <span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span></div>
+            <span class="k">yield from</span> <span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></div>
 
 
 
@@ -261,7 +261,9 @@
 <div class="viewcode-block" id="projection_union">
 <a class="viewcode-back" href="../../module_docs/mongodol/util.html#mongodol.util.projection_union">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">projection_union</span><span class="p">(</span>
-    <span class="n">projection_1</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">projection_2</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span> <span class="n">already_flattened</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">projection_1</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span>
+    <span class="n">projection_2</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">,</span>
+    <span class="n">already_flattened</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
@@ -300,19 +302,19 @@
     <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;mongodb://&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;mongodb://&quot;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;No support (yet) for URI access. &#39;</span>
-                <span class="s1">&#39;If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html&#39;</span>
+                <span class="s2">&quot;No support (yet) for URI access. &quot;</span>
+                <span class="s2">&quot;If you want to implement, see: https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html&quot;</span>
             <span class="p">)</span>
-        <span class="n">database_name</span><span class="p">,</span> <span class="n">collection_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="n">database_name</span><span class="p">,</span> <span class="n">collection_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="c1"># Note: Was (not working now) PyMongoCollection()[database_name][collection_name]</span>
         <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">client_factory</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="n">database_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">PyMongoCollection</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_mgc&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_mgc</span><span class="p">,</span> <span class="n">PyMongoCollection</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;_mgc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_mgc</span><span class="p">,</span> <span class="n">PyMongoCollection</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_mgc</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyMongoCollection</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown pymongo collection specification: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown pymongo collection specification: </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">obj</span></div>
 
 </pre></div>
