@@ -8,7 +8,7 @@ from dol.base import Store
 
 from pymongo import MongoClient
 
-from dol import KvReader, Collection as DolCollection, BaseValuesView, BaseItemsView
+from dol import KvReader, Collection as DolCollection
 
 from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor, DFLT_TEST_DB
 from mongodol.util import (
@@ -16,6 +16,12 @@ from mongodol.util import (
     normalize_projection,
     projection_union,
     get_mongo_collection_pymongo_obj,
+)
+from mongodol.views import (
+    MongoItemsView,
+    MongoValuesView,
+    bulk_items,
+    bulk_values,
 )
 
 
@@ -123,7 +129,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     >>> assert v != {'the': 'default'}
 
     ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances
-    (specialized for mongo).
+    (specialized for mongo -- see :mod:`mongodol.views`: they fetch the whole collection in
+    a single query, and keep doing so, correctly, when the store is wrapped by ``dol``).
 
     >>> assert type(s.keys()) == s.KeysView
     >>> assert type(s.values()) == s.ValuesView
@@ -160,19 +167,10 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     _projections_are_flattened = False
 
-    class ValuesView(BaseValuesView):
-        def __contains__(self, v):
-            return self._mapping.contains_value(v)
-
-        def __iter__(self):
-            return self._mapping.iter_values()
-
-    class ItemsView(BaseItemsView):
-        def __contains__(self, item):
-            return self._mapping.contains_item(item)
-
-        def __iter__(self):
-            return self._mapping.iter_items()
+    #: Views that resolve the bulk-read fast path through any ``dol`` wrapper chain,
+    #: rather than through blind attribute delegation. See :mod:`mongodol.views`.
+    ValuesView = MongoValuesView
+    ItemsView = MongoItemsView
 
     def __init__(
         self,
@@ -538,20 +536,30 @@ class MongoDbReader(KvReader):
 
 
 class MongoBaseStore(Store):
+    """A ``Store`` that forwards the mongo bulk-read protocol through its transforms.
+
+    Historically this was the *only* way to get ``values()``/``items()`` to honour a
+    wrapper's transforms -- hence ``mongodol.trans.wrap_kvs``, which uses it as the
+    wrapper class. It is no longer needed for that: :mod:`mongodol.views` resolves the
+    bulk path through any wrapper chain, so plain ``dol.wrap_kvs`` now works too. It is
+    kept because it also forwards the write-side bulk methods (``append``/``extend``),
+    and because code may call ``iter_values()``/``contains_value()`` directly.
+    """
+
     def contains_value(self, v):
         return self.store.contains_value(self._data_of_obj(v))
 
     def iter_values(self):
-        return map(self._obj_of_data, self.store.iter_values())
+        return map(self._obj_of_data, bulk_values(self.store))
 
     def contains_item(self, item):
         k, v = item
         return self.store.contains_item((self._id_of_key(k), self._data_of_obj(v)))
 
     def iter_items(self):
-        yield from (
+        return (
             (self._key_of_id(key), self._obj_of_data(doc))
-            for key, doc in self.store.iter_items()
+            for key, doc in bulk_items(self.store)
         )
 
     def append(self, v):

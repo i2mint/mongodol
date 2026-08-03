@@ -234,6 +234,16 @@ class PostGet:
         else:
             raise KeyError(f"No document found for query: {k}")
 
+    @staticmethod
+    def all_docs_fetch(k, cursor, doc_collector=list):
+        """Collect every doc matching ``k``, so ``s[k]`` is a collection of docs.
+
+        The key-aware (``postget``) counterpart of :meth:`ObjOfData.all_docs_fetch`.
+        ``wrap_kvs`` calls ``obj_of_data`` with the value alone and ``postget`` with
+        ``(key, value)``, so a store wired through ``postget`` needs this signature.
+        """
+        return doc_collector(cursor)
+
 
 class ObjOfData:
     @staticmethod
