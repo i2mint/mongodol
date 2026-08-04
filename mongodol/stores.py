@@ -14,6 +14,7 @@ from mongodol.base import (
     MongoCollectionPersister,
 )
 from mongodol.trans import PostGet, ObjOfData, normalize_result
+from mongodol.views import disable_bulk_read
 
 single_value_fetch_with_unicity_validation = partial(
     wrap_kvs, postget=PostGet.single_value_fetch_with_unicity_validation
@@ -66,8 +67,12 @@ class MongoCollectionFirstDocReader(MongoCollectionReader):
     """
 
 
+# ``disable_bulk_read``: ``s[key]`` collects *all* docs matching the key into a list,
+# whereas the inherited one-query bulk stream yields single docs -- so ``values()`` and
+# ``items()`` must take the per-key path here to stay equal to ``s[key]``.
+@disable_bulk_read
 @wrap_kvs(
-    postget=partial(ObjOfData.all_docs_fetch, doc_collector=list)
+    postget=partial(PostGet.all_docs_fetch, doc_collector=list)
 )  # list is default but explicit here to show that other choices possible
 class MongoCollectionMultipleDocsReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
@@ -96,8 +101,10 @@ class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping
     """
 
 
+# See the ``disable_bulk_read`` note on MongoCollectionMultipleDocsReader.
+@disable_bulk_read
 @wrap_kvs(
-    postget=partial(ObjOfData.all_docs_fetch, doc_collector=list)
+    postget=partial(PostGet.all_docs_fetch, doc_collector=list)
 )  # list is default but explicit here to show that other choices possible
 class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
@@ -113,9 +120,11 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
         ), (
             f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         )
-        self._mgc.delete_many(self._merge_with_filt(k))
-        _v = v if isinstance(v, Collection) else [v]
-        return self._mgc.insert_many([self._build_doc(k, vi) for vi in _v])
+        self.mgc.delete_many(self._merge_with_filt(k))
+        # A Mapping is itself a Collection, so it must be tested for first, or a single
+        # doc would be "iterated" into its field names.
+        docs = [v] if isinstance(v, Mapping) else list(v)
+        return self.mgc.insert_many([self._build_doc(k, doc) for doc in docs])
 
 
 class MongoStore(Store):
