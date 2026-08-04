@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mongodol"
-version = "0.1.4"
+version = "0.1.5"
 description = "MongoDB Data Object Layer"
 readme = "README.md"
 requires-python = ">=3.10"
