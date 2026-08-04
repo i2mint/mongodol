@@ -17,12 +17,13 @@
    module_docs/mongodol/tests/data
    module_docs/mongodol/tests/int_tests/base_int_test
    module_docs/mongodol/tests/int_tests/conftest
-   module_docs/mongodol/tests/not_working
    module_docs/mongodol/tests/stores_test
    module_docs/mongodol/tests/trans_test
    module_docs/mongodol/tests/util
+   module_docs/mongodol/tests/views_test
    module_docs/mongodol/tracking_methods
    module_docs/mongodol/trans
    module_docs/mongodol/util
    module_docs/mongodol/utils
    module_docs/mongodol/utils/werk_local
+   module_docs/mongodol/views

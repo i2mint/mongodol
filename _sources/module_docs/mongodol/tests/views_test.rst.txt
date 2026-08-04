@@ -1,0 +1,4 @@
+mongodol.tests.views_test
+=========================
+.. automodule:: mongodol.tests.views_test
+   :members:

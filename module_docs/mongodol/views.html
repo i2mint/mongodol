@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.views &mdash; mongodol 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="mongodol.utils.werk_local" href="utils/werk_local.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/trans_test.html">mongodol.tests.trans_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/views_test.html">mongodol.tests.views_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/werk_local.html">mongodol.utils.werk_local</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mongodol.views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.BULK_READ_IS_FAITHFUL_ATTR"><code class="docutils literal notranslate"><span class="pre">BULK_READ_IS_FAITHFUL_ATTR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.CONTAINS_ITEM_METHOD"><code class="docutils literal notranslate"><span class="pre">CONTAINS_ITEM_METHOD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.CONTAINS_VALUE_METHOD"><code class="docutils literal notranslate"><span class="pre">CONTAINS_VALUE_METHOD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.INNER_STORE_ATTR"><code class="docutils literal notranslate"><span class="pre">INNER_STORE_ATTR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.ITER_ITEMS_METHOD"><code class="docutils literal notranslate"><span class="pre">ITER_ITEMS_METHOD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.ITER_VALUES_METHOD"><code class="docutils literal notranslate"><span class="pre">ITER_VALUES_METHOD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.MongoValuesView"><code class="docutils literal notranslate"><span class="pre">MongoValuesView</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.NoBulkReadPath"><code class="docutils literal notranslate"><span class="pre">NoBulkReadPath</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.bulk_contains_item"><code class="docutils literal notranslate"><span class="pre">bulk_contains_item()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.bulk_contains_value"><code class="docutils literal notranslate"><span class="pre">bulk_contains_value()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.bulk_items"><code class="docutils literal notranslate"><span class="pre">bulk_items()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.bulk_values"><code class="docutils literal notranslate"><span class="pre">bulk_values()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.disable_bulk_read"><code class="docutils literal notranslate"><span class="pre">disable_bulk_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.is_crossable"><code class="docutils literal notranslate"><span class="pre">is_crossable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.provides_bulk_read"><code class="docutils literal notranslate"><span class="pre">provides_bulk_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.resolve_bulk_source"><code class="docutils literal notranslate"><span class="pre">resolve_bulk_source()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodol.views.store_layers"><code class="docutils literal notranslate"><span class="pre">store_layers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mongodol.views</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/mongodol/views.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mongodol.views">
+<span id="mongodol-views"></span><h1>mongodol.views<a class="headerlink" href="#module-mongodol.views" title="Link to this heading"></a></h1>
+<p>Mapping views that keep working when a mongo store is wrapped by <code class="docutils literal notranslate"><span class="pre">dol</span></code>.</p>
+<p>A mongo collection can serve a store’s whole <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> stream in a single
+<code class="docutils literal notranslate"><span class="pre">find</span></code> round trip, so <a class="reference internal" href="base.html#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a> implements a
+<strong>bulk-read protocol</strong> – <code class="docutils literal notranslate"><span class="pre">iter_values</span></code>, <code class="docutils literal notranslate"><span class="pre">iter_items</span></code>, <code class="docutils literal notranslate"><span class="pre">contains_value</span></code> and
+<code class="docutils literal notranslate"><span class="pre">contains_item</span></code> – and exposes it through the <code class="docutils literal notranslate"><span class="pre">values()</span></code>/<code class="docutils literal notranslate"><span class="pre">items()</span></code> views
+defined here. One query instead of N is the whole point of these views.</p>
+<p>The catch is <em>composition</em>. A <code class="docutils literal notranslate"><span class="pre">dol</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code> wrapper (what
+<code class="docutils literal notranslate"><span class="pre">wrap_kvs</span></code> builds) forwards every attribute it doesn’t define to the store it
+wraps. A view that simply calls <code class="docutils literal notranslate"><span class="pre">self._mapping.iter_values()</span></code> therefore punches
+straight through the wrappers and yields raw backend documents, silently skipping
+the value transforms the user asked for – breaking the <code class="docutils literal notranslate"><span class="pre">Mapping</span></code> contract:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="n">store</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">store</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>(see <a class="reference external" href="https://github.com/i2mint/mongodol/issues/7">i2mint/mongodol#7</a>).</p>
+<p>This module resolves the bulk stream <strong>explicitly</strong> instead of relying on
+attribute delegation. Given the store a view was built on, <a class="reference internal" href="#mongodol.views.bulk_values" title="mongodol.views.bulk_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">bulk_values()</span></code></a>
+and <a class="reference internal" href="#mongodol.views.bulk_items" title="mongodol.views.bulk_items"><code class="xref py py-func docutils literal notranslate"><span class="pre">bulk_items()</span></code></a> walk the wrapper chain inward, remembering each layer they
+cross, until they reach a store that actually implements the bulk-read protocol.
+The bulk stream is then re-transformed by the crossed layers, innermost first, so
+that it lands in exactly the same space as <code class="docutils literal notranslate"><span class="pre">store[k]</span></code>.</p>
+<p>A layer may only be crossed if its read path is <em>plain transform composition</em> –
+“read from the inner store, then apply <code class="docutils literal notranslate"><span class="pre">_key_of_id</span></code>/<code class="docutils literal notranslate"><span class="pre">_obj_of_data</span></code>”, which is
+what <code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code> does. A layer that redefines <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> or
+<code class="docutils literal notranslate"><span class="pre">__iter__</span></code> (<code class="docutils literal notranslate"><span class="pre">wrap_kvs(postget=...)</span></code>, <code class="docutils literal notranslate"><span class="pre">filt_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">cached_keys</span></code>, …)
+changes values or key sets in ways that cannot be pushed onto a bulk stream, so
+the resolver refuses to guess: it raises <a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoBulkReadPath</span></code></a> and the views
+fall back to the generic per-key behaviour. That fallback is correct, just one
+round trip per key – correctness first, efficiency when it is provable.</p>
+<p>Simple use is invisible: build a mongo store, wrap it however you like, and
+<code class="docutils literal notranslate"><span class="pre">values()</span></code>/<code class="docutils literal notranslate"><span class="pre">items()</span></code> agree with <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>. The knobs, for store authors:</p>
+<ul class="simple">
+<li><p>Implement the bulk-read methods to <em>provide</em> the fast path.</p></li>
+<li><p>Set the <a class="reference internal" href="#mongodol.views.BULK_READ_IS_FAITHFUL_ATTR" title="mongodol.views.BULK_READ_IS_FAITHFUL_ATTR"><code class="xref py py-data docutils literal notranslate"><span class="pre">BULK_READ_IS_FAITHFUL_ATTR</span></code></a> class attribute to <code class="docutils literal notranslate"><span class="pre">False</span></code> (see
+<a class="reference internal" href="#mongodol.views.disable_bulk_read" title="mongodol.views.disable_bulk_read"><code class="xref py py-func docutils literal notranslate"><span class="pre">disable_bulk_read()</span></code></a>) when a class inherits bulk-read methods that no
+longer agree with its own <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>.</p></li>
+</ul>
+<p>Known limitation. <a class="reference internal" href="base.html#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a> is deliberately a
+<em>cursor</em>-level store: <code class="docutils literal notranslate"><span class="pre">s[k]</span></code> is a pymongo <code class="docutils literal notranslate"><span class="pre">Cursor</span></code>, while its bulk stream
+already yields <em>documents</em> – one per key. The two only line up once a single-doc
+layer (<code class="docutils literal notranslate"><span class="pre">MongoCollectionFirstDocReader</span></code> and friends) has turned cursors into
+docs, which is why those are the stores you are meant to wrap. Hanging an
+<code class="docutils literal notranslate"><span class="pre">obj_of_data</span></code> that expects a cursor directly off the raw reader is outside the
+protocol: such a transform cannot be pushed onto a doc-level bulk stream, and is
+not detectable from here.</p>
+<p>Nothing here is mongo-specific; it is a general answer to “how does a store with
+a bulk-read fast path compose with <code class="docutils literal notranslate"><span class="pre">dol</span></code> wrappers?”, and would be a reasonable
+thing for <code class="docutils literal notranslate"><span class="pre">dol</span></code> itself to own one day.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.BULK_READ_IS_FAITHFUL_ATTR">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">BULK_READ_IS_FAITHFUL_ATTR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_bulk_read_is_faithful'</span></span><a class="headerlink" href="#mongodol.views.BULK_READ_IS_FAITHFUL_ATTR" title="Link to this definition"></a></dt>
+<dd><p>Class attribute through which a store declares whether its bulk-read methods are
+value-equivalent to its own <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>. It defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code> (a class that
+implements the protocol is trusted to implement it faithfully). It exists because
+<code class="docutils literal notranslate"><span class="pre">dol</span></code>’s class-decorator wrapping <em>copies</em> the wrapped class’s extra methods onto
+the wrapper, so a wrapper that redefines value semantics – <code class="docutils literal notranslate"><span class="pre">wrap_kvs(postget=...)</span></code>
+– silently inherits bulk-read methods that no longer match it. Such a class sets
+this to <code class="docutils literal notranslate"><span class="pre">False</span></code>; see <a class="reference internal" href="#mongodol.views.disable_bulk_read" title="mongodol.views.disable_bulk_read"><code class="xref py py-func docutils literal notranslate"><span class="pre">disable_bulk_read()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.CONTAINS_ITEM_METHOD">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">CONTAINS_ITEM_METHOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'contains_item'</span></span><a class="headerlink" href="#mongodol.views.CONTAINS_ITEM_METHOD" title="Link to this definition"></a></dt>
+<dd><p>Bulk-read method answering “is this item in the store?” in one backend round trip.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.CONTAINS_VALUE_METHOD">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">CONTAINS_VALUE_METHOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'contains_value'</span></span><a class="headerlink" href="#mongodol.views.CONTAINS_VALUE_METHOD" title="Link to this definition"></a></dt>
+<dd><p>Bulk-read method answering “is this value in the store?” in one backend round trip.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.INNER_STORE_ATTR">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">INNER_STORE_ATTR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'store'</span></span><a class="headerlink" href="#mongodol.views.INNER_STORE_ATTR" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">dol</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code> attribute holding the store a wrapper wraps.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.ITER_ITEMS_METHOD">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">ITER_ITEMS_METHOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'iter_items'</span></span><a class="headerlink" href="#mongodol.views.ITER_ITEMS_METHOD" title="Link to this definition"></a></dt>
+<dd><p>Bulk-read method yielding a store’s <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in one backend round trip.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mongodol.views.ITER_VALUES_METHOD">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">ITER_VALUES_METHOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'iter_values'</span></span><a class="headerlink" href="#mongodol.views.ITER_VALUES_METHOD" title="Link to this definition"></a></dt>
+<dd><p>Bulk-read method yielding a store’s values in one backend round trip.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.views.MongoItemsView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">MongoItemsView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/views.html#MongoItemsView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.MongoItemsView" title="Link to this definition"></a></dt>
+<dd><p>An <code class="docutils literal notranslate"><span class="pre">items()</span></code> view that uses the backend’s bulk read when – and only when –
+that stream provably equals <code class="docutils literal notranslate"><span class="pre">((k,</span> <span class="pre">store[k])</span> <span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">store)</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.views.MongoValuesView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">MongoValuesView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/views.html#MongoValuesView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.MongoValuesView" title="Link to this definition"></a></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">values()</span></code> view that uses the backend’s bulk read when – and only when –
+that stream provably equals <code class="docutils literal notranslate"><span class="pre">(store[k]</span> <span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">store)</span></code>.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mongodol.views.NoBulkReadPath">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">NoBulkReadPath</span></span><a class="reference internal" href="../../_modules/mongodol/views.html#NoBulkReadPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.NoBulkReadPath" title="Link to this definition"></a></dt>
+<dd><p>No bulk-read stream can be <em>proven</em> equivalent to the store’s per-key reads.</p>
+<p>Raised by the resolvers of this module, and caught by the views, which then
+fall back to the generic (correct, one-round-trip-per-key) <code class="docutils literal notranslate"><span class="pre">Mapping</span></code>
+behaviour. It is a control-flow signal, not a user-facing error.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.bulk_contains_item">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">bulk_contains_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#bulk_contains_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.bulk_contains_item" title="Link to this definition"></a></dt>
+<dd><p>Ask the backend whether <code class="docutils literal notranslate"><span class="pre">item</span></code> is one of <code class="docutils literal notranslate"><span class="pre">store</span></code>’s items, in one round trip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><strong>NoBulkReadPath</strong></a> – when <code class="docutils literal notranslate"><span class="pre">item</span></code> cannot be pushed down to backend space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.bulk_contains_value">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">bulk_contains_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#bulk_contains_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.bulk_contains_value" title="Link to this definition"></a></dt>
+<dd><p>Ask the backend whether <code class="docutils literal notranslate"><span class="pre">v</span></code> is one of <code class="docutils literal notranslate"><span class="pre">store</span></code>’s values, in one round trip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><strong>NoBulkReadPath</strong></a> – when <code class="docutils literal notranslate"><span class="pre">v</span></code> cannot be pushed down to backend space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.bulk_items">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">bulk_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#bulk_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.bulk_items" title="Link to this definition"></a></dt>
+<dd><p>Iterate <code class="docutils literal notranslate"><span class="pre">store</span></code>’s <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs via the backend’s bulk-read path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><strong>NoBulkReadPath</strong></a> – when the bulk stream cannot be proven equivalent to
+<code class="docutils literal notranslate"><span class="pre">((k,</span> <span class="pre">store[k])</span> <span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">store)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.bulk_values">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">bulk_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#bulk_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.bulk_values" title="Link to this definition"></a></dt>
+<dd><p>Iterate <code class="docutils literal notranslate"><span class="pre">store</span></code>’s values via the backend’s bulk-read path, transforms honoured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><strong>NoBulkReadPath</strong></a> – when the bulk stream cannot be proven equivalent to
+<code class="docutils literal notranslate"><span class="pre">(store[k]</span> <span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">store)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.disable_bulk_read">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">disable_bulk_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">type</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#disable_bulk_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.disable_bulk_read" title="Link to this definition"></a></dt>
+<dd><p>Class decorator declaring that inherited bulk-read methods are not to be trusted.</p>
+<p>Use it on a class that changes what <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> returns (typically via
+<code class="docutils literal notranslate"><span class="pre">wrap_kvs(postget=...)</span></code>) while inheriting – or being handed, by <code class="docutils literal notranslate"><span class="pre">dol</span></code>’s
+class-decorator wrapping – bulk-read methods written for the <em>un</em>-changed
+semantics. Views then take the correct per-key path instead.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.is_crossable">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">is_crossable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#is_crossable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.is_crossable" title="Link to this definition"></a></dt>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">store</span></code> is a <code class="docutils literal notranslate"><span class="pre">Store</span></code> layer whose read path is plain transform composition.</p>
+<p>Such a layer reads from the store it wraps and applies <code class="docutils literal notranslate"><span class="pre">_key_of_id</span></code> to keys
+and <code class="docutils literal notranslate"><span class="pre">_obj_of_data</span></code> to values – and nothing else. Those two transforms can be
+mapped over a bulk stream, so the layer can be “crossed” on the way to the
+backend’s fast path. A layer that redefines <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> (<code class="docutils literal notranslate"><span class="pre">postget</span></code>) or
+<code class="docutils literal notranslate"><span class="pre">__iter__</span></code> (key filtering/caching) cannot.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.provides_bulk_read">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">provides_bulk_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#provides_bulk_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.provides_bulk_read" title="Link to this definition"></a></dt>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">store</span></code>’s own class implements bulk-read <code class="docutils literal notranslate"><span class="pre">method_name</span></code>, faithfully.</p>
+<p>“Faithfully” means the store has not declared, via
+<a class="reference internal" href="#mongodol.views.BULK_READ_IS_FAITHFUL_ATTR" title="mongodol.views.BULK_READ_IS_FAITHFUL_ATTR"><code class="xref py py-data docutils literal notranslate"><span class="pre">BULK_READ_IS_FAITHFUL_ATTR</span></code></a>, that its bulk-read methods disagree with
+its <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.resolve_bulk_source">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">resolve_bulk_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mongodol/views.html#resolve_bulk_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.resolve_bulk_source" title="Link to this definition"></a></dt>
+<dd><p>Find the store providing bulk-read <code class="docutils literal notranslate"><span class="pre">method_name</span></code>, and the layers crossed to reach it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(source,</span> <span class="pre">layers)</span></code> where <code class="docutils literal notranslate"><span class="pre">layers</span></code> are the crossed
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code> wrappers, outermost first.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#mongodol.views.NoBulkReadPath" title="mongodol.views.NoBulkReadPath"><strong>NoBulkReadPath</strong></a> – if a layer that cannot be crossed is met before a
+provider is found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.views.store_layers">
+<span class="sig-prename descclassname"><span class="pre">mongodol.views.</span></span><span class="sig-name descname"><span class="pre">store_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span></span></span><a class="reference internal" href="../../_modules/mongodol/views.html#store_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.views.store_layers" title="Link to this definition"></a></dt>
+<dd><p>Yield <code class="docutils literal notranslate"><span class="pre">store</span></code> then each store it wraps, outermost first, innermost last.</p>
+<p>The chain ends at the first non-<code class="docutils literal notranslate"><span class="pre">Store</span></code> – the actual backend. Note that
+<code class="docutils literal notranslate"><span class="pre">dol</span></code> is free to insert pass-through <code class="docutils literal notranslate"><span class="pre">Store</span></code> layers of its own, so never
+assume one <code class="docutils literal notranslate"><span class="pre">wrap_kvs</span></code> call means exactly one layer.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_kvs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">store_layers</span><span class="p">(</span><span class="n">wrap_kvs</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="n">obj_of_data</span><span class="o">=</span><span class="nb">str</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">(&#39;Store&#39;, &#39;dict&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Store</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="utils/werk_local.html" class="btn btn-neutral float-left" title="mongodol.utils.werk_local" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

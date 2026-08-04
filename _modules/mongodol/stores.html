@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.stores &mdash; mongodol 0.1.3 documentation</title>
+  <title>mongodol.stores &mdash; mongodol 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -61,15 +61,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/views.html">mongodol.views</a></li>
 </ul>
 
         </div>
@@ -113,6 +114,7 @@
     <span class="n">MongoCollectionPersister</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.trans</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostGet</span><span class="p">,</span> <span class="n">ObjOfData</span><span class="p">,</span> <span class="n">normalize_result</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable_bulk_read</span>
 
 <span class="n">single_value_fetch_with_unicity_validation</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
     <span class="n">wrap_kvs</span><span class="p">,</span> <span class="n">postget</span><span class="o">=</span><span class="n">PostGet</span><span class="o">.</span><span class="n">single_value_fetch_with_unicity_validation</span>
@@ -174,10 +176,14 @@
 
 
 
+<span class="c1"># ``disable_bulk_read``: ``s[key]`` collects *all* docs matching the key into a list,</span>
+<span class="c1"># whereas the inherited one-query bulk stream yields single docs -- so ``values()`` and</span>
+<span class="c1"># ``items()`` must take the per-key path here to stay equal to ``s[key]``.</span>
 <div class="viewcode-block" id="MongoCollectionMultipleDocsReader">
 <a class="viewcode-back" href="../../module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionMultipleDocsReader">[docs]</a>
+<span class="nd">@disable_bulk_read</span>
 <span class="nd">@wrap_kvs</span><span class="p">(</span>
-    <span class="n">postget</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">ObjOfData</span><span class="o">.</span><span class="n">all_docs_fetch</span><span class="p">,</span> <span class="n">doc_collector</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">postget</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">PostGet</span><span class="o">.</span><span class="n">all_docs_fetch</span><span class="p">,</span> <span class="n">doc_collector</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># list is default but explicit here to show that other choices possible</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoCollectionMultipleDocsReader</span><span class="p">(</span><span class="n">MongoCollectionReader</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.</span>
@@ -213,10 +219,12 @@
 
 
 
+<span class="c1"># See the ``disable_bulk_read`` note on MongoCollectionMultipleDocsReader.</span>
 <div class="viewcode-block" id="MongoCollectionMultipleDocsPersister">
 <a class="viewcode-back" href="../../module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionMultipleDocsPersister">[docs]</a>
+<span class="nd">@disable_bulk_read</span>
 <span class="nd">@wrap_kvs</span><span class="p">(</span>
-    <span class="n">postget</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">ObjOfData</span><span class="o">.</span><span class="n">all_docs_fetch</span><span class="p">,</span> <span class="n">doc_collector</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">postget</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">PostGet</span><span class="o">.</span><span class="n">all_docs_fetch</span><span class="p">,</span> <span class="n">doc_collector</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># list is default but explicit here to show that other choices possible</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoCollectionMultipleDocsPersister</span><span class="p">(</span><span class="n">MongoCollectionPersisterWithResultMapping</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.</span>
@@ -232,9 +240,11 @@
         <span class="p">),</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;v (value) must be mappings (often dictionaries) or a collection of mappings. Were:</span><span class="se">\n\t</span><span class="s2">k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">v=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-        <span class="n">_v</span> <span class="o">=</span> <span class="n">v</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Collection</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">vi</span><span class="p">)</span> <span class="k">for</span> <span class="n">vi</span> <span class="ow">in</span> <span class="n">_v</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+        <span class="c1"># A Mapping is itself a Collection, so it must be tested for first, or a single</span>
+        <span class="c1"># doc would be &quot;iterated&quot; into its field names.</span>
+        <span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">])</span></div>
 
 
 

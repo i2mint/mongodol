@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongodol.views &mdash; mongodol 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mongodol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol.html">mongodol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/base.html">mongodol.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/views.html">mongodol.views</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mongodol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mongodol.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mongodol.views</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Mapping views that keep working when a mongo store is wrapped by ``dol``.</span>
+
+<span class="sd">A mongo collection can serve a store&#39;s whole ``(key, value)`` stream in a single</span>
+<span class="sd">``find`` round trip, so :class:`~mongodol.base.MongoCollectionReader` implements a</span>
+<span class="sd">**bulk-read protocol** -- ``iter_values``, ``iter_items``, ``contains_value`` and</span>
+<span class="sd">``contains_item`` -- and exposes it through the ``values()``/``items()`` views</span>
+<span class="sd">defined here. One query instead of N is the whole point of these views.</span>
+
+<span class="sd">The catch is *composition*. A ``dol`` :class:`~dol.base.Store` wrapper (what</span>
+<span class="sd">``wrap_kvs`` builds) forwards every attribute it doesn&#39;t define to the store it</span>
+<span class="sd">wraps. A view that simply calls ``self._mapping.iter_values()`` therefore punches</span>
+<span class="sd">straight through the wrappers and yields raw backend documents, silently skipping</span>
+<span class="sd">the value transforms the user asked for -- breaking the ``Mapping`` contract::</span>
+
+<span class="sd">    list(store.values()) == [store[k] for k in store]</span>
+
+<span class="sd">(see `i2mint/mongodol#7 &lt;https://github.com/i2mint/mongodol/issues/7&gt;`_).</span>
+
+<span class="sd">This module resolves the bulk stream **explicitly** instead of relying on</span>
+<span class="sd">attribute delegation. Given the store a view was built on, :func:`bulk_values`</span>
+<span class="sd">and :func:`bulk_items` walk the wrapper chain inward, remembering each layer they</span>
+<span class="sd">cross, until they reach a store that actually implements the bulk-read protocol.</span>
+<span class="sd">The bulk stream is then re-transformed by the crossed layers, innermost first, so</span>
+<span class="sd">that it lands in exactly the same space as ``store[k]``.</span>
+
+<span class="sd">A layer may only be crossed if its read path is *plain transform composition* --</span>
+<span class="sd">&quot;read from the inner store, then apply ``_key_of_id``/``_obj_of_data``&quot;, which is</span>
+<span class="sd">what :class:`~dol.base.Store` does. A layer that redefines ``__getitem__`` or</span>
+<span class="sd">``__iter__`` (``wrap_kvs(postget=...)``, ``filt_iter``, ``cached_keys``, ...)</span>
+<span class="sd">changes values or key sets in ways that cannot be pushed onto a bulk stream, so</span>
+<span class="sd">the resolver refuses to guess: it raises :class:`NoBulkReadPath` and the views</span>
+<span class="sd">fall back to the generic per-key behaviour. That fallback is correct, just one</span>
+<span class="sd">round trip per key -- correctness first, efficiency when it is provable.</span>
+
+<span class="sd">Simple use is invisible: build a mongo store, wrap it however you like, and</span>
+<span class="sd">``values()``/``items()`` agree with ``__getitem__``. The knobs, for store authors:</span>
+
+<span class="sd">- Implement the bulk-read methods to *provide* the fast path.</span>
+<span class="sd">- Set the :data:`BULK_READ_IS_FAITHFUL_ATTR` class attribute to ``False`` (see</span>
+<span class="sd">  :func:`disable_bulk_read`) when a class inherits bulk-read methods that no</span>
+<span class="sd">  longer agree with its own ``__getitem__``.</span>
+
+<span class="sd">Known limitation. :class:`~mongodol.base.MongoCollectionReader` is deliberately a</span>
+<span class="sd">*cursor*-level store: ``s[k]`` is a pymongo ``Cursor``, while its bulk stream</span>
+<span class="sd">already yields *documents* -- one per key. The two only line up once a single-doc</span>
+<span class="sd">layer (``MongoCollectionFirstDocReader`` and friends) has turned cursors into</span>
+<span class="sd">docs, which is why those are the stores you are meant to wrap. Hanging an</span>
+<span class="sd">``obj_of_data`` that expects a cursor directly off the raw reader is outside the</span>
+<span class="sd">protocol: such a transform cannot be pushed onto a doc-level bulk stream, and is</span>
+<span class="sd">not detectable from here.</span>
+
+<span class="sd">Nothing here is mongo-specific; it is a general answer to &quot;how does a store with</span>
+<span class="sd">a bulk-read fast path compose with ``dol`` wrappers?&quot;, and would be a reasonable</span>
+<span class="sd">thing for ``dol`` itself to own one day.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseItemsView</span><span class="p">,</span> <span class="n">BaseValuesView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Store</span>
+
+<span class="c1">#: Bulk-read method yielding a store&#39;s values in one backend round trip.</span>
+<span class="n">ITER_VALUES_METHOD</span> <span class="o">=</span> <span class="s2">&quot;iter_values&quot;</span>
+<span class="c1">#: Bulk-read method yielding a store&#39;s ``(key, value)`` pairs in one backend round trip.</span>
+<span class="n">ITER_ITEMS_METHOD</span> <span class="o">=</span> <span class="s2">&quot;iter_items&quot;</span>
+<span class="c1">#: Bulk-read method answering &quot;is this value in the store?&quot; in one backend round trip.</span>
+<span class="n">CONTAINS_VALUE_METHOD</span> <span class="o">=</span> <span class="s2">&quot;contains_value&quot;</span>
+<span class="c1">#: Bulk-read method answering &quot;is this item in the store?&quot; in one backend round trip.</span>
+<span class="n">CONTAINS_ITEM_METHOD</span> <span class="o">=</span> <span class="s2">&quot;contains_item&quot;</span>
+
+<span class="c1">#: Class attribute through which a store declares whether its bulk-read methods are</span>
+<span class="c1">#: value-equivalent to its own ``__getitem__``. It defaults to ``True`` (a class that</span>
+<span class="c1">#: implements the protocol is trusted to implement it faithfully). It exists because</span>
+<span class="c1">#: ``dol``&#39;s class-decorator wrapping *copies* the wrapped class&#39;s extra methods onto</span>
+<span class="c1">#: the wrapper, so a wrapper that redefines value semantics -- ``wrap_kvs(postget=...)``</span>
+<span class="c1">#: -- silently inherits bulk-read methods that no longer match it. Such a class sets</span>
+<span class="c1">#: this to ``False``; see :func:`disable_bulk_read`.</span>
+<span class="n">BULK_READ_IS_FAITHFUL_ATTR</span> <span class="o">=</span> <span class="s2">&quot;_bulk_read_is_faithful&quot;</span>
+
+<span class="c1">#: The ``dol`` :class:`~dol.base.Store` attribute holding the store a wrapper wraps.</span>
+<span class="n">INNER_STORE_ATTR</span> <span class="o">=</span> <span class="s2">&quot;store&quot;</span>
+
+<span class="n">KeyValStream</span> <span class="o">=</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="NoBulkReadPath">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.NoBulkReadPath">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoBulkReadPath</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No bulk-read stream can be *proven* equivalent to the store&#39;s per-key reads.</span>
+
+<span class="sd">    Raised by the resolvers of this module, and caught by the views, which then</span>
+<span class="sd">    fall back to the generic (correct, one-round-trip-per-key) ``Mapping``</span>
+<span class="sd">    behaviour. It is a control-flow signal, not a user-facing error.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<span class="c1"># -------------------------------------------------------------------------------------</span>
+<span class="c1"># Inspecting a store layer</span>
+<span class="c1">#</span>
+<span class="c1"># Everything here looks attributes up on ``type(store)``, never on the instance:</span>
+<span class="c1"># ``dol``&#39;s ``Store.__getattr__`` forwards *instance* lookups to the wrapped store, so</span>
+<span class="c1"># ``hasattr(store, &#39;iter_values&#39;)`` is True even for a wrapper that has no idea what a</span>
+<span class="c1"># bulk read is. Class lookup does not delegate, so it tells the truth.</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look ``attr`` up on ``type(store)``, bypassing ``Store.__getattr__`` delegation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">store</span><span class="p">),</span> <span class="n">attr</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="provides_bulk_read">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.provides_bulk_read">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">provides_bulk_read</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``store``&#39;s own class implements bulk-read ``method_name``, faithfully.</span>
+
+<span class="sd">    &quot;Faithfully&quot; means the store has not declared, via</span>
+<span class="sd">    :data:`BULK_READ_IS_FAITHFUL_ATTR`, that its bulk-read methods disagree with</span>
+<span class="sd">    its ``__getitem__``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">BULK_READ_IS_FAITHFUL_ATTR</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="is_crossable">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.is_crossable">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_crossable</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``store`` is a ``Store`` layer whose read path is plain transform composition.</span>
+
+<span class="sd">    Such a layer reads from the store it wraps and applies ``_key_of_id`` to keys</span>
+<span class="sd">    and ``_obj_of_data`` to values -- and nothing else. Those two transforms can be</span>
+<span class="sd">    mapped over a bulk stream, so the layer can be &quot;crossed&quot; on the way to the</span>
+<span class="sd">    backend&#39;s fast path. A layer that redefines ``__getitem__`` (``postget``) or</span>
+<span class="sd">    ``__iter__`` (key filtering/caching) cannot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">Store</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__getitem__</span> <span class="ow">is</span> <span class="n">Store</span><span class="o">.</span><span class="fm">__getitem__</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__iter__</span> <span class="ow">is</span> <span class="n">Store</span><span class="o">.</span><span class="fm">__iter__</span></div>
+
+
+
+<div class="viewcode-block" id="store_layers">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.store_layers">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_layers</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield ``store`` then each store it wraps, outermost first, innermost last.</span>
+
+<span class="sd">    The chain ends at the first non-``Store`` -- the actual backend. Note that</span>
+<span class="sd">    ``dol`` is free to insert pass-through ``Store`` layers of its own, so never</span>
+<span class="sd">    assume one ``wrap_kvs`` call means exactly one layer.</span>
+
+<span class="sd">    &gt;&gt;&gt; from dol import wrap_kvs</span>
+<span class="sd">    &gt;&gt;&gt; layers = list(store_layers(wrap_kvs({&#39;a&#39;: 1}, obj_of_data=str)))</span>
+<span class="sd">    &gt;&gt;&gt; type(layers[0]).__name__, type(layers[-1]).__name__</span>
+<span class="sd">    (&#39;Store&#39;, &#39;dict&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; all(isinstance(x, Store) for x in layers[:-1])</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">yield</span> <span class="n">store</span>
+    <span class="k">while</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">Store</span><span class="p">):</span>
+        <span class="n">inner</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">INNER_STORE_ATTR</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># a Store that never got one: nothing further to walk</span>
+            <span class="k">return</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">inner</span>
+        <span class="k">yield</span> <span class="n">store</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_bulk_source">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.resolve_bulk_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the store providing bulk-read ``method_name``, and the layers crossed to reach it.</span>
+
+<span class="sd">    :return: ``(source, layers)`` where ``layers`` are the crossed</span>
+<span class="sd">        :class:`~dol.base.Store` wrappers, outermost first.</span>
+<span class="sd">    :raises NoBulkReadPath: if a layer that cannot be crossed is met before a</span>
+<span class="sd">        provider is found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">store_layers</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">provides_bulk_read</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">layer</span><span class="p">,</span> <span class="n">layers</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_crossable</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No bulk </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2"> path: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> neither provides &quot;</span>
+                <span class="s2">&quot;it nor is a plain transform-composition layer that can be crossed.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No store in the chain provides </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># -------------------------------------------------------------------------------------</span>
+<span class="c1"># Pushing a layer&#39;s transforms onto a bulk stream</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_outgoing_trans</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The layer&#39;s outgoing (backend -&gt; user) transform named ``trans_attr``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ingoing_trans</span><span class="p">(</span>
+    <span class="n">layer</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The layer&#39;s ingoing (user -&gt; backend) transform, if it is usable as an inverse.</span>
+
+<span class="sd">    A layer that transforms outgoing values/keys but declares no ingoing transform</span>
+<span class="sd">    has no inverse, so a user-space value cannot be pushed down to the backend.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+    <span class="n">transforms_outgoing</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span>
+        <span class="n">Store</span><span class="p">,</span> <span class="n">outgoing_attr</span>
+    <span class="p">)</span>
+    <span class="n">has_inverse</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Store</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transforms_outgoing</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_inverse</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> transforms outgoing values via </span><span class="si">{</span><span class="n">outgoing_attr</span><span class="si">!r}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;but declares no </span><span class="si">{</span><span class="n">ingoing_attr</span><span class="si">!r}</span><span class="s2"> inverse, so nothing can be pushed down &quot;</span>
+            <span class="s2">&quot;to the backend.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_map_outward</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply each crossed layer&#39;s ``trans_attr`` to ``stream``, innermost layer first.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">_outgoing_trans</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">),</span> <span class="n">stream</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_trans_items</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">KeyValStream</span><span class="p">,</span> <span class="n">key_of_id</span><span class="p">,</span> <span class="n">obj_of_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply one layer&#39;s key and value transforms to an item stream.</span>
+
+<span class="sd">    A function -- not an inlined generator expression in :func:`_map_items_outward` --</span>
+<span class="sd">    so that each layer&#39;s transforms are captured in their own scope. A genexpr would</span>
+<span class="sd">    look them up lazily, in a scope the next loop iteration has already overwritten.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">key_of_id</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">obj_of_data</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_map_items_outward</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">KeyValStream</span><span class="p">,</span> <span class="n">layers</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply each crossed layer&#39;s key *and* value transforms to an item stream.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">_trans_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">_key_of_id</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">_obj_of_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_push_inward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Push a user-space ``x`` down to backend space through ``layers``, outermost first.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">_ingoing_trans</span><span class="p">(</span>
+            <span class="n">layer</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="n">outgoing_attr</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="n">ingoing_attr</span>
+        <span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_push_value_inward</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_push_inward</span><span class="p">(</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">&quot;_obj_of_data&quot;</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">&quot;_data_of_obj&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_push_key_inward</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_push_inward</span><span class="p">(</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">&quot;_key_of_id&quot;</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">&quot;_id_of_key&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># -------------------------------------------------------------------------------------</span>
+<span class="c1"># The bulk-read facade: what the views (and store authors) call</span>
+
+
+<div class="viewcode-block" id="bulk_values">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_values</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate ``store``&#39;s values via the backend&#39;s bulk-read path, transforms honoured.</span>
+
+<span class="sd">    :raises NoBulkReadPath: when the bulk stream cannot be proven equivalent to</span>
+<span class="sd">        ``(store[k] for k in store)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">ITER_VALUES_METHOD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_map_outward</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iter_values</span><span class="p">(),</span> <span class="n">layers</span><span class="p">,</span> <span class="s2">&quot;_obj_of_data&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="bulk_items">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_items">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_items</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate ``store``&#39;s ``(key, value)`` pairs via the backend&#39;s bulk-read path.</span>
+
+<span class="sd">    :raises NoBulkReadPath: when the bulk stream cannot be proven equivalent to</span>
+<span class="sd">        ``((k, store[k]) for k in store)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">ITER_ITEMS_METHOD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_map_items_outward</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iter_items</span><span class="p">(),</span> <span class="n">layers</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="bulk_contains_value">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_contains_value">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_contains_value</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask the backend whether ``v`` is one of ``store``&#39;s values, in one round trip.</span>
+
+<span class="sd">    :raises NoBulkReadPath: when ``v`` cannot be pushed down to backend space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">CONTAINS_VALUE_METHOD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">contains_value</span><span class="p">(</span><span class="n">_push_value_inward</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="bulk_contains_item">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_contains_item">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_contains_item</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask the backend whether ``item`` is one of ``store``&#39;s items, in one round trip.</span>
+
+<span class="sd">    :raises NoBulkReadPath: when ``item`` cannot be pushed down to backend space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">CONTAINS_ITEM_METHOD</span><span class="p">)</span>
+    <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">contains_item</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">_push_key_inward</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">),</span> <span class="n">_push_value_inward</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">))</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="disable_bulk_read">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.disable_bulk_read">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">disable_bulk_read</span><span class="p">(</span><span class="n">store_cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class decorator declaring that inherited bulk-read methods are not to be trusted.</span>
+
+<span class="sd">    Use it on a class that changes what ``__getitem__`` returns (typically via</span>
+<span class="sd">    ``wrap_kvs(postget=...)``) while inheriting -- or being handed, by ``dol``&#39;s</span>
+<span class="sd">    class-decorator wrapping -- bulk-read methods written for the *un*-changed</span>
+<span class="sd">    semantics. Views then take the correct per-key path instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">store_cls</span><span class="p">,</span> <span class="n">BULK_READ_IS_FAITHFUL_ATTR</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">store_cls</span></div>
+
+
+
+<span class="c1"># -------------------------------------------------------------------------------------</span>
+<span class="c1"># The views themselves</span>
+
+
+<div class="viewcode-block" id="MongoValuesView">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.MongoValuesView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoValuesView</span><span class="p">(</span><span class="n">BaseValuesView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``values()`` view that uses the backend&#39;s bulk read when -- and only when --</span>
+<span class="sd">    that stream provably equals ``(store[k] for k in store)``.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bulk_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoBulkReadPath</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bulk_contains_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoBulkReadPath</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="MongoItemsView">
+<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.MongoItemsView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MongoItemsView</span><span class="p">(</span><span class="n">BaseItemsView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An ``items()`` view that uses the backend&#39;s bulk read when -- and only when --</span>
+<span class="sd">    that stream provably equals ``((k, store[k]) for k in store)``.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bulk_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoBulkReadPath</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bulk_contains_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoBulkReadPath</span><span class="p">:</span>
+            <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">v</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

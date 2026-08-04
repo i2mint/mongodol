@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.base &mdash; mongodol 0.1.3 documentation</title>
+  <title>mongodol.base &mdash; mongodol 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -61,15 +61,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/not_working.html">mongodol.tests.not_working</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/views.html">mongodol.views</a></li>
 </ul>
 
         </div>
@@ -107,7 +108,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">KvReader</span><span class="p">,</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">DolCollection</span><span class="p">,</span> <span class="n">BaseValuesView</span><span class="p">,</span> <span class="n">BaseItemsView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">KvReader</span><span class="p">,</span> <span class="n">Collection</span> <span class="k">as</span> <span class="n">DolCollection</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">ID</span><span class="p">,</span> <span class="n">PyMongoCollectionSpec</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">,</span> <span class="n">DFLT_TEST_DB</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -115,6 +116,12 @@
     <span class="n">normalize_projection</span><span class="p">,</span>
     <span class="n">projection_union</span><span class="p">,</span>
     <span class="n">get_mongo_collection_pymongo_obj</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.views</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MongoItemsView</span><span class="p">,</span>
+    <span class="n">MongoValuesView</span><span class="p">,</span>
+    <span class="n">bulk_items</span><span class="p">,</span>
+    <span class="n">bulk_values</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -227,7 +234,8 @@
 <span class="sd">    &gt;&gt;&gt; assert v != {&#39;the&#39;: &#39;default&#39;}</span>
 
 <span class="sd">    ``s.keys()``, ``s.values()``, and ``s.items()`` are ``collections.abc.MappingViews`` instances</span>
-<span class="sd">    (specialized for mongo).</span>
+<span class="sd">    (specialized for mongo -- see :mod:`mongodol.views`: they fetch the whole collection in</span>
+<span class="sd">    a single query, and keep doing so, correctly, when the store is wrapped by ``dol``).</span>
 
 <span class="sd">    &gt;&gt;&gt; assert type(s.keys()) == s.KeysView</span>
 <span class="sd">    &gt;&gt;&gt; assert type(s.values()) == s.ValuesView</span>
@@ -264,22 +272,10 @@
 
     <span class="n">_projections_are_flattened</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">class</span><span class="w"> </span><span class="nc">ValuesView</span><span class="p">(</span><span class="n">BaseValuesView</span><span class="p">):</span>
-        <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="o">.</span><span class="n">contains_value</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="o">.</span><span class="n">iter_values</span><span class="p">()</span>
-
-<div class="viewcode-block" id="MongoCollectionReader.ItemsView">
-<a class="viewcode-back" href="../../module_docs/mongodol/base.html#mongodol.base.MongoCollectionReader.ItemsView">[docs]</a>
-    <span class="k">class</span><span class="w"> </span><span class="nc">ItemsView</span><span class="p">(</span><span class="n">BaseItemsView</span><span class="p">):</span>
-        <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="o">.</span><span class="n">contains_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span><span class="o">.</span><span class="n">iter_items</span><span class="p">()</span></div>
-
+    <span class="c1">#: Views that resolve the bulk-read fast path through any ``dol`` wrapper chain,</span>
+    <span class="c1">#: rather than through blind attribute delegation. See :mod:`mongodol.views`.</span>
+    <span class="n">ValuesView</span> <span class="o">=</span> <span class="n">MongoValuesView</span>
+    <span class="n">ItemsView</span> <span class="o">=</span> <span class="n">MongoItemsView</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -660,20 +656,30 @@
 <div class="viewcode-block" id="MongoBaseStore">
 <a class="viewcode-back" href="../../module_docs/mongodol/base.html#mongodol.base.MongoBaseStore">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoBaseStore</span><span class="p">(</span><span class="n">Store</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``Store`` that forwards the mongo bulk-read protocol through its transforms.</span>
+
+<span class="sd">    Historically this was the *only* way to get ``values()``/``items()`` to honour a</span>
+<span class="sd">    wrapper&#39;s transforms -- hence ``mongodol.trans.wrap_kvs``, which uses it as the</span>
+<span class="sd">    wrapper class. It is no longer needed for that: :mod:`mongodol.views` resolves the</span>
+<span class="sd">    bulk path through any wrapper chain, so plain ``dol.wrap_kvs`` now works too. It is</span>
+<span class="sd">    kept because it also forwards the write-side bulk methods (``append``/``extend``),</span>
+<span class="sd">    and because code may call ``iter_values()``/``contains_value()`` directly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">contains_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">contains_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_of_obj</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">iter_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj_of_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">iter_values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj_of_data</span><span class="p">,</span> <span class="n">bulk_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">contains_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">contains_item</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_id_of_key</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_of_obj</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">iter_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">yield from</span> <span class="p">(</span>
+        <span class="k">return</span> <span class="p">(</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_of_id</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj_of_data</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">iter_items</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">bulk_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
