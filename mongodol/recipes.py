@@ -31,7 +31,7 @@ def disallow_sourced_interval_overlaps(store):
     r"""Disallow writing to a key that shares the same "source" field value and overlapping ("bt", "tt") interval.
 
     :param store: ``KvPersister`` (instance or class) ``s``
-    :return: The same store, but where `s[dict(source=source, bt=bt, tt=tt}] = v`` writes are not permitted if
+    :return: The same store, but where ``s[dict(source=source, bt=bt, tt=tt)] = v`` writes are not permitted if
         there is another doc, with the same source, and an overlapping (bt, tt) interval.
 
     >>> from mongodol.tests import get_test_collection_persister, clear_all_and_populate

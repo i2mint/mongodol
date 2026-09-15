@@ -32,7 +32,8 @@ class MongoCollectionPersisterWithResultMapping(MongoCollectionPersister):
 @single_value_fetch_with_unicity_validation
 class MongoCollectionUniqueDocReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
-    :raises KeyNotUniqueError if the k matches more than a single unique doc.
+
+    :raises KeyNotUniqueError: if the k matches more than a single unique doc.
 
     >>> from mongodol.stores import MongoCollectionUniqueDocReader
     >>> from mongodol.tests import data, util
@@ -64,6 +65,22 @@ class MongoCollectionFirstDocReader(MongoCollectionReader):
     Typically, this should be used when you don't want the overhead of checking for uniqueness,
     because it doesn't matter, you like risk, or you told the mongo collection indexing system itself to
     ensure uniqueness for you.
+
+    >>> from mongodol.stores import MongoCollectionFirstDocReader
+    >>> from mongodol.tests import data, util
+    >>> test_mgc = util.populated_pymongo_collection(data.three_simple_docs)
+    >>> s = MongoCollectionFirstDocReader(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection=['n'])
+    >>> assert list(s) == [{'s': 'a'}, {'s': 'b'}, {'s': 'b'}]
+
+    Unlike ``MongoCollectionUniqueDocReader``, a key matching more than one doc
+    doesn't raise; it just returns the first match found:
+
+    >>> s[{'s': 'a'}]
+    {'_id': 0, 'n': 1}
+    >>> s[{'s': 'b'}]
+    {'_id': 1, 'n': 2}
+
     """
 
 
@@ -77,6 +94,19 @@ class MongoCollectionFirstDocReader(MongoCollectionReader):
 class MongoCollectionMultipleDocsReader(MongoCollectionReader):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
+
+    >>> from mongodol.stores import MongoCollectionMultipleDocsReader
+    >>> from mongodol.tests import data, util
+    >>> test_mgc = util.populated_pymongo_collection(data.three_simple_docs)
+    >>> s = MongoCollectionMultipleDocsReader(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection=['n'])
+    >>> s[{'s': 'a'}]
+    [{'_id': 0, 'n': 1}]
+    >>> s[{'s': 'b'}]
+    [{'_id': 1, 'n': 2}, {'_id': 2, 'n': 3}]
+    >>> s[{'s': 'nonexistent'}]
+    []
+
     """
 
 
@@ -86,7 +116,27 @@ class MongoCollectionMultipleDocsReader(MongoCollectionReader):
 @single_value_fetch_with_unicity_validation
 class MongoCollectionUniqueDocPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).
-    :raises KeyNotUniqueError if the k matches more than a single unique doc.
+
+    :raises KeyNotUniqueError: if the k matches more than a single unique doc.
+
+    >>> from mongodol.stores import MongoCollectionUniqueDocPersister
+    >>> from mongodol.tests import util
+    >>> test_mgc = util.populated_pymongo_collection([])
+    >>> s = MongoCollectionUniqueDocPersister(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection={'n': True, '_id': False})
+    >>> s[{'s': 'a'}] = {'n': 1}
+    >>> list(s)
+    [{'s': 'a'}]
+    >>> s[{'s': 'a'}]
+    {'n': 1}
+
+    >>> s[{'s': 'b'}] = {'n': 2}
+    >>> _ = s.mgc.insert_one({'s': 'b', 'n': 99})
+    >>> s[{'s': 'b'}]
+    Traceback (most recent call last):
+      ...
+    mongodol.util.KeyNotUniqueError: Key was not unique (i.e. cursor has more than one match): {'s': 'b'}
+
     """
 
 
@@ -98,6 +148,23 @@ class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping
     Typically, this should be used when you don't want the overhead of checking for uniqueness,
     because it doesn't matter, you like risk, or you told the mongo collection indexing system itself to
     ensure uniqueness for you.
+
+    >>> from mongodol.stores import MongoCollectionFirstDocPersister
+    >>> from mongodol.tests import util
+    >>> test_mgc = util.populated_pymongo_collection([])
+    >>> s = MongoCollectionFirstDocPersister(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection={'n': True, '_id': False})
+    >>> s[{'s': 'a'}] = {'n': 1}
+    >>> s[{'s': 'a'}]
+    {'n': 1}
+
+    A second doc matching the same key does not raise; ``s[key]`` keeps returning
+    the first match found:
+
+    >>> _ = s.mgc.insert_one({'s': 'a', 'n': 999})
+    >>> s[{'s': 'a'}]
+    {'n': 1}
+
     """
 
 
@@ -109,6 +176,23 @@ class MongoCollectionFirstDocPersister(MongoCollectionPersisterWithResultMapping
 class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMapping):
     """A mongo collection (kv-)reader where s[key] will return the list of all key-matching docs.
     If no docs match, will return an empty list.
+
+    ``s[key] = v`` first deletes every doc matching ``key``, then inserts ``v``
+    (a doc, or a collection of docs) merged with ``key``:
+
+    >>> from mongodol.stores import MongoCollectionMultipleDocsPersister
+    >>> from mongodol.tests import util
+    >>> test_mgc = util.populated_pymongo_collection([])
+    >>> s = MongoCollectionMultipleDocsPersister(test_mgc,
+    ...     iter_projection={'s': True, '_id': False}, getitem_projection={'n': True, '_id': False})
+    >>> s[{'s': 'a'}] = [{'n': 1}, {'n': 2}]
+    >>> s[{'s': 'a'}]
+    [{'n': 1}, {'n': 2}]
+
+    >>> s[{'s': 'a'}] = {'n': 3}  # replaces the two docs above with just this one
+    >>> s[{'s': 'a'}]
+    [{'n': 3}]
+
     """
 
     def __setitem__(self, k, v):
@@ -128,6 +212,8 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
 
 
 class MongoStore(Store):
+    """A ``Store`` wrapping a ``MongoCollectionUniqueDocPersister``, built from host/db/collection names."""
+
     @wraps(MongoCollectionUniqueDocPersister.__init__)
     def __init__(
         self, *args, host, db_name, collection_name, mongo_client_kwargs=None, **kwargs
@@ -229,10 +315,9 @@ class MongoStore(Store):
 
 @lru_cache
 def _get_db(db_name, host, **mongo_client_kwargs):
-    """
-    Get a mongo database object from a db_name and host.
+    """Get a mongo database object from a db_name and host.
 
-    The `host` parameter can be a full `mongodb URI
+    The ``host`` parameter can be a full `mongodb URI
     <http://dochub.mongodb.org/core/connections>`_, in addition to
     a simple hostname. It can also be a list of hostnames or
     URIs.

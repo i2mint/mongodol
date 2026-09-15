@@ -16,6 +16,7 @@ from mongodol.errors import MethodNameAlreadyExists, SetattrNotAllowed
 
 
 def disallow_if_name_exists_already(store, method_name):
+    """Raise ``MethodNameAlreadyExists`` if ``store`` already has an attribute named ``method_name``."""
     if hasattr(store, method_name):
         raise MethodNameAlreadyExists(f"Method name already exists: {method_name}")
 
@@ -37,12 +38,15 @@ def has_exactly_one_non_defaulted_input(func):
 
 class Addons(ABC):
     """A collection of add-on methods. Addons can't (and is not meant to) be instantiated.
-    It's just to group add-on functions (meant to be injected in stores) in one place"""
+    It's just to group add-on functions (meant to be injected in stores) in one place
+    """
 
     def clear(self: MongoCollectionCollection):
+        """Delete every doc matching this store's filter, without confirmation."""
         return self.mgc.delete_many(self.filter)
 
     def clear_after_checking_with_user(self: MongoCollectionCollection):
+        """Delete every doc matching this store's filter, after the user confirms the count on stdin."""
         n = len(self)
         answer = input(
             f"Are you sure you want to delete all {n} docs matching the filter: {self.filter}?\n"
@@ -115,7 +119,6 @@ def add_clear_method(
     >>> assert len(whole_store) == whole_length_before_clear - n_reds == 3
 
     """
-    """Add a clear method to the store"""
     return add_store_method(
         store, method_func=clear_method, method_name="clear", validator=validator
     )

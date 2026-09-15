@@ -35,20 +35,19 @@ from mongodol.util import KeyNotUniqueError
 
 
 class PersistentObjectBase(ABC):
-    """
-    Base class to propagate a modification event through a parent-child chain structure.
+    """Base class to propagate a modification event through a parent-child chain structure.
     """
 
     def __init__(self, container):
         self._container = container
 
     def persist_data(self, *args):
+        """Notify the container that this object's data has changed, by forwarding to its ``persist_data``."""
         return self._container.persist_data(self)
 
 
 class PersistentDict(dict, PersistentObjectBase):
-    '''
-    Extension of a dict wich triggers an event to notify the object that contains the dict that a modification
+    '''Extension of a dict wich triggers an event to notify the object that contains the dict that a modification
     has been made.
 
     Requirement: The container object needs to implement the method "persist_data(self, data: Mapping)".
@@ -116,6 +115,7 @@ class PersistentDict(dict, PersistentObjectBase):
         return self.persist_data()
 
     def update(self, *args, **kwargs):
+        """Update like a normal dict, then persist the updated dict."""
         super().update(*args, **kwargs)
         return self.persist_data()
 
@@ -125,8 +125,7 @@ class PersistentDict(dict, PersistentObjectBase):
 
 
 class PersistentList(list, PersistentObjectBase):
-    '''
-    Extension of a list wich triggers an event to notify the object that contains the list that a modification
+    '''Extension of a list wich triggers an event to notify the object that contains the list that a modification
     has been made.
 
     Requirement: The container object needs to implement the method "persist_data(self, data: Mapping)".
@@ -168,10 +167,12 @@ class PersistentList(list, PersistentObjectBase):
         list.__init__(self, persistent_iterable)
 
     def append(self, __object):
+        """Append ``__object``, then persist the updated list."""
         super().append(__object)
         return self.persist_data()
 
     def extend(self, __iterable):
+        """Extend with ``__iterable``, then persist the updated list."""
         super().extend(__iterable)
         return self.persist_data()
 
@@ -185,11 +186,13 @@ class PersistentList(list, PersistentObjectBase):
         return self.persist_data()
 
     def pop(self, __index):
+        """Pop the item at ``__index``, then persist the updated list."""
         r = super().pop(__index)
         self.persist_data()
         return r
 
     def remove(self, __value):
+        """Remove the first occurrence of ``__value``, then persist the updated list."""
         super().remove(__value)
         return self.persist_data()
 
@@ -198,10 +201,12 @@ class PersistentList(list, PersistentObjectBase):
         return self.persist_data()
 
     def deepcopy(self):
+        """A deep copy of the original iterable this list was built from (not the persistent list itself)."""
         return deepcopy(self._initial_iterable)
 
 
 def get_persistent_obj(container, v):
+    """Wrap ``v`` in a ``PersistentDict``/``PersistentList`` if it's a mapping/iterable, else return it as is."""
     if isinstance(v, Mapping):
         return PersistentDict(container, v)
     elif isinstance(v, Iterable) and not isinstance(v, str):
@@ -212,8 +217,11 @@ def get_persistent_obj(container, v):
 
 # TODO: Make trans funcs/method carry their role and find their place in wrap_kvs automatically
 class PostGet:
+    """``postget`` (key-aware) transform functions for ``wrap_kvs``, turning a cursor into a value."""
+
     @staticmethod
     def single_value_fetch_with_unicity_validation(store, k, cursor):
+        """Return the single doc in ``cursor``; raise if there's none or more than one."""
         doc = next(cursor, None)
         if doc is not None:
             if (
@@ -227,6 +235,7 @@ class PostGet:
 
     @staticmethod
     def single_value_fetch_without_unicity_validation(store, k, cursor):
+        """Return the first doc in ``cursor``; raise only if there's none (no uniqueness check)."""
         doc = next(cursor, None)
         if doc is not None:
             # return PersistentDict(store, doc)
@@ -246,13 +255,21 @@ class PostGet:
 
 
 class ObjOfData:
+    """``obj_of_data`` (value-only) transform functions for ``wrap_kvs``."""
+
     @staticmethod
     def all_docs_fetch(cursor, doc_collector=list):
+        """Collect every doc in ``cursor`` into ``doc_collector`` (default: a list).
+
+        The value-only (``obj_of_data``) counterpart of :meth:`PostGet.all_docs_fetch`.
+        """
         # return doc_collector(map(lambda x: PersistentDict(x), cursor))
         return doc_collector(cursor)
 
 
 class WriteOpResult(TypedDict):
+    """The shape of a normalized mongo write-operation result (see ``normalize_result``)."""
+
     ok: bool
     n: int
     ids: Iterable[str] | None
@@ -274,7 +291,6 @@ def normalize_result(obj, *, method_names_to_normalize=DFLT_METHOD_NAMES_TO_NORM
     :param func: [description]
     :type func: [type]
     """
-
     if not isinstance(obj, type):
         assert callable(obj), f"Should be callable: {obj}"
         func = obj
@@ -331,12 +347,16 @@ from operator import itemgetter
 
 
 def _vector_to_dict(vector: Iterable, fields: Iterable[str]):
-    """Note: meant to be used with functools.partial(_vector_to_dict, fields=fields)"""
+    """Zip ``fields`` and ``vector`` into a dict; meant to be used with
+    ``functools.partial(_vector_to_dict, fields=fields)``.
+    """
     return {k: v for k, v in zip(fields, vector)}
 
 
 def _string_to_dict(value, field: str):
-    """Note: meant to be used with functools.partial(_string_to_dict, field=field)"""
+    """Wrap ``value`` as ``{field: value}``; meant to be used with
+    ``functools.partial(_string_to_dict, field=field)``.
+    """
     return {field: value}
 
 
@@ -361,11 +381,11 @@ def set_key_and_data_fields(
 
     This is to make it easier to get from an interface like this
 
-    :code: `store[{'folder': 'path', 'file': 'name'}] = {'field1': 'value1', 'field2': 'value2'}`
+    ``store[{'folder': 'path', 'file': 'name'}] = {'field1': 'value1', 'field2': 'value2'}``
 
     to an interface like this:
 
-    :code: `store['path', 'name'] = ('value1', 'value2')`
+    ``store['path', 'name'] = ('value1', 'value2')``
 
     """
     id_of_key, key_of_id, obj_of_data, data_of_obj = None, None, None, None

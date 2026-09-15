@@ -36,9 +36,9 @@ Simple use is invisible: build a mongo store, wrap it however you like, and
 ``values()``/``items()`` agree with ``__getitem__``. The knobs, for store authors:
 
 - Implement the bulk-read methods to *provide* the fast path.
-- Set the :data:`BULK_READ_IS_FAITHFUL_ATTR` class attribute to ``False`` (see
-  :func:`disable_bulk_read`) when a class inherits bulk-read methods that no
-  longer agree with its own ``__getitem__``.
+- Set the :data:`BULK_READ_IS_FAITHFUL_ATTR` class attribute to ``False``
+  (see :func:`disable_bulk_read`) when a class inherits bulk-read methods
+  that no longer agree with its own ``__getitem__``.
 
 Known limitation. :class:`~mongodol.base.MongoCollectionReader` is deliberately a
 *cursor*-level store: ``s[k]`` is a pymongo ``Cursor``, while its bulk stream
@@ -316,7 +316,8 @@ def disable_bulk_read(store_cls: type) -> type:
 
 class MongoValuesView(BaseValuesView):
     """A ``values()`` view that uses the backend's bulk read when -- and only when --
-    that stream provably equals ``(store[k] for k in store)``."""
+    that stream provably equals ``(store[k] for k in store)``.
+    """
 
     def __iter__(self):
         try:
@@ -333,7 +334,8 @@ class MongoValuesView(BaseValuesView):
 
 class MongoItemsView(BaseItemsView):
     """An ``items()`` view that uses the backend's bulk read when -- and only when --
-    that stream provably equals ``((k, store[k]) for k in store)``."""
+    that stream provably equals ``((k, store[k]) for k in store)``.
+    """
 
     def __iter__(self):
         try:

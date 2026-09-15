@@ -13,6 +13,8 @@ from mongodol.utils.werk_local import LocalProxy
 
 
 def track_calls_of_method(method: Callable, execute_call=True, tracks_factory=list):
+    """Wrap ``method`` so every call is appended to ``self._tracks``, and (if ``execute_call``) also run."""
+
     @wraps(method)
     def tracked_method(self, *args, **kwargs):
         try:
@@ -29,6 +31,8 @@ def track_calls_of_method(method: Callable, execute_call=True, tracks_factory=li
 
 
 def track_calls_without_executing(method: Callable):
+    """Wrap ``method`` so every call is appended to ``self._tracks``, but never actually run."""
+
     @wraps(method)
     def tracked_method(self, *args, **kwargs):
         self._tracks.append((method, args, kwargs))
@@ -37,6 +41,8 @@ def track_calls_without_executing(method: Callable):
 
 
 def forward_method_calls(method):
+    """Wrap ``method`` so calls on ``self`` are forwarded to ``self._instance`` instead."""
+
     @wraps(method)
     def forwarded_method(self, *args, **kwargs):
         return method(self._instance, *args, **kwargs)
@@ -77,11 +83,13 @@ class TrackableMixin:
 
     # commit_execution
     def flush(self):
+        """Execute all pending tracked calls, clear the tracks, and return the call results."""
         call_results = self._execute_tracks()
         self.clear_tracks()
         return call_results
 
     def clear_tracks(self):
+        """Discard all pending tracked calls without executing them."""
         self._tracks.clear()
 
 
@@ -161,6 +169,7 @@ def track_method_calls(
     >>> assert str(d._tracks) == "[(<slot wrapper '__setitem__' of 'dict' objects>, ('a', 42), {})]"
 
     To execute the command in _tracks, you can use the ``.flush()`` method
+
     >>> _ = d.flush()
     >>> # See that the setitem call was indeed made
     >>> assert d['a'] == 42
@@ -242,6 +251,7 @@ def add_tracked_methods(
 
 
 def consume(gen):
+    """Exhaust an iterable/generator ``gen`` for its side effects, discarding all values."""
     for _ in gen:
         pass
 

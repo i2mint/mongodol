@@ -28,6 +28,8 @@ from mongodol.views import (
 # TODO: mgc type annotation
 #  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
+    """Base class wrapping a mongo collection with a fixed ``filter`` and ``iter_projection``."""
+
     def __init__(
         self,
         mgc: PyMongoCollectionSpec | DolCollection = None,
@@ -41,9 +43,7 @@ class MongoCollectionCollection(DolCollection):
         self._mgc_find_kwargs = mgc_find_kwargs
 
     def _merge_with_filt(self, m: Mapping) -> dict:
-        """
-
-        :param args: dictionaries that are valid mongo queries
+        """:param args: dictionaries that are valid mongo queries
         :return:
 
         >>> class Mock(MongoCollectionCollection):
@@ -83,6 +83,7 @@ class MongoCollectionCollection(DolCollection):
 
     @cached_property
     def mgc_repr(self):
+        """A short ``<database/collection>`` string identifying the wrapped mongo collection."""
         return f"<{self.mgc.database.name}/{self.mgc.name}>"
 
     def __repr__(self):
@@ -122,7 +123,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     that is really meant to be wrapped in order to produce the actual key-value interfaces one needs.
     You shouldn't think of it's instances as a normal dict where any request for the value under a key,
     for a key that doesn't exist, will result in a ``KeyError``.
-    Note that this means that `s.get(k, default)` will never result in the default being returned,
+    Note that this means that ``s.get(k, default)`` will never result in the default being returned,
     since there are no missing keys here; only empty results (cursors that don't yield anything).
 
     >>> v = s.get(fake_key, {'the': 'default'})
@@ -200,12 +201,14 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         )
 
     def contains_value(self, v):
+        """Bulk-read counterpart of ``__contains__`` for values: is there a doc matching ``v``?"""
         cursor = self.mgc.find(
             filter=self._merge_with_filt(v), projection=(), **self._mgc_find_kwargs
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def iter_values(self):
+        """Bulk-read all values in a single ``find`` query (see the module's bulk-read protocol)."""
         return self.mgc.find(
             filter=self.filter,
             projection=self._getitem_projection,
@@ -213,6 +216,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         )
 
     def contains_item(self, item):
+        """Bulk-read counterpart of ``__contains__`` for ``(key, value)`` pairs."""
         k, v = item
         # TODO: How do we have cursor return no data (here still has _id)
         cursor = self.mgc.find(
@@ -223,6 +227,9 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def iter_items(self):
+        """Bulk-read all ``(key, value)`` pairs in a single ``find`` query, splitting each doc into
+        its key fields and the rest.
+        """
         cursor = self.mgc.find(
             filter=self.filter,
             projection=self._items_projection,
@@ -248,6 +255,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     @cached_property
     def key_fields(self):
+        """The field names (from ``iter_projection``) that make up a key."""
         _iter_projection = normalize_projection(self._iter_projection)
         return tuple(
             field for field in _iter_projection if _iter_projection[field] is True
@@ -255,6 +263,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
 
     @cached_property
     def val_fields(self):
+        """The field names (from ``getitem_projection``) that make up a value, or None if unset."""
         if self._getitem_projection is None:
             return None
         else:
@@ -276,6 +285,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         getitem_projection: ProjectionSpec = None,
         **mgc_find_kwargs,
     ):
+        """Make an instance from db/collection names and connection params, instead of a live mongo collection object."""
         if mongo_client is None:
             mongo_client = MongoClient()
         elif isinstance(mongo_client, dict):
@@ -290,6 +300,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         )
 
     def distinct(self, key, filter=None, **kwargs):
+        """The distinct values of ``key`` across docs matching ``filter`` (merged with this store's own filter)."""
         # TODO: Check if this is correct (what about $ cases?): filter=m._merge_with_filt(filter)
         return self.mgc.distinct(
             key, filter=self._merge_with_filt(filter or {}), **kwargs
@@ -298,6 +309,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     unique = distinct
 
     def aggregate(self, pipeline, **kwargs):
+        """Run a mongo aggregation ``pipeline``, prefixed with a ``$match`` on this store's filter."""
         _pipeline = pipeline.copy()
         _pipeline.insert(0, {"$match": self.filter})
         return self.mgc.aggregate(_pipeline, **kwargs)
@@ -430,12 +442,14 @@ class MongoCollectionPersister(MongoCollectionReader):
             raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
+        """Insert a single doc ``v``, merged with ``on_write_filter`` if set, else this store's filter."""
         assert isinstance(v, Mapping), (
             f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
         )
         return self.mgc.insert_one(self._build_doc(v))
 
     def extend(self, values):
+        """Insert several docs ``values``, each merged with ``on_write_filter`` if set, else this store's filter."""
         assert all([isinstance(v, Mapping) for v in values]), (
             f" values must be mappings (often dictionaries)"
         )
@@ -471,6 +485,7 @@ class MongoCollectionPersister(MongoCollectionReader):
         return doc
 
     def persist_data(self, data):
+        """Write ``data`` (a doc with an ``_id``) under the key ``{ID: data[ID]}``."""
         return self.__setitem__({ID: data[ID]}, data)
 
 
@@ -486,6 +501,23 @@ class MongoCollectionPersister(MongoCollectionReader):
 
 
 class MongoClientReader(KvReader):
+    """A ``Mapping`` view of a mongo client. Keys are database names, values are
+    ``MongoDbReader`` instances for the corresponding database.
+
+    Takes the same arguments as ``pymongo.MongoClient``.
+
+    >>> from mongodol.base import MongoClientReader, MongoDbReader
+    >>> from mongodol.util import mk_dflt_mgc
+    >>> _ = mk_dflt_mgc().insert_one({'x': 1})  # ensure the default db/collection exist
+    >>> client_reader = MongoClientReader()
+    >>> 'mongodol' in client_reader
+    True
+    >>> db_reader = client_reader['mongodol']
+    >>> isinstance(db_reader, MongoDbReader)
+    True
+
+    """
+
     @wraps(MongoClient.__init__)
     def __init__(self, *mongo_client_args, **mongo_client_kwargs):
         self._mongo_client = MongoClient(*mongo_client_args, **mongo_client_kwargs)
@@ -500,6 +532,26 @@ class MongoClientReader(KvReader):
 
 
 class MongoDbReader(KvReader):
+    """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
+
+    :param db_name: Name of db
+    :param mk_collection_store: Function that is called on a key (collection name) to make the
+        collection store instance.
+        Use mk_collection_store to define what kind of collection stores you want to make.
+        Will be called with only one unnamed argument; the collection name.
+        Use custom classes here, and/or partials (curried functions) thereof, to fix any parameters you want to fix.
+    :param mongo_client: MongoClient instance, kwargs to make it (``MongoClient(**kwargs)``), or callable to make it
+    :param mongo_client_kwargs: ``**kwargs`` to make a MongoClient, that is used if mongo_client is callable
+
+    >>> from mongodol.base import MongoDbReader
+    >>> from mongodol.util import mk_dflt_mgc
+    >>> _ = mk_dflt_mgc().insert_one({'x': 1})  # ensure the default db/collection exist
+    >>> db_reader = MongoDbReader()
+    >>> 'mongodol_test' in db_reader
+    True
+
+    """
+
     def __init__(
         self,
         db_name=DFLT_TEST_DB,
@@ -507,17 +559,6 @@ class MongoDbReader(KvReader):
         mongo_client=None,
         **mongo_client_kwargs,
     ):
-        """Base Mongo Db Reader. Keys are collection names and values are collection store instances.
-
-        :param db_name: Name of db
-        :param mk_collection_store: Function that is called on a key (collection name) to make the
-            collection store instance.
-            Use mk_collection_store to define what kind of collection stores you want to make.
-            Will be called with only one unnamed argument; the collection name.
-            Use custom classes here, and/or partials (curried functions) thereof, to fix any parameters you want to fix.
-        :param mongo_client: MongoClient instance, kwargs to make it (MongoClient(**kwargs)), or callable to make it
-        :param mongo_client_kwargs: **kwargs to make a MongoClient, that is used if mongo_client is callable
-        """
         if mongo_client is None:
             self._mongo_client = MongoClient(**mongo_client_kwargs)
         elif isinstance(mongo_client, dict):
@@ -547,23 +588,29 @@ class MongoBaseStore(Store):
     """
 
     def contains_value(self, v):
+        """Forward ``contains_value`` to the wrapped store, transforming ``v`` first."""
         return self.store.contains_value(self._data_of_obj(v))
 
     def iter_values(self):
+        """Bulk-read all values, transforming each with ``_obj_of_data``."""
         return map(self._obj_of_data, bulk_values(self.store))
 
     def contains_item(self, item):
+        """Forward ``contains_item`` to the wrapped store, transforming key and value first."""
         k, v = item
         return self.store.contains_item((self._id_of_key(k), self._data_of_obj(v)))
 
     def iter_items(self):
+        """Bulk-read all ``(key, value)`` pairs, transforming each with ``_key_of_id``/``_obj_of_data``."""
         return (
             (self._key_of_id(key), self._obj_of_data(doc))
             for key, doc in bulk_items(self.store)
         )
 
     def append(self, v):
+        """Forward ``append`` to the wrapped store, transforming ``v`` first."""
         return self.store.append(self._data_of_obj(v))
 
     def extend(self, values):
+        """Forward ``extend`` to the wrapped store, transforming each value first."""
         return self.store.extend(list(map(self._data_of_obj, values)))
