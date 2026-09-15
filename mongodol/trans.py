@@ -35,8 +35,7 @@ from mongodol.util import KeyNotUniqueError
 
 
 class PersistentObjectBase(ABC):
-    """Base class to propagate a modification event through a parent-child chain structure.
-    """
+    """Base class to propagate a modification event through a parent-child chain structure."""
 
     def __init__(self, container):
         self._container = container
