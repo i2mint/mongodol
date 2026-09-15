@@ -1,5 +1,4 @@
-"""
-Vendored from werkzeug's local.py module, edited to our needs.
+"""Vendored from werkzeug's local.py module, edited to our needs.
 That single need is have a LocalProxy to subclass in making TrackedObj (see tracking_methods.py).
 """
 

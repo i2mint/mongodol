@@ -20,10 +20,20 @@ from mongodol.constants import (
 
 
 def mk_dflt_client():
+    """Make a ``pymongo.MongoClient`` with the default client args."""
     return MongoClient(*DFLT_MONGO_CLIENT_ARGS)
 
 
 def mk_dflt_mgc():
+    """Make a default ``pymongo.collection.Collection``, connecting with default
+    client args to the default test database and collection.
+
+    >>> from mongodol.util import mk_dflt_mgc
+    >>> c = mk_dflt_mgc()
+    >>> c.name, c.database.name
+    ('mongodol_test', 'mongodol')
+
+    """
     return MongoClient(*DFLT_MONGO_CLIENT_ARGS)[DFLT_TEST_DB][DFLT_TEST_COLLECTION]
 
 
@@ -32,6 +42,7 @@ class KeyNotUniqueError(RuntimeError):
 
     @staticmethod
     def raise_error(k):
+        """Raise ``KeyNotUniqueError`` for the non-unique key ``k``."""
         raise KeyNotUniqueError(
             f"Key was not unique (i.e. cursor has more than one match): {k}"
         )
@@ -42,6 +53,9 @@ ProjectionSpec = Union[ProjectionDict, Iterable[str], None]
 
 
 def get_key_value_specs(key_fields, data_fields):
+    """Derive normalized ``(key_fields, data_fields, key_projection, items_projection)`` from
+    the given key/data field specs, for building fixed-fields readers/persisters.
+    """
     if isinstance(key_fields, str):
         key_fields = (key_fields,)
     if data_fields is None:
@@ -65,8 +79,7 @@ def get_key_value_specs(key_fields, data_fields):
 
 
 def flatten_dict_items(d: Mapping, prefix=""):
-    """
-    Computes a "flat" dict from a nested one. A flat dict's keys are the dot-paths of the input dict.
+    """Computes a "flat" dict from a nested one. A flat dict's keys are the dot-paths of the input dict.
 
     :param d: a nested dict
     :param prefix: A string to prepend on all the paths
@@ -155,7 +168,7 @@ def projection_union(
     projection_2: ProjectionDict,
     already_flattened=False,
 ):
-    """
+    """Flatten and merge two mongo projection dicts, OR-ing shared fields.
 
     >>> d = {'a': {
     ...         'a': True,
@@ -179,12 +192,27 @@ def projection_union(
 def get_mongo_collection_pymongo_obj(obj=None, client_factory=mk_dflt_client):
     """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
 
-    ```
-    get_mongo_collection_pymongo_obj()  # gives you a default mongo collection ({DFLT_TEST_DB}/test)
-    get_mongo_collection_pymongo_obj('database_name/collection_name')  # does the obvious (with default host)
-    get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute
-    get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it
-    ```
+    .. code-block:: text
+
+        get_mongo_collection_pymongo_obj()  # gives you a default mongo collection (mongodol/mongodol_test)
+        get_mongo_collection_pymongo_obj('database_name/collection_name')  # does the obvious (with default host)
+        get_mongo_collection_pymongo_obj(... an object that has an _mgc attribute...)  # return the _mgc attribute
+        get_mongo_collection_pymongo_obj(obj)  # else, asserts pymongo.collection.Collection and returns it
+
+    >>> from mongodol.util import get_mongo_collection_pymongo_obj
+    >>> c = get_mongo_collection_pymongo_obj()
+    >>> c.name, c.database.name
+    ('mongodol_test', 'mongodol')
+
+    An object with an ``_mgc`` attribute (such as a mongodol store) has that
+    attribute returned directly:
+
+    >>> from mongodol.tests import util
+    >>> mgc = util.populated_pymongo_collection([])
+    >>> store = type('Store', (), {'_mgc': mgc})()
+    >>> get_mongo_collection_pymongo_obj(store) is mgc
+    True
+
     """
     if obj is None:
         obj = mk_dflt_mgc()

@@ -39,6 +39,7 @@ def get_test_collection_persister(
     *,
     iter_projection=(ID,),
 ):
+    """Make a ``MongoCollectionPersister`` on the (default) test collection, for use in tests and examples."""
     mgc = get_test_collection_object(mongo_client_args, db_name, collection_name)
     return MongoCollectionPersister(mgc, iter_projection=iter_projection)
 
