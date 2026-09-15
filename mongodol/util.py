@@ -53,8 +53,11 @@ ProjectionSpec = Union[ProjectionDict, Iterable[str], None]
 
 
 def get_key_value_specs(key_fields, data_fields):
-    """Derive normalized ``(key_fields, data_fields, key_projection, items_projection)`` from
-    the given key/data field specs, for building fixed-fields readers/persisters.
+    """Derive ``key_projection`` (and, when ``data_fields`` is None or a non-dict iterable,
+    ``items_projection``) from ``key_fields``/``data_fields``.
+
+    Note: when ``data_fields`` is already a dict, ``items_projection`` is never assigned,
+    so this branch raises ``UnboundLocalError`` on the ``return`` below.
     """
     if isinstance(key_fields, str):
         key_fields = (key_fields,)
@@ -168,7 +171,9 @@ def projection_union(
     projection_2: ProjectionDict,
     already_flattened=False,
 ):
-    """Flatten and merge two mongo projection dicts, OR-ing shared fields.
+    """Flatten and merge two mongo projection dicts, OR-ing every field against a forced
+    default of ``True`` -- so a field appearing in only one of the two dicts (or with a
+    ``False`` value) still comes out ``True`` unless both dicts agree it's ``False``.
 
     >>> d = {'a': {
     ...         'a': True,

@@ -33,6 +33,7 @@ from mongodol import MongoCollectionPersister, mk_dflt_mgc
 
 # mk_dflt_mgc() gives you a pymongo collection to play with (mongodol/mongodol_test by default)
 mgc = mk_dflt_mgc()
+mgc.delete_many({})  # start from an empty collection (skip this to keep what's already there)
 s = MongoCollectionPersister(mgc, getitem_projection={'_id': False})
 
 len(s)

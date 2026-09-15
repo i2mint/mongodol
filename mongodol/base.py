@@ -442,14 +442,14 @@ class MongoCollectionPersister(MongoCollectionReader):
             raise KeyError(f"You can't remove that key: {k}")
 
     def append(self, v):
-        """Insert a single doc ``v``, merged with this store's filter."""
+        """Insert a single doc ``v``, merged with ``on_write_filter`` if set, else this store's filter."""
         assert isinstance(v, Mapping), (
             f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
         )
         return self.mgc.insert_one(self._build_doc(v))
 
     def extend(self, values):
-        """Insert several docs ``values``, each merged with this store's filter."""
+        """Insert several docs ``values``, each merged with ``on_write_filter`` if set, else this store's filter."""
         assert all([isinstance(v, Mapping) for v in values]), (
             f" values must be mappings (often dictionaries)"
         )
