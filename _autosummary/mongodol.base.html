@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="mongodol.base.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+    <title>mongodol.base &#8212; mongodol</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=50f4acfb" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=59fadc99"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/mongodol.base';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mongodol.constants" href="mongodol.constants.html" />
+    <link rel="prev" title="mongodol.add_ons" href="mongodol.add_ons.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.5" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">mongodol</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="mongodol.html">mongodol</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mongodol.add_ons.html">mongodol.add_ons</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mongodol.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.constants.html">mongodol.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.errors.html">mongodol.errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.recipes.html">mongodol.recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.stores.html">mongodol.stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.tracking_methods.html">mongodol.tracking_methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.trans.html">mongodol.trans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.util.html">mongodol.util</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mongodol.utils.html">mongodol.utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="mongodol.utils.werk_local.html">mongodol.utils.werk_local</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="mongodol.views.html">mongodol.views</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="mongodol.html" class="nav-link">mongodol</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mongodol.base</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-mongodol.base">
+<span id="mongodol-base"></span><h1>mongodol.base<a class="headerlink" href="#module-mongodol.base" title="Link to this heading">#</a></h1>
+<p>Base mongoDB data object layers</p>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.base.MongoBaseStore" title="mongodol.base.MongoBaseStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoBaseStore</span></code></a>([store])</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">Store</span></code> that forwards the mongo bulk-read protocol through its transforms.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.base.MongoClientReader" title="mongodol.base.MongoClientReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a>([host, port, ...])</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">Mapping</span></code> view of a mongo client.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.base.MongoCollectionCollection" title="mongodol.base.MongoCollectionCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a>([mgc, filter, ...])</p></td>
+<td><p>Base class wrapping a mongo collection with a fixed <code class="docutils literal notranslate"><span class="pre">filter</span></code> and <code class="docutils literal notranslate"><span class="pre">iter_projection</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.base.MongoCollectionFieldsReader" title="mongodol.base.MongoCollectionFieldsReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a>([mgc, filter, ...])</p></td>
+<td><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.base.MongoCollectionPersister" title="mongodol.base.MongoCollectionPersister"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a>([mgc, filter, ...])</p></td>
+<td><p>base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a>([mgc, filter, ...])</p></td>
+<td><p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.base.MongoDbReader" title="mongodol.base.MongoDbReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a>([db_name, ...])</p></td>
+<td><p>Base Mongo Db Reader.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoBaseStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'dict'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Store</span></code> that forwards the mongo bulk-read protocol through its transforms.</p>
+<p>Historically this was the <em>only</em> way to get <code class="docutils literal notranslate"><span class="pre">values()</span></code>/<code class="docutils literal notranslate"><span class="pre">items()</span></code> to honour a
+wrapper’s transforms – hence <code class="docutils literal notranslate"><span class="pre">mongodol.trans.wrap_kvs</span></code>, which uses it as the
+wrapper class. It is no longer needed for that: <a class="reference internal" href="mongodol.views.html#module-mongodol.views" title="mongodol.views"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mongodol.views</span></code></a> resolves the
+bulk path through any wrapper chain, so plain <code class="docutils literal notranslate"><span class="pre">dol.wrap_kvs</span></code> now works too. It is
+kept because it also forwards the write-side bulk methods (<code class="docutils literal notranslate"><span class="pre">append</span></code>/<code class="docutils literal notranslate"><span class="pre">extend</span></code>),
+and because code may call <code class="docutils literal notranslate"><span class="pre">iter_values()</span></code>/<code class="docutils literal notranslate"><span class="pre">contains_value()</span></code> directly.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.append" title="Link to this definition">#</a></dt>
+<dd><p>Forward <code class="docutils literal notranslate"><span class="pre">append</span></code> to the wrapped store, transforming <code class="docutils literal notranslate"><span class="pre">v</span></code> first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.contains_item">
+<span class="sig-name descname"><span class="pre">contains_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.contains_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.contains_item" title="Link to this definition">#</a></dt>
+<dd><p>Forward <code class="docutils literal notranslate"><span class="pre">contains_item</span></code> to the wrapped store, transforming key and value first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.contains_value">
+<span class="sig-name descname"><span class="pre">contains_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.contains_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.contains_value" title="Link to this definition">#</a></dt>
+<dd><p>Forward <code class="docutils literal notranslate"><span class="pre">contains_value</span></code> to the wrapped store, transforming <code class="docutils literal notranslate"><span class="pre">v</span></code> first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.extend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.extend" title="Link to this definition">#</a></dt>
+<dd><p>Forward <code class="docutils literal notranslate"><span class="pre">extend</span></code> to the wrapped store, transforming each value first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.iter_items">
+<span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.iter_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.iter_items" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs, transforming each with <code class="docutils literal notranslate"><span class="pre">_key_of_id</span></code>/<code class="docutils literal notranslate"><span class="pre">_obj_of_data</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.iter_values">
+<span class="sig-name descname"><span class="pre">iter_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.iter_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.iter_values" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read all values, transforming each with <code class="docutils literal notranslate"><span class="pre">_obj_of_data</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoClientReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoClientReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'dict'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tz_aware</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoClientReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoClientReader" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">KvReader</span></code></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Mapping</span></code> view of a mongo client. Keys are database names, values are
+<code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code> instances for the corresponding database.</p>
+<p>Takes the same arguments as <code class="docutils literal notranslate"><span class="pre">pymongo.MongoClient</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClientReader</span><span class="p">,</span> <span class="n">MongoDbReader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_dflt_mgc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span><span class="o">.</span><span class="n">insert_one</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>  <span class="c1"># ensure the default db/collection exist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client_reader</span> <span class="o">=</span> <span class="n">MongoClientReader</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">'mongodol'</span> <span class="ow">in</span> <span class="n">client_reader</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db_reader</span> <span class="o">=</span> <span class="n">client_reader</span><span class="p">[</span><span class="s1">'mongodol'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">db_reader</span><span class="p">,</span> <span class="n">MongoDbReader</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionCollection">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionCollection" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></p>
+<p>Base class wrapping a mongo collection with a fixed <code class="docutils literal notranslate"><span class="pre">filter</span></code> and <code class="docutils literal notranslate"><span class="pre">iter_projection</span></code>.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionCollection.mgc_repr">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mgc_repr</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionCollection.mgc_repr" title="Link to this definition">#</a></dt>
+<dd><p>A short <code class="docutils literal notranslate"><span class="pre">&lt;database/collection&gt;</span></code> string identifying the wrapped mongo collection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionFieldsReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionFieldsReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionFieldsReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionFieldsReader" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></p>
+<p>A base class to read from a mongo collection, or subset thereof, with the Mapping (i.e. dict-like) interface.</p>
+<p>An “easier” interface for the common case where we just want to specify fixed fields for keys and vals.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_write_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></p>
+<p>base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_dflt_mgc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mongo_collection_obj</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mongo_collection_obj</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in default collection</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="s1">'foo'</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'val'</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># see that key is not in store (and testing __contains__)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">[{'_id': 'foo'}]</span>
+</pre></div>
+</div>
+<p>Since this is a base mongo store, the values are cursors, so to get an actual value, you need to fetch the first doc</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="go">{'val': 'bar'}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="go">{'val': 'bar'}</span>
+</pre></div>
+</div>
+<p>Remember (see <code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code> docs) that <code class="docutils literal notranslate"><span class="pre">s.get</span></code> will never reach its default since
+the reader will always return a cursor (possibly empty).
+So in the following case, we should get an empty cursor (not a default value)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">({</span><span class="s1">'not'</span><span class="p">:</span> <span class="s1">'a key'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'default'</span><span class="p">:</span> <span class="s1">'val'</span><span class="p">}))</span>  <span class="c1"># testing s.get with default</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">[{'val': 'bar'}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span>  <span class="c1"># testing __contains__ again</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>  <span class="c1"># test the contains capability of s.keys() (a MongoKeysView instance)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Making a persister whose keys are 2-dimensional and values are 3-dimensional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalize_projection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mongo_collection_obj</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">iter_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">'first'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+<span class="gp">... </span>                    <span class="n">getitem_projection</span><span class="o">=</span><span class="n">normalize_projection</span><span class="p">((</span><span class="s1">'yob'</span><span class="p">,</span> <span class="s1">'proj'</span><span class="p">,</span> <span class="s1">'bdfl'</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># deleting all docs in tmp</span>
+<span class="gp">... </span>    <span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">_id</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># writing two items</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">'first'</span><span class="p">:</span> <span class="s1">'Guido'</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">:</span> <span class="s1">'van Rossum'</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'yob'</span><span class="p">:</span> <span class="mi">1956</span><span class="p">,</span> <span class="s1">'proj'</span><span class="p">:</span> <span class="s1">'python'</span><span class="p">,</span> <span class="s1">'bdfl'</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[{</span><span class="s1">'first'</span><span class="p">:</span> <span class="s1">'Vitalik'</span><span class="p">,</span> <span class="s1">'last'</span><span class="p">:</span> <span class="s1">'Buterin'</span><span class="p">}]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'yob'</span><span class="p">:</span> <span class="mi">1994</span><span class="p">,</span> <span class="s1">'proj'</span><span class="p">:</span> <span class="s1">'ethereum'</span><span class="p">,</span> <span class="s1">'bdfl'</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Seeing that those two items are there</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="go">{'first': 'Guido', 'last': 'van Rossum'} --&gt; {'yob': 1956, 'proj': 'python', 'bdfl': False}</span>
+<span class="go">{'first': 'Vitalik', 'last': 'Buterin'} --&gt; {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister.append" title="Link to this definition">#</a></dt>
+<dd><p>Insert a single doc <code class="docutils literal notranslate"><span class="pre">v</span></code>, merged with <code class="docutils literal notranslate"><span class="pre">on_write_filter</span></code> if set, else this store’s filter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister.extend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister.extend" title="Link to this definition">#</a></dt>
+<dd><p>Insert several docs <code class="docutils literal notranslate"><span class="pre">values</span></code>, each merged with <code class="docutils literal notranslate"><span class="pre">on_write_filter</span></code> if set, else this store’s filter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister.persist_data">
+<span class="sig-name descname"><span class="pre">persist_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister.persist_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister.persist_data" title="Link to this definition">#</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">data</span></code> (a doc with an <code class="docutils literal notranslate"><span class="pre">_id</span></code>) under the key <code class="docutils literal notranslate"><span class="pre">{ID:</span> <span class="pre">data[ID]}</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mongodol.base.MongoCollectionCollection" title="mongodol.base.MongoCollectionCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">KvReader</span></code></p>
+<p>A base class to read from a mongo collection, or subset thereof, with the Mapping
+(i.e. dict-like) interface.</p>
+<p>Some examples below. For examples using actual data (with setup and tear down)
+see the tests/ folder.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionReader</span><span class="p">(</span><span class="n">MongoClient</span><span class="p">()[</span><span class="s1">'mongodol'</span><span class="p">][</span><span class="s1">'mongodol_test'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_of_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="s1">'this key does not exist'</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="ow">in</span> <span class="n">s</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>It’s important to note that <code class="docutils literal notranslate"><span class="pre">s[k]</span></code> (for any base MongoCollectionReader instance <code class="docutils literal notranslate"><span class="pre">s</span></code>) returns a Cursor,
+and will always return a Cursor, no matter what key <code class="docutils literal notranslate"><span class="pre">k</span></code> you ask for
+– as long as the key is a valid mapping (dict usually).
+This cursor is a (pymongo) object that is used to iterate over the results of the <code class="docutils literal notranslate"><span class="pre">k</span></code> lookup.
+It may yield no results what-so-ever, or one, or many.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">fake_key</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="go">'Cursor'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>  <span class="c1"># but the cursor yields no results</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<p>Indeed, <code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code> is really meant to provide a low level key-value interface to a mongo collection
+that is really meant to be wrapped in order to produce the actual key-value interfaces one needs.
+You shouldn’t think of it’s instances as a normal dict where any request for the value under a key,
+for a key that doesn’t exist, will result in a <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.
+Note that this means that <code class="docutils literal notranslate"><span class="pre">s.get(k,</span> <span class="pre">default)</span></code> will never result in the default being returned,
+since there are no missing keys here; only empty results (cursors that don’t yield anything).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="p">{</span><span class="s1">'the'</span><span class="p">:</span> <span class="s1">'default'</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">v</span> <span class="o">!=</span> <span class="p">{</span><span class="s1">'the'</span><span class="p">:</span> <span class="s1">'default'</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">s.keys()</span></code>, <code class="docutils literal notranslate"><span class="pre">s.values()</span></code>, and <code class="docutils literal notranslate"><span class="pre">s.items()</span></code> are <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> instances
+(specialized for mongo – see <a class="reference internal" href="mongodol.views.html#module-mongodol.views" title="mongodol.views"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mongodol.views</span></code></a>: they fetch the whole collection in
+a single query, and keep doing so, correctly, when the store is wrapped by <code class="docutils literal notranslate"><span class="pre">dol</span></code>).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">KeysView</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">ValuesView</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">ItemsView</span>
+</pre></div>
+</div>
+<p>Recall that <code class="docutils literal notranslate"><span class="pre">collections.abc.MappingViews</span></code> have many set-like functionalities:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fake_key</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_list_of_fake_keys</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="s1">'fake_key'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="s1">'yet_another'</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">a_list_of_fake_keys</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">a_list_of_fake_keys</span>
+<span class="go">set()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'data'</span><span class="p">:</span> <span class="s2">"this does not exist"</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_value</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="o">=</span> <span class="p">(</span><span class="n">fake_key</span><span class="p">,</span> <span class="n">fake_value</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fake_item</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Note though that since keys and values are both dictionaries in mongo, some of these set-like functionalities
+might not work (complaints such as <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">unhashable</span> <span class="pre">type:</span> <span class="pre">'dict'</span></code>),
+such as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">|</span> <span class="n">a_list_of_fake_keys</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="gr">TypeError</span>: <span class="n">unhashable type: 'dict'</span>
+</pre></div>
+</div>
+<p>But you can take care of that in higher level wrappers that have hashable keys and/or values.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.ItemsView">
+<span class="sig-name descname"><span class="pre">ItemsView</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionReader.ItemsView" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="mongodol.views.html#mongodol.views.MongoItemsView" title="mongodol.views.MongoItemsView"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.ValuesView">
+<span class="sig-name descname"><span class="pre">ValuesView</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionReader.ValuesView" title="Link to this definition">#</a></dt>
+<dd><p>Views that resolve the bulk-read fast path through any <code class="docutils literal notranslate"><span class="pre">dol</span></code> wrapper chain,
+rather than through blind attribute delegation. See <a class="reference internal" href="mongodol.views.html#module-mongodol.views" title="mongodol.views"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mongodol.views</span></code></a>.</p>
+<p>alias of <a class="reference internal" href="mongodol.views.html#mongodol.views.MongoValuesView" title="mongodol.views.MongoValuesView"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoValuesView</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.aggregate" title="Link to this definition">#</a></dt>
+<dd><p>Run a mongo aggregation <code class="docutils literal notranslate"><span class="pre">pipeline</span></code>, prefixed with a <code class="docutils literal notranslate"><span class="pre">$match</span></code> on this store’s filter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.contains_item">
+<span class="sig-name descname"><span class="pre">contains_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.contains_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.contains_item" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read counterpart of <code class="docutils literal notranslate"><span class="pre">__contains__</span></code> for <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.contains_value">
+<span class="sig-name descname"><span class="pre">contains_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.contains_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.contains_value" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read counterpart of <code class="docutils literal notranslate"><span class="pre">__contains__</span></code> for values: is there a doc matching <code class="docutils literal notranslate"><span class="pre">v</span></code>?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.distinct">
+<span class="sig-name descname"><span class="pre">distinct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.distinct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.distinct" title="Link to this definition">#</a></dt>
+<dd><p>The distinct values of <code class="docutils literal notranslate"><span class="pre">key</span></code> across docs matching <code class="docutils literal notranslate"><span class="pre">filter</span></code> (merged with this store’s own filter).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.from_params">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mongodol'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mongo_client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.from_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.from_params" title="Link to this definition">#</a></dt>
+<dd><p>Make an instance from db/collection names and connection params, instead of a live mongo collection object.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.iter_items">
+<span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.iter_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.iter_items" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
+its key fields and the rest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.iter_values">
+<span class="sig-name descname"><span class="pre">iter_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionReader.iter_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionReader.iter_values" title="Link to this definition">#</a></dt>
+<dd><p>Bulk-read all values in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query (see the module’s bulk-read protocol).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.key_fields">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">key_fields</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionReader.key_fields" title="Link to this definition">#</a></dt>
+<dd><p>The field names (from <code class="docutils literal notranslate"><span class="pre">iter_projection</span></code>) that make up a key.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.unique">
+<span class="sig-name descname"><span class="pre">unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.base.MongoCollectionReader.unique" title="Link to this definition">#</a></dt>
+<dd><p>The distinct values of <code class="docutils literal notranslate"><span class="pre">key</span></code> across docs matching <code class="docutils literal notranslate"><span class="pre">filter</span></code> (merged with this store’s own filter).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionReader.val_fields">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">val_fields</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionReader.val_fields" title="Link to this definition">#</a></dt>
+<dd><p>The field names (from <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code>) that make up a value, or None if unset.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mongodol.base.MongoDbReader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoDbReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mongodol'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mk_collection_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'mongodol.base.MongoCollectionReader'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mongo_client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**mongo_client_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoDbReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoDbReader" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">KvReader</span></code></p>
+<p>Base Mongo Db Reader. Keys are collection names and values are collection store instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_name</strong> – Name of db</p></li>
+<li><p><strong>mk_collection_store</strong> – Function that is called on a key (collection name) to make the
+collection store instance.
+Use mk_collection_store to define what kind of collection stores you want to make.
+Will be called with only one unnamed argument; the collection name.
+Use custom classes here, and/or partials (curried functions) thereof, to fix any parameters you want to fix.</p></li>
+<li><p><strong>mongo_client</strong> – MongoClient instance, kwargs to make it (<code class="docutils literal notranslate"><span class="pre">MongoClient(**kwargs)</span></code>), or callable to make it</p></li>
+<li><p><strong>mongo_client_kwargs</strong> – <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> to make a MongoClient, that is used if mongo_client is callable</p></li>
+</ul>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoDbReader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_dflt_mgc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span><span class="o">.</span><span class="n">insert_one</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>  <span class="c1"># ensure the default db/collection exist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db_reader</span> <span class="o">=</span> <span class="n">MongoDbReader</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">'mongodol_test'</span> <span class="ow">in</span> <span class="n">db_reader</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mongodol.add_ons.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mongodol.add_ons</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mongodol.constants.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">mongodol.constants</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.append"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.append()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.contains_item"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.contains_item()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.contains_value"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.contains_value()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.extend"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.extend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.iter_items"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.iter_items()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.iter_values"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.iter_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoClientReader"><code class="docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionCollection"><code class="docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionCollection.mgc_repr"><code class="docutils literal notranslate"><span class="pre">MongoCollectionCollection.mgc_repr</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionFieldsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.append"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.append()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.extend"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.extend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.persist_data"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.persist_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.ItemsView"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.ItemsView</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.ValuesView"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.ValuesView</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.aggregate"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.aggregate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.contains_item"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.contains_item()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.contains_value"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.contains_value()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.distinct"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.distinct()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.from_params"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.from_params()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.iter_items"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.iter_items()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.iter_values"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.iter_values()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.key_fields"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.key_fields</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.unique"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.unique()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionReader.val_fields"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader.val_fields</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoDbReader"><code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/_autosummary/mongodol.base.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

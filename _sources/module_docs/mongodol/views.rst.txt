@@ -1,4 +1,0 @@
-mongodol.views
-==============
-.. automodule:: mongodol.views
-   :members:

@@ -1,0 +1,23 @@
+﻿mongodol
+========
+
+.. automodule:: mongodol
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   add_ons
+   base
+   constants
+   errors
+   recipes
+   stores
+   tracking_methods
+   trans
+   util
+   utils
+   views

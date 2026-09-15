@@ -1,0 +1,31 @@
+# mongodol
+
+> MongoDB Data Object Layer
+
+
+## Pages
+
+- [mongodol](index.html.md): Access MongoDB through a `Mapping` (dict-like) interface.
+- [API reference](api.html.md): | [`mongodol`](_autosummary/mongodol.html.md#module-mongodol)   | Access mongo through a Mapping int...
+- [mongodol](_autosummary/mongodol.html.md): Access mongo through a Mapping interface
+- [mongodol.add_ons](_autosummary/mongodol.add_ons.html.md): [https://github.com/i2mint/mongodol/issues/3](https://github.com/i2mint/mongodol/issues/3)
+- [mongodol.base](_autosummary/mongodol.base.html.md): Base mongoDB data object layers
+- [mongodol.constants](_autosummary/mongodol.constants.html.md): Module to centralize constants used throughout project.
+- [mongodol.errors](_autosummary/mongodol.errors.html.md): Where mongodol error objects are
+- [mongodol.recipes](_autosummary/mongodol.recipes.html.md): Mongodol Recipes
+- [mongodol.stores](_autosummary/mongodol.stores.html.md): Some useful stores for mongoDB
+- [mongodol.tracking_methods](_autosummary/mongodol.tracking_methods.html.md): Tracking functionality
+- [mongodol.trans](_autosummary/mongodol.trans.html.md): Transformative functionality
+- [mongodol.util](_autosummary/mongodol.util.html.md): Util functions
+- [mongodol.utils](_autosummary/mongodol.utils.html.md): Util modules
+- [mongodol.utils.werk_local](_autosummary/mongodol.utils.werk_local.html.md): Vendored from werkzeug’s local.py module, edited to our needs.
+- [mongodol.views](_autosummary/mongodol.views.html.md): Mapping views that keep working when a mongo store is wrapped by `dol`.
+- [About this build](about-this-build.html.md): This documentation was built on **2026-09-15 13:34 UTC** from commit <a href="https://github.com/i2m...
+
+---
+
+For more comprehensive documentation, see [mongodol.md](mongodol.md)
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

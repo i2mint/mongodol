@@ -1,276 +1,487 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to mongodol’s documentation! &mdash; mongodol 0.1.4 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="index.html.md">
+<link rel="describedby" href="llms.txt" type="text/markdown">
+    <title>mongodol &#8212; mongodol</title>
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=fd825880"></script>
-      <script src="_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/js/theme.js"></script>
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/epythet.css?v=50f4acfb" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="_static/documentation_options.js?v=59fadc99"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=fd10adb8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="mongodol" href="module_docs/mongodol.html" /> 
-</head>
+    <link rel="next" title="API reference" href="api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.5" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-          
-          
-          <a href="#" class="icon icon-home">
-            mongodol
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol.html">mongodol</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/base.html">mongodol.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/constants.html">mongodol.constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/errors.html">mongodol.errors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/stores.html">mongodol.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests.html">mongodol.tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/trans.html">mongodol.trans</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/util.html">mongodol.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/utils.html">mongodol.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/views.html">mongodol.views</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">mongodol</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to mongodol’s documentation!</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">mongodol</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API reference
+  </a>
+</li>
+
   </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="welcome-to-mongodol-s-documentation">
-<h1>Welcome to mongodol’s documentation!<a class="headerlink" href="#welcome-to-mongodol-s-documentation" title="Link to this heading"></a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol.html">mongodol</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/add_ons.html">mongodol.add_ons</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/add_ons.html#mongodol.add_ons.Addons"><code class="docutils literal notranslate"><span class="pre">Addons</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/add_ons.html#mongodol.add_ons.add_clear_method"><code class="docutils literal notranslate"><span class="pre">add_clear_method()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/add_ons.html#mongodol.add_ons.has_exactly_one_non_defaulted_input"><code class="docutils literal notranslate"><span class="pre">has_exactly_one_non_defaulted_input()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/add_ons.html#mongodol.add_ons.number_of_non_defaulted_arguments"><code class="docutils literal notranslate"><span class="pre">number_of_non_defaulted_arguments()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/base.html">mongodol.base</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoBaseStore"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoClientReader"><code class="docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoCollectionCollection"><code class="docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoCollectionFieldsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/base.html#mongodol.base.MongoDbReader"><code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/constants.html">mongodol.constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/errors.html">mongodol.errors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/recipes.html">mongodol.recipes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/recipes.html#mongodol.recipes.WriteNotAllowedToThatKey"><code class="docutils literal notranslate"><span class="pre">WriteNotAllowedToThatKey</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/recipes.html#mongodol.recipes.disallow_sourced_interval_overlaps"><code class="docutils literal notranslate"><span class="pre">disallow_sourced_interval_overlaps()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.OldMongoInsertPersister"><code class="docutils literal notranslate"><span class="pre">OldMongoInsertPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/old01.html#mongodol.scrap.old01.OldMongoPersister"><code class="docutils literal notranslate"><span class="pre">OldMongoPersister</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoClientReader"><code class="docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoCollectionCollection"><code class="docutils literal notranslate"><span class="pre">MongoCollectionCollection</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoCollectionFieldsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoCollectionReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoDbReader"><code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/scrap/views_work.html#mongodol.scrap.views_work.SpecialKeysView"><code class="docutils literal notranslate"><span class="pre">SpecialKeysView</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/stores.html">mongodol.stores</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionFirstDocPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFirstDocPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionFirstDocReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFirstDocReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionMultipleDocsPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionMultipleDocsPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionMultipleDocsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionMultipleDocsReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionPersisterWithResultMapping"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersisterWithResultMapping</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionUniqueDocPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionUniqueDocPersister</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoCollectionUniqueDocReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionUniqueDocReader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/stores.html#mongodol.stores.MongoStore"><code class="docutils literal notranslate"><span class="pre">MongoStore</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests.html">mongodol.tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tests/base_test.html#mongodol.tests.base_test.test_mongo_collection_reader_without_test_data_dependencies"><code class="docutils literal notranslate"><span class="pre">test_mongo_collection_reader_without_test_data_dependencies()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/data.html">mongodol.tests.data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tests/data.html#mongodol.tests.data.mk_kvs_versions"><code class="docutils literal notranslate"><span class="pre">mk_kvs_versions()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/util.html">mongodol.tests.util</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tests/util.html#mongodol.tests.util.populated_pymongo_collection"><code class="docutils literal notranslate"><span class="pre">populated_pymongo_collection()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html#mongodol.tracking_methods.MongoBulkWritesMixin"><code class="docutils literal notranslate"><span class="pre">MongoBulkWritesMixin</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html#mongodol.tracking_methods.TrackableMixin"><code class="docutils literal notranslate"><span class="pre">TrackableMixin</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html#mongodol.tracking_methods.add_tracked_methods"><code class="docutils literal notranslate"><span class="pre">add_tracked_methods()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html#mongodol.tracking_methods.track_method_calls"><code class="docutils literal notranslate"><span class="pre">track_method_calls()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/tracking_methods.html#mongodol.tracking_methods.with_bulk_writes"><code class="docutils literal notranslate"><span class="pre">with_bulk_writes()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/trans.html">mongodol.trans</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.PersistentDict"><code class="docutils literal notranslate"><span class="pre">PersistentDict</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.PersistentList"><code class="docutils literal notranslate"><span class="pre">PersistentList</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.PersistentObjectBase"><code class="docutils literal notranslate"><span class="pre">PersistentObjectBase</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.WriteOpResult"><code class="docutils literal notranslate"><span class="pre">WriteOpResult</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.normalize_result"><code class="docutils literal notranslate"><span class="pre">normalize_result()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/trans.html#mongodol.trans.set_key_and_data_fields"><code class="docutils literal notranslate"><span class="pre">set_key_and_data_fields()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/util.html">mongodol.util</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/util.html#mongodol.util.KeyNotUniqueError"><code class="docutils literal notranslate"><span class="pre">KeyNotUniqueError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/util.html#mongodol.util.flatten_dict_items"><code class="docutils literal notranslate"><span class="pre">flatten_dict_items()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/util.html#mongodol.util.get_mongo_collection_pymongo_obj"><code class="docutils literal notranslate"><span class="pre">get_mongo_collection_pymongo_obj()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/util.html#mongodol.util.normalize_projection"><code class="docutils literal notranslate"><span class="pre">normalize_projection()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/util.html#mongodol.util.projection_union"><code class="docutils literal notranslate"><span class="pre">projection_union()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/utils.html">mongodol.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/utils/werk_local.html#mongodol.utils.werk_local.LocalProxy"><code class="docutils literal notranslate"><span class="pre">LocalProxy</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/mongodol/views.html">mongodol.views</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.BULK_READ_IS_FAITHFUL_ATTR"><code class="docutils literal notranslate"><span class="pre">BULK_READ_IS_FAITHFUL_ATTR</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.CONTAINS_ITEM_METHOD"><code class="docutils literal notranslate"><span class="pre">CONTAINS_ITEM_METHOD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.CONTAINS_VALUE_METHOD"><code class="docutils literal notranslate"><span class="pre">CONTAINS_VALUE_METHOD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.INNER_STORE_ATTR"><code class="docutils literal notranslate"><span class="pre">INNER_STORE_ATTR</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.ITER_ITEMS_METHOD"><code class="docutils literal notranslate"><span class="pre">ITER_ITEMS_METHOD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.ITER_VALUES_METHOD"><code class="docutils literal notranslate"><span class="pre">ITER_VALUES_METHOD</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.MongoItemsView"><code class="docutils literal notranslate"><span class="pre">MongoItemsView</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.MongoValuesView"><code class="docutils literal notranslate"><span class="pre">MongoValuesView</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.NoBulkReadPath"><code class="docutils literal notranslate"><span class="pre">NoBulkReadPath</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.bulk_contains_item"><code class="docutils literal notranslate"><span class="pre">bulk_contains_item()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.bulk_contains_value"><code class="docutils literal notranslate"><span class="pre">bulk_contains_value()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.bulk_items"><code class="docutils literal notranslate"><span class="pre">bulk_items()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.bulk_values"><code class="docutils literal notranslate"><span class="pre">bulk_values()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.disable_bulk_read"><code class="docutils literal notranslate"><span class="pre">disable_bulk_read()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.is_crossable"><code class="docutils literal notranslate"><span class="pre">is_crossable()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.provides_bulk_read"><code class="docutils literal notranslate"><span class="pre">provides_bulk_read()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.resolve_bulk_source"><code class="docutils literal notranslate"><span class="pre">resolve_bulk_source()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/mongodol/views.html#mongodol.views.store_layers"><code class="docutils literal notranslate"><span class="pre">store_layers()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-<p>Release: 0.1.4</p>
-<p>Last change: Aug 04, 2026</p>
-</section>
-
-
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="module_docs/mongodol.html" class="btn btn-neutral float-right" title="mongodol" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+</nav></div>
+      
     </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+      
+      
+        <div class="navbar-item">
 
-</body>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <!-- generated by epythet -->
+<section id="mongodol">
+<h1>mongodol<a class="headerlink" href="#mongodol" title="Link to this heading">#</a></h1>
+<p>Access MongoDB through a <code class="docutils literal notranslate"><span class="pre">Mapping</span></code> (dict-like) interface.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mongodol</span></code> wraps <code class="docutils literal notranslate"><span class="pre">pymongo</span></code> collections as <code class="docutils literal notranslate"><span class="pre">Mapping</span></code>/<code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> objects (readers and
+persisters), so you can read and write mongo data with normal <code class="docutils literal notranslate"><span class="pre">dict</span></code>-like syntax, and
+compose your own key/value transforms with <a class="reference external" href="https://github.com/i2mint/dol"><code class="docutils literal notranslate"><span class="pre">dol</span></code></a> wrappers
+instead of writing backend-specific boilerplate.</p>
+<p>To install:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mongodol</span>
+</pre></div>
+</div>
+<p>And of course, you need a running MongoDB – see the
+<a class="reference external" href="https://www.mongodb.com/docs/manual/installation/">installation instructions</a>.</p>
+<!-- epythet:agentic-readme:start -->
+<section id="for-ai-agents">
+<h2>For AI agents<a class="headerlink" href="#for-ai-agents" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mongodol</span></code> publishes its documentation in forms made for coding agents. If you are one, start here.</p>
+<p><strong>The documentation, machine-readable</strong>: <a class="reference external" href="https://i2mint.github.io/mongodol/llms.txt"><code class="docutils literal notranslate"><span class="pre">llms.txt</span></code></a> indexes every page; <a class="reference external" href="https://i2mint.github.io/mongodol/mongodol.md"><code class="docutils literal notranslate"><span class="pre">mongodol.md</span></code></a> is the whole documentation in one file; every page has a <code class="docutils literal notranslate"><span class="pre">.md</span></code> twin; <a class="reference external" href="https://i2mint.github.io/mongodol/objects.inv"><code class="docutils literal notranslate"><span class="pre">objects.inv</span></code></a> maps symbols to URLs.</p>
+<p>If you are a control freak, the rest of this README is written for you, starting at <a class="reference internal" href="#quick-start">Quick start</a>.</p>
+<!-- epythet:agentic-readme:end -->
+</section>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoCollectionPersister</span><span class="p">,</span> <span class="n">mk_dflt_mgc</span>
+
+<span class="c1"># mk_dflt_mgc() gives you a pymongo collection to play with (mongodol/mongodol_test by default)</span>
+<span class="n">mgc</span> <span class="o">=</span> <span class="n">mk_dflt_mgc</span><span class="p">()</span>
+<span class="n">mgc</span><span class="o">.</span><span class="n">delete_many</span><span class="p">({})</span>  <span class="c1"># start from an empty collection (skip this to keep what's already there)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">MongoCollectionPersister</span><span class="p">(</span><span class="n">mgc</span><span class="p">,</span> <span class="n">getitem_projection</span><span class="o">=</span><span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1"># 0</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'_id'</span><span class="p">:</span> <span class="s1">'my_id'</span><span class="p">}</span>
+<span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'mongo'</span><span class="p">:</span> <span class="s1">'uses'</span><span class="p">,</span> <span class="s1">'json'</span><span class="p">:</span> <span class="s1">'data'</span><span class="p">}</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1"># [{'_id': 'my_id'}]</span>
+</pre></div>
+</div>
+<p>Since the base reader is a thin, low-level wrapper, <code class="docutils literal notranslate"><span class="pre">s[k]</span></code> returns a <code class="docutils literal notranslate"><span class="pre">pymongo.cursor.Cursor</span></code>
+(a key may match zero, one, or many docs), so you fetch the value(s) explicitly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="c1"># {'mongo': 'uses', 'json': 'data'}</span>
+
+<span class="k">del</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1"># 0</span>
+</pre></div>
+</div>
+</section>
+<section id="beyond-the-base-classes">
+<h2>Beyond the base classes<a class="headerlink" href="#beyond-the-base-classes" title="Link to this heading">#</a></h2>
+<p>The base <code class="docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code>/<code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code> classes always return cursors
+and never validate uniqueness. For the common case of “one key maps to one doc”, use one
+of the <code class="docutils literal notranslate"><span class="pre">*UniqueDoc*</span></code>/<code class="docutils literal notranslate"><span class="pre">*FirstDoc*</span></code> reader and persister classes instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoCollectionUniqueDocReader</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">MongoCollectionUniqueDocReader</span></code> gives you <code class="docutils literal notranslate"><span class="pre">s[k]</span></code> as a plain <code class="docutils literal notranslate"><span class="pre">dict</span></code> (not a cursor), and
+raises <code class="docutils literal notranslate"><span class="pre">KeyNotUniqueError</span></code> if more than one doc matches <code class="docutils literal notranslate"><span class="pre">k</span></code>. See its docstring for a
+runnable example.</p>
+<p>For custom key/value shapes, business logic, or connecting <code class="docutils literal notranslate"><span class="pre">mongodol</span></code> stores to the rest
+of the <a class="reference external" href="https://github.com/i2mint/dol"><code class="docutils literal notranslate"><span class="pre">dol</span></code></a> ecosystem (caching, serialization,
+key transforms, etc.), wrap a <code class="docutils literal notranslate"><span class="pre">mongodol</span></code> store with <code class="docutils literal notranslate"><span class="pre">dol.wrap_kvs</span></code> like you would any
+other <code class="docutils literal notranslate"><span class="pre">dol</span></code> store.</p>
+</section>
+<section id="more">
+<h2>More<a class="headerlink" href="#more" title="Link to this heading">#</a></h2>
+<p>See the <a class="reference external" href="https://i2mint.github.io/mongodol/">package documentation</a> and the flat
+<a class="reference external" href="https://i2mint.github.io/mongodol/mongodol.md"><code class="docutils literal notranslate"><span class="pre">mongodol.md</span></code></a> aggregate for the full API.</p>
+<p class="epythet-aggregates">This documentation as a single file: <a href="mongodol.md">mongodol.md</a> (Markdown, for agents).</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-09-15 13:34 UTC from <a href="https://github.com/i2mint/mongodol/commit/d5502c083d05b25aee8edad95f6a57e5d3c6ff4e">d5502c0</a> (master) · mongodol 0.1.5 · <a href="about-this-build.html">about this build</a></p>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#for-ai-agents">For AI agents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-the-base-classes">Beyond the base classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more">More</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/index.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

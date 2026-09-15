@@ -1,0 +1,24 @@
+mongodol.util
+=============
+
+.. automodule:: mongodol.util
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      flatten_dict_items
+      get_key_value_specs
+      get_mongo_collection_pymongo_obj
+      mk_dflt_client
+      mk_dflt_mgc
+      normalize_projection
+      projection_union
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      KeyNotUniqueError
+   

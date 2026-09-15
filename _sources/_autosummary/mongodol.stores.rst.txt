@@ -1,0 +1,19 @@
+mongodol.stores
+===============
+
+.. automodule:: mongodol.stores
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MongoCollectionFirstDocPersister
+      MongoCollectionFirstDocReader
+      MongoCollectionMultipleDocsPersister
+      MongoCollectionMultipleDocsReader
+      MongoCollectionPersisterWithResultMapping
+      MongoCollectionUniqueDocPersister
+      MongoCollectionUniqueDocReader
+      MongoStore
+   

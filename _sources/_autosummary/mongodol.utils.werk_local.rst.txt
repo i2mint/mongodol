@@ -1,0 +1,12 @@
+mongodol.utils.werk\_local
+==========================
+
+.. automodule:: mongodol.utils.werk_local
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LocalProxy
+   

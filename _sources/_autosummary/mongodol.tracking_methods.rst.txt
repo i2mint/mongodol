@@ -1,0 +1,24 @@
+mongodol.tracking\_methods
+==========================
+
+.. automodule:: mongodol.tracking_methods
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_tracked_methods
+      consume
+      forward_method_calls
+      track_calls_of_method
+      track_calls_without_executing
+      track_method_calls
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MongoBulkWritesMixin
+      TrackableMixin
+   

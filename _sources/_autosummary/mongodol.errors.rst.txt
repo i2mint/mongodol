@@ -1,0 +1,6 @@
+mongodol.errors
+===============
+
+.. automodule:: mongodol.errors
+
+   

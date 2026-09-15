@@ -1,0 +1,6 @@
+mongodol.constants
+==================
+
+.. automodule:: mongodol.constants
+
+   

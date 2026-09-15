@@ -1,0 +1,18 @@
+mongodol.base
+=============
+
+.. automodule:: mongodol.base
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MongoBaseStore
+      MongoClientReader
+      MongoCollectionCollection
+      MongoCollectionFieldsReader
+      MongoCollectionPersister
+      MongoCollectionReader
+      MongoDbReader
+   

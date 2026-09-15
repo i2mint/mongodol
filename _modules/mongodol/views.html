@@ -1,113 +1,712 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mongodol.views &mdash; mongodol 0.1.4 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="views.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown">
+    <title>mongodol.views &#8212; mongodol</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/epythet.css?v=50f4acfb" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../_static/documentation_options.js?v=59fadc99"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mongodol/views';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.5" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=fd825880"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            mongodol
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol.html">mongodol</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/add_ons.html">mongodol.add_ons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/base.html">mongodol.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/constants.html">mongodol.constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/errors.html">mongodol.errors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/recipes.html">mongodol.recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/old01.html">mongodol.scrap.old01</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/scrap/views_work.html">mongodol.scrap.views_work</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/stores.html">mongodol.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests.html">mongodol.tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/add_ons_test.html">mongodol.tests.add_ons_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/base_test.html">mongodol.tests.base_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/data.html">mongodol.tests.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/base_int_test.html">mongodol.tests.int_tests.base_int_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/int_tests/conftest.html">mongodol.tests.int_tests.conftest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/stores_test.html">mongodol.tests.stores_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/trans_test.html">mongodol.tests.trans_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/util.html">mongodol.tests.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tests/views_test.html">mongodol.tests.views_test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/tracking_methods.html">mongodol.tracking_methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/trans.html">mongodol.trans</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/util.html">mongodol.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils.html">mongodol.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/utils/werk_local.html">mongodol.utils.werk_local</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/mongodol/views.html">mongodol.views</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">mongodol</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">mongodol.views</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">mongodol</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
   </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for mongodol.views</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Mapping views that keep working when a mongo store is wrapped by ``dol``.</span>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
 
-<span class="sd">A mongo collection can serve a store&#39;s whole ``(key, value)`` stream in a single</span>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/i2mint/mongodol" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mongodol.views</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for mongodol.views</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Mapping views that keep working when a mongo store is wrapped by ``dol``.</span>
+
+<span class="sd">A mongo collection can serve a store's whole ``(key, value)`` stream in a single</span>
 <span class="sd">``find`` round trip, so :class:`~mongodol.base.MongoCollectionReader` implements a</span>
 <span class="sd">**bulk-read protocol** -- ``iter_values``, ``iter_items``, ``contains_value`` and</span>
 <span class="sd">``contains_item`` -- and exposes it through the ``values()``/``items()`` views</span>
 <span class="sd">defined here. One query instead of N is the whole point of these views.</span>
 
 <span class="sd">The catch is *composition*. A ``dol`` :class:`~dol.base.Store` wrapper (what</span>
-<span class="sd">``wrap_kvs`` builds) forwards every attribute it doesn&#39;t define to the store it</span>
+<span class="sd">``wrap_kvs`` builds) forwards every attribute it doesn't define to the store it</span>
 <span class="sd">wraps. A view that simply calls ``self._mapping.iter_values()`` therefore punches</span>
 <span class="sd">straight through the wrappers and yields raw backend documents, silently skipping</span>
 <span class="sd">the value transforms the user asked for -- breaking the ``Mapping`` contract::</span>
@@ -124,7 +723,7 @@
 <span class="sd">that it lands in exactly the same space as ``store[k]``.</span>
 
 <span class="sd">A layer may only be crossed if its read path is *plain transform composition* --</span>
-<span class="sd">&quot;read from the inner store, then apply ``_key_of_id``/``_obj_of_data``&quot;, which is</span>
+<span class="sd">"read from the inner store, then apply ``_key_of_id``/``_obj_of_data``", which is</span>
 <span class="sd">what :class:`~dol.base.Store` does. A layer that redefines ``__getitem__`` or</span>
 <span class="sd">``__iter__`` (``wrap_kvs(postget=...)``, ``filt_iter``, ``cached_keys``, ...)</span>
 <span class="sd">changes values or key sets in ways that cannot be pushed onto a bulk stream, so</span>
@@ -136,9 +735,9 @@
 <span class="sd">``values()``/``items()`` agree with ``__getitem__``. The knobs, for store authors:</span>
 
 <span class="sd">- Implement the bulk-read methods to *provide* the fast path.</span>
-<span class="sd">- Set the :data:`BULK_READ_IS_FAITHFUL_ATTR` class attribute to ``False`` (see</span>
-<span class="sd">  :func:`disable_bulk_read`) when a class inherits bulk-read methods that no</span>
-<span class="sd">  longer agree with its own ``__getitem__``.</span>
+<span class="sd">- Set the :data:`BULK_READ_IS_FAITHFUL_ATTR` class attribute to ``False``</span>
+<span class="sd">  (see :func:`disable_bulk_read`) when a class inherits bulk-read methods</span>
+<span class="sd">  that no longer agree with its own ``__getitem__``.</span>
 
 <span class="sd">Known limitation. :class:`~mongodol.base.MongoCollectionReader` is deliberately a</span>
 <span class="sd">*cursor*-level store: ``s[k]`` is a pymongo ``Cursor``, while its bulk stream</span>
@@ -149,49 +748,49 @@
 <span class="sd">protocol: such a transform cannot be pushed onto a doc-level bulk stream, and is</span>
 <span class="sd">not detectable from here.</span>
 
-<span class="sd">Nothing here is mongo-specific; it is a general answer to &quot;how does a store with</span>
-<span class="sd">a bulk-read fast path compose with ``dol`` wrappers?&quot;, and would be a reasonable</span>
+<span class="sd">Nothing here is mongo-specific; it is a general answer to "how does a store with</span>
+<span class="sd">a bulk-read fast path compose with ``dol`` wrappers?", and would be a reasonable</span>
 <span class="sd">thing for ``dol`` itself to own one day.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseItemsView</span><span class="p">,</span> <span class="n">BaseValuesView</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Store</span>
 
-<span class="c1">#: Bulk-read method yielding a store&#39;s values in one backend round trip.</span>
-<span class="n">ITER_VALUES_METHOD</span> <span class="o">=</span> <span class="s2">&quot;iter_values&quot;</span>
-<span class="c1">#: Bulk-read method yielding a store&#39;s ``(key, value)`` pairs in one backend round trip.</span>
-<span class="n">ITER_ITEMS_METHOD</span> <span class="o">=</span> <span class="s2">&quot;iter_items&quot;</span>
-<span class="c1">#: Bulk-read method answering &quot;is this value in the store?&quot; in one backend round trip.</span>
-<span class="n">CONTAINS_VALUE_METHOD</span> <span class="o">=</span> <span class="s2">&quot;contains_value&quot;</span>
-<span class="c1">#: Bulk-read method answering &quot;is this item in the store?&quot; in one backend round trip.</span>
-<span class="n">CONTAINS_ITEM_METHOD</span> <span class="o">=</span> <span class="s2">&quot;contains_item&quot;</span>
+<span class="c1">#: Bulk-read method yielding a store's values in one backend round trip.</span>
+<span class="n">ITER_VALUES_METHOD</span> <span class="o">=</span> <span class="s2">"iter_values"</span>
+<span class="c1">#: Bulk-read method yielding a store's ``(key, value)`` pairs in one backend round trip.</span>
+<span class="n">ITER_ITEMS_METHOD</span> <span class="o">=</span> <span class="s2">"iter_items"</span>
+<span class="c1">#: Bulk-read method answering "is this value in the store?" in one backend round trip.</span>
+<span class="n">CONTAINS_VALUE_METHOD</span> <span class="o">=</span> <span class="s2">"contains_value"</span>
+<span class="c1">#: Bulk-read method answering "is this item in the store?" in one backend round trip.</span>
+<span class="n">CONTAINS_ITEM_METHOD</span> <span class="o">=</span> <span class="s2">"contains_item"</span>
 
 <span class="c1">#: Class attribute through which a store declares whether its bulk-read methods are</span>
 <span class="c1">#: value-equivalent to its own ``__getitem__``. It defaults to ``True`` (a class that</span>
 <span class="c1">#: implements the protocol is trusted to implement it faithfully). It exists because</span>
-<span class="c1">#: ``dol``&#39;s class-decorator wrapping *copies* the wrapped class&#39;s extra methods onto</span>
+<span class="c1">#: ``dol``'s class-decorator wrapping *copies* the wrapped class's extra methods onto</span>
 <span class="c1">#: the wrapper, so a wrapper that redefines value semantics -- ``wrap_kvs(postget=...)``</span>
 <span class="c1">#: -- silently inherits bulk-read methods that no longer match it. Such a class sets</span>
 <span class="c1">#: this to ``False``; see :func:`disable_bulk_read`.</span>
-<span class="n">BULK_READ_IS_FAITHFUL_ATTR</span> <span class="o">=</span> <span class="s2">&quot;_bulk_read_is_faithful&quot;</span>
+<span class="n">BULK_READ_IS_FAITHFUL_ATTR</span> <span class="o">=</span> <span class="s2">"_bulk_read_is_faithful"</span>
 
 <span class="c1">#: The ``dol`` :class:`~dol.base.Store` attribute holding the store a wrapper wraps.</span>
-<span class="n">INNER_STORE_ATTR</span> <span class="o">=</span> <span class="s2">&quot;store&quot;</span>
+<span class="n">INNER_STORE_ATTR</span> <span class="o">=</span> <span class="s2">"store"</span>
 
 <span class="n">KeyValStream</span> <span class="o">=</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
 
 
 <div class="viewcode-block" id="NoBulkReadPath">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.NoBulkReadPath">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.NoBulkReadPath">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoBulkReadPath</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;No bulk-read stream can be *proven* equivalent to the store&#39;s per-key reads.</span>
+<span class="w">    </span><span class="sd">"""No bulk-read stream can be *proven* equivalent to the store's per-key reads.</span>
 
 <span class="sd">    Raised by the resolvers of this module, and caught by the views, which then</span>
 <span class="sd">    fall back to the generic (correct, one-round-trip-per-key) ``Mapping``</span>
 <span class="sd">    behaviour. It is a control-flow signal, not a user-facing error.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    """</span></div>
 
 
 
@@ -199,25 +798,25 @@
 <span class="c1"># Inspecting a store layer</span>
 <span class="c1">#</span>
 <span class="c1"># Everything here looks attributes up on ``type(store)``, never on the instance:</span>
-<span class="c1"># ``dol``&#39;s ``Store.__getattr__`` forwards *instance* lookups to the wrapped store, so</span>
-<span class="c1"># ``hasattr(store, &#39;iter_values&#39;)`` is True even for a wrapper that has no idea what a</span>
+<span class="c1"># ``dol``'s ``Store.__getattr__`` forwards *instance* lookups to the wrapped store, so</span>
+<span class="c1"># ``hasattr(store, 'iter_values')`` is True even for a wrapper that has no idea what a</span>
 <span class="c1"># bulk read is. Class lookup does not delegate, so it tells the truth.</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look ``attr`` up on ``type(store)``, bypassing ``Store.__getattr__`` delegation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Look ``attr`` up on ``type(store)``, bypassing ``Store.__getattr__`` delegation."""</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">store</span><span class="p">),</span> <span class="n">attr</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="provides_bulk_read">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.provides_bulk_read">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.provides_bulk_read">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">provides_bulk_read</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``store``&#39;s own class implements bulk-read ``method_name``, faithfully.</span>
+<span class="w">    </span><span class="sd">"""Whether ``store``'s own class implements bulk-read ``method_name``, faithfully.</span>
 
-<span class="sd">    &quot;Faithfully&quot; means the store has not declared, via</span>
+<span class="sd">    "Faithfully" means the store has not declared, via</span>
 <span class="sd">    :data:`BULK_READ_IS_FAITHFUL_ATTR`, that its bulk-read methods disagree with</span>
 <span class="sd">    its ``__getitem__``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">BULK_READ_IS_FAITHFUL_ATTR</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">_class_attr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
@@ -225,16 +824,16 @@
 
 
 <div class="viewcode-block" id="is_crossable">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.is_crossable">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.is_crossable">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_crossable</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``store`` is a ``Store`` layer whose read path is plain transform composition.</span>
+<span class="w">    </span><span class="sd">"""Whether ``store`` is a ``Store`` layer whose read path is plain transform composition.</span>
 
 <span class="sd">    Such a layer reads from the store it wraps and applies ``_key_of_id`` to keys</span>
 <span class="sd">    and ``_obj_of_data`` to values -- and nothing else. Those two transforms can be</span>
-<span class="sd">    mapped over a bulk stream, so the layer can be &quot;crossed&quot; on the way to the</span>
-<span class="sd">    backend&#39;s fast path. A layer that redefines ``__getitem__`` (``postget``) or</span>
+<span class="sd">    mapped over a bulk stream, so the layer can be "crossed" on the way to the</span>
+<span class="sd">    backend's fast path. A layer that redefines ``__getitem__`` (``postget``) or</span>
 <span class="sd">    ``__iter__`` (key filtering/caching) cannot.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">Store</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
@@ -243,21 +842,21 @@
 
 
 <div class="viewcode-block" id="store_layers">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.store_layers">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.store_layers">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">store_layers</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield ``store`` then each store it wraps, outermost first, innermost last.</span>
+<span class="w">    </span><span class="sd">"""Yield ``store`` then each store it wraps, outermost first, innermost last.</span>
 
 <span class="sd">    The chain ends at the first non-``Store`` -- the actual backend. Note that</span>
 <span class="sd">    ``dol`` is free to insert pass-through ``Store`` layers of its own, so never</span>
 <span class="sd">    assume one ``wrap_kvs`` call means exactly one layer.</span>
 
 <span class="sd">    &gt;&gt;&gt; from dol import wrap_kvs</span>
-<span class="sd">    &gt;&gt;&gt; layers = list(store_layers(wrap_kvs({&#39;a&#39;: 1}, obj_of_data=str)))</span>
+<span class="sd">    &gt;&gt;&gt; layers = list(store_layers(wrap_kvs({'a': 1}, obj_of_data=str)))</span>
 <span class="sd">    &gt;&gt;&gt; type(layers[0]).__name__, type(layers[-1]).__name__</span>
-<span class="sd">    (&#39;Store&#39;, &#39;dict&#39;)</span>
+<span class="sd">    ('Store', 'dict')</span>
 <span class="sd">    &gt;&gt;&gt; all(isinstance(x, Store) for x in layers[:-1])</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">yield</span> <span class="n">store</span>
     <span class="k">while</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">Store</span><span class="p">):</span>
         <span class="n">inner</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">INNER_STORE_ATTR</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -269,46 +868,46 @@
 
 
 <div class="viewcode-block" id="resolve_bulk_source">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.resolve_bulk_source">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.resolve_bulk_source">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the store providing bulk-read ``method_name``, and the layers crossed to reach it.</span>
+<span class="w">    </span><span class="sd">"""Find the store providing bulk-read ``method_name``, and the layers crossed to reach it.</span>
 
 <span class="sd">    :return: ``(source, layers)`` where ``layers`` are the crossed</span>
 <span class="sd">        :class:`~dol.base.Store` wrappers, outermost first.</span>
 <span class="sd">    :raises NoBulkReadPath: if a layer that cannot be crossed is met before a</span>
 <span class="sd">        provider is found.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">store_layers</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">provides_bulk_read</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">layer</span><span class="p">,</span> <span class="n">layers</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_crossable</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No bulk </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2"> path: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> neither provides &quot;</span>
-                <span class="s2">&quot;it nor is a plain transform-composition layer that can be crossed.&quot;</span>
+                <span class="sa">f</span><span class="s2">"No bulk </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2"> path: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> neither provides "</span>
+                <span class="s2">"it nor is a plain transform-composition layer that can be crossed."</span>
             <span class="p">)</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No store in the chain provides </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No store in the chain provides </span><span class="si">{</span><span class="n">method_name</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 
 <span class="c1"># -------------------------------------------------------------------------------------</span>
-<span class="c1"># Pushing a layer&#39;s transforms onto a bulk stream</span>
+<span class="c1"># Pushing a layer's transforms onto a bulk stream</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_outgoing_trans</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The layer&#39;s outgoing (backend -&gt; user) transform named ``trans_attr``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The layer's outgoing (backend -&gt; user) transform named ``trans_attr``."""</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_ingoing_trans</span><span class="p">(</span>
     <span class="n">layer</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The layer&#39;s ingoing (user -&gt; backend) transform, if it is usable as an inverse.</span>
+<span class="w">    </span><span class="sd">"""The layer's ingoing (user -&gt; backend) transform, if it is usable as an inverse.</span>
 
 <span class="sd">    A layer that transforms outgoing values/keys but declares no ingoing transform</span>
 <span class="sd">    has no inverse, so a user-space value cannot be pushed down to the backend.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
     <span class="n">transforms_outgoing</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span>
         <span class="n">Store</span><span class="p">,</span> <span class="n">outgoing_attr</span>
@@ -316,39 +915,39 @@
     <span class="n">has_inverse</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Store</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">transforms_outgoing</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_inverse</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">NoBulkReadPath</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> transforms outgoing values via </span><span class="si">{</span><span class="n">outgoing_attr</span><span class="si">!r}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;but declares no </span><span class="si">{</span><span class="n">ingoing_attr</span><span class="si">!r}</span><span class="s2"> inverse, so nothing can be pushed down &quot;</span>
-            <span class="s2">&quot;to the backend.&quot;</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> transforms outgoing values via </span><span class="si">{</span><span class="n">outgoing_attr</span><span class="si">!r}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"but declares no </span><span class="si">{</span><span class="n">ingoing_attr</span><span class="si">!r}</span><span class="s2"> inverse, so nothing can be pushed down "</span>
+            <span class="s2">"to the backend."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_map_outward</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply each crossed layer&#39;s ``trans_attr`` to ``stream``, innermost layer first.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Apply each crossed layer's ``trans_attr`` to ``stream``, innermost layer first."""</span>
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
         <span class="n">stream</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">_outgoing_trans</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">trans_attr</span><span class="p">),</span> <span class="n">stream</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_trans_items</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">KeyValStream</span><span class="p">,</span> <span class="n">key_of_id</span><span class="p">,</span> <span class="n">obj_of_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply one layer&#39;s key and value transforms to an item stream.</span>
+<span class="w">    </span><span class="sd">"""Apply one layer's key and value transforms to an item stream.</span>
 
 <span class="sd">    A function -- not an inlined generator expression in :func:`_map_items_outward` --</span>
-<span class="sd">    so that each layer&#39;s transforms are captured in their own scope. A genexpr would</span>
+<span class="sd">    so that each layer's transforms are captured in their own scope. A genexpr would</span>
 <span class="sd">    look them up lazily, in a scope the next loop iteration has already overwritten.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">((</span><span class="n">key_of_id</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">obj_of_data</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_map_items_outward</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">KeyValStream</span><span class="p">,</span> <span class="n">layers</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply each crossed layer&#39;s key *and* value transforms to an item stream.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Apply each crossed layer's key *and* value transforms to an item stream."""</span>
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">_trans_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">_key_of_id</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">_obj_of_data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">items</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_push_inward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Push a user-space ``x`` down to backend space through ``layers``, outermost first.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Push a user-space ``x`` down to backend space through ``layers``, outermost first."""</span>
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">_ingoing_trans</span><span class="p">(</span>
             <span class="n">layer</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="n">outgoing_attr</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="n">ingoing_attr</span>
@@ -358,13 +957,13 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_push_value_inward</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">_push_inward</span><span class="p">(</span>
-        <span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">&quot;_obj_of_data&quot;</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">&quot;_data_of_obj&quot;</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">"_obj_of_data"</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">"_data_of_obj"</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_push_key_inward</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">_push_inward</span><span class="p">(</span>
-        <span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">&quot;_key_of_id&quot;</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">&quot;_id_of_key&quot;</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outgoing_attr</span><span class="o">=</span><span class="s2">"_key_of_id"</span><span class="p">,</span> <span class="n">ingoing_attr</span><span class="o">=</span><span class="s2">"_id_of_key"</span>
     <span class="p">)</span>
 
 
@@ -373,50 +972,50 @@
 
 
 <div class="viewcode-block" id="bulk_values">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_values">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.bulk_values">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bulk_values</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate ``store``&#39;s values via the backend&#39;s bulk-read path, transforms honoured.</span>
+<span class="w">    </span><span class="sd">"""Iterate ``store``'s values via the backend's bulk-read path, transforms honoured.</span>
 
 <span class="sd">    :raises NoBulkReadPath: when the bulk stream cannot be proven equivalent to</span>
 <span class="sd">        ``(store[k] for k in store)``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">ITER_VALUES_METHOD</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_map_outward</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iter_values</span><span class="p">(),</span> <span class="n">layers</span><span class="p">,</span> <span class="s2">&quot;_obj_of_data&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_map_outward</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iter_values</span><span class="p">(),</span> <span class="n">layers</span><span class="p">,</span> <span class="s2">"_obj_of_data"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="bulk_items">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_items">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.bulk_items">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bulk_items</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyValStream</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate ``store``&#39;s ``(key, value)`` pairs via the backend&#39;s bulk-read path.</span>
+<span class="w">    </span><span class="sd">"""Iterate ``store``'s ``(key, value)`` pairs via the backend's bulk-read path.</span>
 
 <span class="sd">    :raises NoBulkReadPath: when the bulk stream cannot be proven equivalent to</span>
 <span class="sd">        ``((k, store[k]) for k in store)``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">ITER_ITEMS_METHOD</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_map_items_outward</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iter_items</span><span class="p">(),</span> <span class="n">layers</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="bulk_contains_value">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_contains_value">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.bulk_contains_value">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bulk_contains_value</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask the backend whether ``v`` is one of ``store``&#39;s values, in one round trip.</span>
+<span class="w">    </span><span class="sd">"""Ask the backend whether ``v`` is one of ``store``'s values, in one round trip.</span>
 
 <span class="sd">    :raises NoBulkReadPath: when ``v`` cannot be pushed down to backend space.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">CONTAINS_VALUE_METHOD</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">contains_value</span><span class="p">(</span><span class="n">_push_value_inward</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">layers</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="bulk_contains_item">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.bulk_contains_item">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.bulk_contains_item">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bulk_contains_item</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask the backend whether ``item`` is one of ``store``&#39;s items, in one round trip.</span>
+<span class="w">    </span><span class="sd">"""Ask the backend whether ``item`` is one of ``store``'s items, in one round trip.</span>
 
 <span class="sd">    :raises NoBulkReadPath: when ``item`` cannot be pushed down to backend space.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">source</span><span class="p">,</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">resolve_bulk_source</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">CONTAINS_ITEM_METHOD</span><span class="p">)</span>
     <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span>
     <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">contains_item</span><span class="p">(</span>
@@ -426,15 +1025,15 @@
 
 
 <div class="viewcode-block" id="disable_bulk_read">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.disable_bulk_read">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.disable_bulk_read">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">disable_bulk_read</span><span class="p">(</span><span class="n">store_cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class decorator declaring that inherited bulk-read methods are not to be trusted.</span>
+<span class="w">    </span><span class="sd">"""Class decorator declaring that inherited bulk-read methods are not to be trusted.</span>
 
 <span class="sd">    Use it on a class that changes what ``__getitem__`` returns (typically via</span>
-<span class="sd">    ``wrap_kvs(postget=...)``) while inheriting -- or being handed, by ``dol``&#39;s</span>
+<span class="sd">    ``wrap_kvs(postget=...)``) while inheriting -- or being handed, by ``dol``'s</span>
 <span class="sd">    class-decorator wrapping -- bulk-read methods written for the *un*-changed</span>
 <span class="sd">    semantics. Views then take the correct per-key path instead.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="n">store_cls</span><span class="p">,</span> <span class="n">BULK_READ_IS_FAITHFUL_ATTR</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">store_cls</span></div>
 
@@ -445,10 +1044,11 @@
 
 
 <div class="viewcode-block" id="MongoValuesView">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.MongoValuesView">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.MongoValuesView">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoValuesView</span><span class="p">(</span><span class="n">BaseValuesView</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``values()`` view that uses the backend&#39;s bulk read when -- and only when --</span>
-<span class="sd">    that stream provably equals ``(store[k] for k in store)``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A ``values()`` view that uses the backend's bulk read when -- and only when --</span>
+<span class="sd">    that stream provably equals ``(store[k] for k in store)``.</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -465,10 +1065,11 @@
 
 
 <div class="viewcode-block" id="MongoItemsView">
-<a class="viewcode-back" href="../../module_docs/mongodol/views.html#mongodol.views.MongoItemsView">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/mongodol.views.html#mongodol.views.MongoItemsView">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoItemsView</span><span class="p">(</span><span class="n">BaseItemsView</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;An ``items()`` view that uses the backend&#39;s bulk read when -- and only when --</span>
-<span class="sd">    that stream provably equals ``((k, store[k]) for k in store)``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""An ``items()`` view that uses the backend's bulk read when -- and only when --</span>
+<span class="sd">    that stream provably equals ``((k, store[k]) for k in store)``.</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -488,31 +1089,53 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

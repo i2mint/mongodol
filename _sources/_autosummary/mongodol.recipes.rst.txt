@@ -1,0 +1,18 @@
+mongodol.recipes
+================
+
+.. automodule:: mongodol.recipes
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      disallow_sourced_interval_overlaps
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      WriteNotAllowedToThatKey
+   

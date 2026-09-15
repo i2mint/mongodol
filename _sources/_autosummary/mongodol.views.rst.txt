@@ -1,0 +1,44 @@
+mongodol.views
+==============
+
+.. automodule:: mongodol.views
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ITER_VALUES_METHOD
+      ITER_ITEMS_METHOD
+      CONTAINS_VALUE_METHOD
+      CONTAINS_ITEM_METHOD
+      BULK_READ_IS_FAITHFUL_ATTR
+      INNER_STORE_ATTR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bulk_contains_item
+      bulk_contains_value
+      bulk_items
+      bulk_values
+      disable_bulk_read
+      is_crossable
+      provides_bulk_read
+      resolve_bulk_source
+      store_layers
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MongoItemsView
+      MongoValuesView
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      NoBulkReadPath
+   

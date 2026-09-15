@@ -1,0 +1,21 @@
+mongodol.add\_ons
+=================
+
+.. automodule:: mongodol.add_ons
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_clear_method
+      disallow_if_name_exists_already
+      has_exactly_one_non_defaulted_input
+      number_of_non_defaulted_arguments
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Addons
+   

@@ -1,0 +1,25 @@
+mongodol.trans
+==============
+
+.. automodule:: mongodol.trans
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_persistent_obj
+      normalize_result
+      set_key_and_data_fields
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ObjOfData
+      PersistentDict
+      PersistentList
+      PersistentObjectBase
+      PostGet
+      WriteOpResult
+   

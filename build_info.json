@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-15T13:34:54Z",
+  "package": {
+    "name": "mongodol",
+    "version": "0.1.5",
+    "display_name": "mongodol",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "d5502c083d05b25aee8edad95f6a57e5d3c6ff4e",
+    "short_commit": "d5502c0",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/i2mint/mongodol",
+    "commit_url": "https://github.com/i2mint/mongodol/commit/d5502c083d05b25aee8edad95f6a57e5d3c6ff4e",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "i2mint/mongodol",
+    "sha": "d5502c083d05b25aee8edad95f6a57e5d3c6ff4e",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "34975694579",
+    "run_url": "https://github.com/i2mint/mongodol/actions/runs/34975694579",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "pydata_sphinx_theme",
+    "accent": "#8f3254",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 13,
+    "objects_documented": 185
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.1.5",
+    "relation": "same",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/i2mint/mongodol && cd mongodol\ngit checkout d5502c083d05b25aee8edad95f6a57e5d3c6ff4e\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}
