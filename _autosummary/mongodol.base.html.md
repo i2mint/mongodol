@@ -2,6 +2,11 @@
 
 Base mongoDB data object layers
 
+### Functions
+
+| [`operator_field_names`](#mongodol.base.operator_field_names)(obj)   | The parts of `obj` that make it act as a query rather than an exact match.   |
+|------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+
 ### Classes
 
 | [`MongoBaseStore`](#mongodol.base.MongoBaseStore)([store])                         | A `Store` that forwards the mongo bulk-read protocol through its transforms.                                   |
@@ -101,7 +106,7 @@ A base class to read from a mongo collection, or subset thereof, with the Mappin
 
 An “easier” interface for the common case where we just want to specify fixed fields for keys and vals.
 
-### *class* mongodol.base.MongoCollectionPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.base.MongoCollectionPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: [`MongoCollectionReader`](#mongodol.base.MongoCollectionReader)
 
@@ -173,6 +178,20 @@ True
 {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
 {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 ```
+
+Writes stay inside the store’s scope: a key or value that contradicts a field
+of the write filter (`on_write_filter`, else `filter`) raises
+`ValueError`. Fields scoped with operators other than `$eq`/`$in` (such
+as `$ne`, `$gt`) are NOT checked and such writes are let through: give
+those stores an `on_write_filter` with plain values. Keys used to replace or
+delete docs may not contain `$`-operators or regexes (pass
+`allow_operators_in_write_keys=True`, or set it as a class attribute, to allow
+them), and those queries are confined by `filter` and `on_write_filter`.
+Reads (`s[k]`, `k in s`) still accept query keys, always within `filter`.
+
+#### allow_operators_in_write_keys *= False*
+
+Whether keys given to write/delete operations may contain `$`-operators.
 
 #### append(v)
 
@@ -347,4 +366,23 @@ Base Mongo Db Reader. Keys are collection names and values are collection store 
 >>> db_reader = MongoDbReader()
 >>> 'mongodol_test' in db_reader
 True
+```
+
+### mongodol.base.operator_field_names(obj)
+
+The parts of `obj` that make it act as a query rather than an exact match.
+
+That is: `$`-prefixed field names and regular-expression values, found at any
+depth (in mappings and lists). Regexes are reported by their `repr`.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+```pycon
+>>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
+['$gt']
+>>> operator_field_names({'a': re.compile('x')})
+["re.compile('x')"]
+>>> operator_field_names({'a': 1})
+[]
 ```

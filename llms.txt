@@ -20,7 +20,7 @@
 - [mongodol.utils](_autosummary/mongodol.utils.html.md): Util modules
 - [mongodol.utils.werk_local](_autosummary/mongodol.utils.werk_local.html.md): Vendored from werkzeug’s local.py module, edited to our needs.
 - [mongodol.views](_autosummary/mongodol.views.html.md): Mapping views that keep working when a mongo store is wrapped by &#96;dol&#96;.
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 13:32 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 16:30 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
 
 ## Optional
 

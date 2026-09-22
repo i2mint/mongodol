@@ -5,19 +5,19 @@ orphan: true
 
 # About this build
 
-This documentation was built on **2026-09-22 13:32 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>3680460</code></a> on branch <code>master</code>, for **mongodol 0.1.6** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-22 16:30 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5b</code></a> on branch <code>master</code>, for **mongodol 0.1.7** (from <code>pyproject.toml</code>).
 
 :::{warning}
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.6) is behind the latest release on PyPI (0.1.7): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.7) is behind the latest release on PyPI (0.1.8): `pip install mongodol` gives newer code than these docs describe.
 :::
 
 ## Source
 
 | | |
 |---|---|
-| Commit | <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>36804609d4f4213c17e951742fad26bc9b839bb2</code></a> |
+| Commit | <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5ba681f37d29a47e7679554bac1a4db8168</code></a> |
 | Branch | <code>master</code> |
 | Tags at this commit | none |
 | Working tree | clean |
@@ -28,9 +28,9 @@ The documentation and the package may be misaligned:
 | | |
 |---|---|
 | Repository | <code>i2mint/mongodol</code> |
-| Run | <a href="https://github.com/i2mint/mongodol/actions/runs/35733883379">35733883379</a> |
+| Run | <a href="https://github.com/i2mint/mongodol/actions/runs/35754287660">35754287660</a> |
 | Ref | <code>refs/heads/master</code> |
-| Event commit | <code>36804609d4f4213c17e951742fad26bc9b839bb2</code> (in the history of the built commit) |
+| Event commit | <code>21cec5ba681f37d29a47e7679554bac1a4db8168</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -55,13 +55,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.7/">0.1.7</a>, newer than the documented version (0.1.6).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.8/">0.1.8</a>, newer than the documented version (0.1.7).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 36804609d4f4213c17e951742fad26bc9b839bb2
+git checkout 21cec5ba681f37d29a47e7679554bac1a4db8168
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

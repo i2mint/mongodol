@@ -14,7 +14,7 @@ Some useful stores for mongoDB
 | [`MongoCollectionUniqueDocReader`](#mongodol.stores.MongoCollectionUniqueDocReader)([mgc, ...])        | A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).        |
 | [`MongoStore`](#mongodol.stores.MongoStore)([store])                               | A `Store` wrapping a `MongoCollectionUniqueDocPersister`, built from host/db/collection names. |
 
-### *class* mongodol.stores.MongoCollectionFirstDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionFirstDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -48,6 +48,14 @@ the first match found:
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 
@@ -177,7 +185,7 @@ The distinct values of `key` across docs matching `filter` (merged with this sto
 
 The field names (from `getitem_projection`) that make up a value, or None if unset.
 
-### *class* mongodol.stores.MongoCollectionMultipleDocsPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionMultipleDocsPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -207,6 +215,14 @@ If no docs match, will return an empty list.
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 
@@ -327,7 +343,7 @@ The distinct values of `key` across docs matching `filter` (merged with this sto
 
 The field names (from `getitem_projection`) that make up a value, or None if unset.
 
-### *class* mongodol.stores.MongoCollectionPersisterWithResultMapping(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionPersisterWithResultMapping(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: [`MongoCollectionPersister`](mongodol.base.html.md#mongodol.base.MongoCollectionPersister)
 
@@ -341,7 +357,7 @@ Insert a single doc `v`, merged with `on_write_filter` if set, else this store�
 
 Insert several docs `values`, each merged with `on_write_filter` if set, else this store’s filter.
 
-### *class* mongodol.stores.MongoCollectionUniqueDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionUniqueDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -375,6 +391,14 @@ mongodol.util.KeyNotUniqueError: Key was not unique (i.e. cursor has more than o
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 

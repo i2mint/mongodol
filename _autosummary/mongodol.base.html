@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=6e0256f3"></script>
+    <script src="../_static/documentation_options.js?v=ca7ad2ea"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +57,7 @@
     <link rel="prev" title="mongodol.add_ons" href="mongodol.add_ons.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.6" />
+  <meta name="docsearch:version" content="0.1.7" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -387,6 +387,15 @@
   <section id="module-mongodol.base">
 <span id="mongodol-base"></span><h1>mongodol.base<a class="headerlink" href="#module-mongodol.base" title="Link to this heading">#</a></h1>
 <p>Base mongoDB data object layers</p>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.base.operator_field_names" title="mongodol.base.operator_field_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">operator_field_names</span></code></a>(obj)</p></td>
+<td><p>The parts of <code class="docutils literal notranslate"><span class="pre">obj</span></code> that make it act as a query rather than an exact match.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -522,7 +531,7 @@ key codec, so pass <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_write_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">MongoCollectionPersister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_write_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('_id',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getitem_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_operators_in_write_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mgc_find_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mongodol.base.MongoCollectionReader" title="mongodol.base.MongoCollectionReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">MongoCollectionReader</span></code></a></p>
 <p>base class to read from and write to a mongo collection, or subset thereof, with the MutableMapping interface.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_dflt_mgc</span>
@@ -585,8 +594,23 @@ So in the following case, we should get an empty cursor (not a default value)</p
 <span class="go">{'first': 'Vitalik', 'last': 'Buterin'} --&gt; {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}</span>
 </pre></div>
 </div>
+<p>Writes stay inside the store’s scope: a key or value that contradicts a field
+of the write filter (<code class="docutils literal notranslate"><span class="pre">on_write_filter</span></code>, else <code class="docutils literal notranslate"><span class="pre">filter</span></code>) raises
+<code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Fields scoped with operators other than <code class="docutils literal notranslate"><span class="pre">$eq</span></code>/<code class="docutils literal notranslate"><span class="pre">$in</span></code> (such
+as <code class="docutils literal notranslate"><span class="pre">$ne</span></code>, <code class="docutils literal notranslate"><span class="pre">$gt</span></code>) are NOT checked and such writes are let through: give
+those stores an <code class="docutils literal notranslate"><span class="pre">on_write_filter</span></code> with plain values. Keys used to replace or
+delete docs may not contain <code class="docutils literal notranslate"><span class="pre">$</span></code>-operators or regexes (pass
+<code class="docutils literal notranslate"><span class="pre">allow_operators_in_write_keys=True</span></code>, or set it as a class attribute, to allow
+them), and those queries are confined by <code class="docutils literal notranslate"><span class="pre">filter</span></code> and <code class="docutils literal notranslate"><span class="pre">on_write_filter</span></code>.
+Reads (<code class="docutils literal notranslate"><span class="pre">s[k]</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">in</span> <span class="pre">s</span></code>) still accept query keys, always within <code class="docutils literal notranslate"><span class="pre">filter</span></code>.</p>
 <dl class="field-list simple">
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister.allow_operators_in_write_keys">
+<span class="sig-name descname"><span class="pre">allow_operators_in_write_keys</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#mongodol.base.MongoCollectionPersister.allow_operators_in_write_keys" title="Link to this definition">#</a></dt>
+<dd><p>Whether keys given to write/delete operations may contain <code class="docutils literal notranslate"><span class="pre">$</span></code>-operators.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.base.MongoCollectionPersister.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoCollectionPersister.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoCollectionPersister.append" title="Link to this definition">#</a></dt>
@@ -789,6 +813,27 @@ Use custom classes here, and/or partials (curried functions) thereof, to fix any
 </div>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.base.operator_field_names">
+<span class="sig-prename descclassname"><span class="pre">mongodol.base.</span></span><span class="sig-name descname"><span class="pre">operator_field_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#operator_field_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.operator_field_names" title="Link to this definition">#</a></dt>
+<dd><p>The parts of <code class="docutils literal notranslate"><span class="pre">obj</span></code> that make it act as a query rather than an exact match.</p>
+<p>That is: <code class="docutils literal notranslate"><span class="pre">$</span></code>-prefixed field names and regular-expression values, found at any
+depth (in mappings and lists). Regexes are reported by their <code class="docutils literal notranslate"><span class="pre">repr</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">operator_field_names</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'c'</span><span class="p">:</span> <span class="p">[{</span><span class="s1">'$gt'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}]}})</span>
+<span class="go">['$gt']</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operator_field_names</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'x'</span><span class="p">)})</span>
+<span class="go">["re.compile('x')"]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operator_field_names</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
@@ -855,6 +900,7 @@ Use custom classes here, and/or partials (curried functions) thereof, to fix any
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionFieldsReader"><code class="docutils literal notranslate"><span class="pre">MongoCollectionFieldsReader</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.allow_operators_in_write_keys"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.allow_operators_in_write_keys</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.append"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.append()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.extend"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.extend()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoCollectionPersister.persist_data"><code class="docutils literal notranslate"><span class="pre">MongoCollectionPersister.persist_data()</span></code></a></li>
@@ -876,6 +922,7 @@ Use custom classes here, and/or partials (curried functions) thereof, to fix any
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoDbReader"><code class="docutils literal notranslate"><span class="pre">MongoDbReader</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.operator_field_names"><code class="docutils literal notranslate"><span class="pre">operator_field_names()</span></code></a></li>
 </ul>
   </nav></div>
 

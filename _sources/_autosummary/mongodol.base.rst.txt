@@ -4,6 +4,12 @@ mongodol.base
 .. automodule:: mongodol.base
 
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      operator_field_names
+   
    .. rubric:: Classes
 
    .. autosummary::

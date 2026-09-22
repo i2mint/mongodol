@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
+    <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +410,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.6" />
+  <meta name="docsearch:version" content="0.1.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -923,11 +923,14 @@ window.runMermaid = runMermaid;</script>
         <span class="p">),</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:</span><span class="se">\n\t</span><span class="s2">k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n\t</span><span class="s2">v=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
         <span class="c1"># A Mapping is itself a Collection, so it must be tested for first, or a single</span>
         <span class="c1"># doc would be "iterated" into its field names.</span>
         <span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">])</span></div>
+        <span class="c1"># Validate everything before deleting anything, so a refused write loses no data.</span>
+        <span class="n">delete_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_filter_for_key</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">new_docs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_doc</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">delete_many</span><span class="p">(</span><span class="n">delete_filter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">new_docs</span><span class="p">)</span></div>
 
 
 

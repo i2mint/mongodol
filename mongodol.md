@@ -1,4 +1,4 @@
-> built 2026-09-22 13:32 UTC from 3680460 (master) · mongodol 0.1.6. Details: build_info.json
+> built 2026-09-22 16:30 UTC from 21cec5b (master) · mongodol 0.1.7. Details: build_info.json
 
 # index.html.md
 
@@ -201,6 +201,11 @@ Return the number of arguments that don’t have defaults in it’s signature
 
 Base mongoDB data object layers
 
+### Functions
+
+| [`operator_field_names`](_autosummary/mongodol.base.html.md#mongodol.base.operator_field_names)(obj)   | The parts of `obj` that make it act as a query rather than an exact match.   |
+|------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+
 ### Classes
 
 | [`MongoBaseStore`](_autosummary/mongodol.base.html.md#mongodol.base.MongoBaseStore)([store])                         | A `Store` that forwards the mongo bulk-read protocol through its transforms.                                   |
@@ -300,7 +305,7 @@ A base class to read from a mongo collection, or subset thereof, with the Mappin
 
 An “easier” interface for the common case where we just want to specify fixed fields for keys and vals.
 
-### *class* mongodol.base.MongoCollectionPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.base.MongoCollectionPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: [`MongoCollectionReader`](_autosummary/mongodol.base.html.md#mongodol.base.MongoCollectionReader)
 
@@ -372,6 +377,20 @@ True
 {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
 {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 ```
+
+Writes stay inside the store’s scope: a key or value that contradicts a field
+of the write filter (`on_write_filter`, else `filter`) raises
+`ValueError`. Fields scoped with operators other than `$eq`/`$in` (such
+as `$ne`, `$gt`) are NOT checked and such writes are let through: give
+those stores an `on_write_filter` with plain values. Keys used to replace or
+delete docs may not contain `$`-operators or regexes (pass
+`allow_operators_in_write_keys=True`, or set it as a class attribute, to allow
+them), and those queries are confined by `filter` and `on_write_filter`.
+Reads (`s[k]`, `k in s`) still accept query keys, always within `filter`.
+
+#### allow_operators_in_write_keys *= False*
+
+Whether keys given to write/delete operations may contain `$`-operators.
 
 #### append(v)
 
@@ -548,6 +567,25 @@ Base Mongo Db Reader. Keys are collection names and values are collection store 
 True
 ```
 
+### mongodol.base.operator_field_names(obj)
+
+The parts of `obj` that make it act as a query rather than an exact match.
+
+That is: `$`-prefixed field names and regular-expression values, found at any
+depth (in mappings and lists). Regexes are reported by their `repr`.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+```pycon
+>>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
+['$gt']
+>>> operator_field_names({'a': re.compile('x')})
+["re.compile('x')"]
+>>> operator_field_names({'a': 1})
+[]
+```
+
 
 # _autosummary/mongodol.constants.html.md
 
@@ -687,7 +725,7 @@ Some useful stores for mongoDB
 | [`MongoCollectionUniqueDocReader`](_autosummary/mongodol.stores.html.md#mongodol.stores.MongoCollectionUniqueDocReader)([mgc, ...])        | A mongo collection (kv-)reader where s[key] is the dict (a mongo doc matching the key).        |
 | [`MongoStore`](_autosummary/mongodol.stores.html.md#mongodol.stores.MongoStore)([store])                               | A `Store` wrapping a `MongoCollectionUniqueDocPersister`, built from host/db/collection names. |
 
-### *class* mongodol.stores.MongoCollectionFirstDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionFirstDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -721,6 +759,14 @@ the first match found:
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 
@@ -850,7 +896,7 @@ The distinct values of `key` across docs matching `filter` (merged with this sto
 
 The field names (from `getitem_projection`) that make up a value, or None if unset.
 
-### *class* mongodol.stores.MongoCollectionMultipleDocsPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionMultipleDocsPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -880,6 +926,14 @@ If no docs match, will return an empty list.
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 
@@ -1000,7 +1054,7 @@ The distinct values of `key` across docs matching `filter` (merged with this sto
 
 The field names (from `getitem_projection`) that make up a value, or None if unset.
 
-### *class* mongodol.stores.MongoCollectionPersisterWithResultMapping(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionPersisterWithResultMapping(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: [`MongoCollectionPersister`](_autosummary/mongodol.base.html.md#mongodol.base.MongoCollectionPersister)
 
@@ -1014,7 +1068,7 @@ Insert a single doc `v`, merged with `on_write_filter` if set, else this store�
 
 Insert several docs `values`, each merged with `on_write_filter` if set, else this store’s filter.
 
-### *class* mongodol.stores.MongoCollectionUniqueDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, \*\*mgc_find_kwargs)
+### *class* mongodol.stores.MongoCollectionUniqueDocPersister(mgc=None, filter=None, on_write_filter=None, iter_projection=('_id',), getitem_projection=None, , allow_operators_in_write_keys=None, \*\*mgc_find_kwargs)
 
 Bases: `Store`
 
@@ -1048,6 +1102,14 @@ mongodol.util.KeyNotUniqueError: Key was not unique (i.e. cursor has more than o
 #### aggregate(pipeline, \*\*kwargs)
 
 Run a mongo aggregation `pipeline`, prefixed with a `$match` on this store’s filter.
+
+#### allow_operators_in_write_keys
+
+bool(x) -> bool
+
+Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.
 
 #### append(v)
 
@@ -2230,18 +2292,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-09-22 13:32 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>3680460</code></a> on branch <code>master</code>, for **mongodol 0.1.6** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-22 16:30 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5b</code></a> on branch <code>master</code>, for **mongodol 0.1.7** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.6) is behind the latest release on PyPI (0.1.7): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.7) is behind the latest release on PyPI (0.1.8): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>36804609d4f4213c17e951742fad26bc9b839bb2</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5ba681f37d29a47e7679554bac1a4db8168</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2252,9 +2314,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/35733883379">35733883379</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/35754287660">35754287660</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>36804609d4f4213c17e951742fad26bc9b839bb2</code> (in the history of the built commit) |
+| Event commit | <code>21cec5ba681f37d29a47e7679554bac1a4db8168</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -2279,13 +2341,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.7/">0.1.7</a>, newer than the documented version (0.1.6).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.8/">0.1.8</a>, newer than the documented version (0.1.7).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 36804609d4f4213c17e951742fad26bc9b839bb2
+git checkout 21cec5ba681f37d29a47e7679554bac1a4db8168
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
