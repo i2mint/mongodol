@@ -5,10 +5,10 @@
 
 ## Pages
 
-- [mongodol](index.html.md): Access MongoDB through a `Mapping` (dict-like) interface.
-- [API reference](api.html.md): | [`mongodol`](_autosummary/mongodol.html.md#module-mongodol)   | Access mongo through a Mapping int...
+- [mongodol](index.html.md): Access MongoDB through a &#96;Mapping&#96; (dict-like) interface.
+- [API reference](api.html.md): | &#96;mongodol&#96;   | Access mongo through a Mapping interface   |
 - [mongodol](_autosummary/mongodol.html.md): Access mongo through a Mapping interface
-- [mongodol.add_ons](_autosummary/mongodol.add_ons.html.md): [https://github.com/i2mint/mongodol/issues/3](https://github.com/i2mint/mongodol/issues/3)
+- [mongodol.add_ons](_autosummary/mongodol.add_ons.html.md): https://github.com/i2mint/mongodol/issues/3
 - [mongodol.base](_autosummary/mongodol.base.html.md): Base mongoDB data object layers
 - [mongodol.constants](_autosummary/mongodol.constants.html.md): Module to centralize constants used throughout project.
 - [mongodol.errors](_autosummary/mongodol.errors.html.md): Where mongodol error objects are
@@ -19,12 +19,12 @@
 - [mongodol.util](_autosummary/mongodol.util.html.md): Util functions
 - [mongodol.utils](_autosummary/mongodol.utils.html.md): Util modules
 - [mongodol.utils.werk_local](_autosummary/mongodol.utils.werk_local.html.md): Vendored from werkzeug’s local.py module, edited to our needs.
-- [mongodol.views](_autosummary/mongodol.views.html.md): Mapping views that keep working when a mongo store is wrapped by `dol`.
-- [About this build](about-this-build.html.md): This documentation was built on **2026-09-15 13:34 UTC** from commit <a href="https://github.com/i2m...
+- [mongodol.views](_autosummary/mongodol.views.html.md): Mapping views that keep working when a mongo store is wrapped by &#96;dol&#96;.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 13:32 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
 
----
+## Optional
 
-For more comprehensive documentation, see [mongodol.md](mongodol.md)
+- [mongodol.md](mongodol.md): Complete documentation in a single file.
 
 ## Build
 

@@ -21,7 +21,7 @@ A `Store` that forwards the mongo bulk-read protocol through its transforms.
 
 Historically this was the *only* way to get `values()`/`items()` to honour a
 wrapper’s transforms – hence `mongodol.trans.wrap_kvs`, which uses it as the
-wrapper class. It is no longer needed for that: [`mongodol.views`](mongodol.views.html.md#module-mongodol.views) resolves the
+wrapper class. It is no longer needed for that: [`mongodol.views`](mongodol.views.md#module-mongodol.views) resolves the
 bulk path through any wrapper chain, so plain `dol.wrap_kvs` now works too. It is
 kept because it also forwards the write-side bulk methods (`append`/`extend`),
 and because code may call `iter_values()`/`contains_value()` directly.
@@ -232,7 +232,7 @@ since there are no missing keys here; only empty results (cursors that don’t y
 ```
 
 `s.keys()`, `s.values()`, and `s.items()` are `collections.abc.MappingViews` instances
-(specialized for mongo – see [`mongodol.views`](mongodol.views.html.md#module-mongodol.views): they fetch the whole collection in
+(specialized for mongo – see [`mongodol.views`](mongodol.views.md#module-mongodol.views): they fetch the whole collection in
 a single query, and keep doing so, correctly, when the store is wrapped by `dol`).
 
 ```pycon
@@ -274,14 +274,14 @@ But you can take care of that in higher level wrappers that have hashable keys a
 
 #### ItemsView
 
-alias of [`MongoItemsView`](mongodol.views.html.md#mongodol.views.MongoItemsView)
+alias of [`MongoItemsView`](mongodol.views.md#mongodol.views.MongoItemsView)
 
 #### ValuesView
 
 Views that resolve the bulk-read fast path through any `dol` wrapper chain,
-rather than through blind attribute delegation. See [`mongodol.views`](mongodol.views.html.md#module-mongodol.views).
+rather than through blind attribute delegation. See [`mongodol.views`](mongodol.views.md#module-mongodol.views).
 
-alias of [`MongoValuesView`](mongodol.views.html.md#mongodol.views.MongoValuesView)
+alias of [`MongoValuesView`](mongodol.views.md#mongodol.views.MongoValuesView)
 
 #### aggregate(pipeline, \*\*kwargs)
 

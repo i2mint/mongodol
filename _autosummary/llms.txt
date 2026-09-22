@@ -1,0 +1,24 @@
+# mongodol
+
+> MongoDB Data Object Layer
+
+
+## Pages in this subsection
+
+- [mongodol](mongodol.html.md): Access mongo through a Mapping interface
+- [mongodol.add_ons](mongodol.add_ons.html.md): https://github.com/i2mint/mongodol/issues/3
+- [mongodol.base](mongodol.base.html.md): Base mongoDB data object layers
+- [mongodol.constants](mongodol.constants.html.md): Module to centralize constants used throughout project.
+- [mongodol.errors](mongodol.errors.html.md): Where mongodol error objects are
+- [mongodol.recipes](mongodol.recipes.html.md): Mongodol Recipes
+- [mongodol.stores](mongodol.stores.html.md): Some useful stores for mongoDB
+- [mongodol.tracking_methods](mongodol.tracking_methods.html.md): Tracking functionality
+- [mongodol.trans](mongodol.trans.html.md): Transformative functionality
+- [mongodol.util](mongodol.util.html.md): Util functions
+- [mongodol.utils](mongodol.utils.html.md): Util modules
+- [mongodol.utils.werk_local](mongodol.utils.werk_local.html.md): Vendored from werkzeug’s local.py module, edited to our needs.
+- [mongodol.views](mongodol.views.html.md): Mapping views that keep working when a mongo store is wrapped by &#96;dol&#96;.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

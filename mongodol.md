@@ -1,4 +1,4 @@
-> built 2026-09-15 13:34 UTC from d5502c0 (master) · mongodol 0.1.5. Details: build_info.json
+> built 2026-09-22 13:32 UTC from 3680460 (master) · mongodol 0.1.6. Details: build_info.json
 
 # index.html.md
 
@@ -41,14 +41,16 @@ from mongodol import MongoCollectionPersister, mk_dflt_mgc
 
 # mk_dflt_mgc() gives you a pymongo collection to play with (mongodol/mongodol_test by default)
 mgc = mk_dflt_mgc()
-mgc.delete_many({})  # start from an empty collection (skip this to keep what's already there)
-s = MongoCollectionPersister(mgc, getitem_projection={'_id': False})
+mgc.delete_many(
+    {}
+)  # start from an empty collection (skip this to keep what's already there)
+s = MongoCollectionPersister(mgc, getitem_projection={"_id": False})
 
 len(s)
 # 0
 
-k = {'_id': 'my_id'}
-s[k] = {'mongo': 'uses', 'json': 'data'}
+k = {"_id": "my_id"}
+s[k] = {"mongo": "uses", "json": "data"}
 list(s)
 # [{'_id': 'my_id'}]
 ```
@@ -246,6 +248,18 @@ Bulk-read all `(key, value)` pairs, transforming each with `_key_of_id`/`_obj_of
 #### iter_values()
 
 Bulk-read all values, transforming each with `_obj_of_data`.
+
+#### persist_data(data, key=None)
+
+Write `data` under `key`, through this wrapper’s own `__setitem__`.
+
+Unlike the leaf’s `persist_data` (a thin `{ID: data[ID]} -> data` shortcut),
+this routes through `self[key] = data`, so it applies `_id_of_key`/
+`_data_of_obj` instead of bypassing them (see i2mint/mongodol#11).
+
+`key` defaults to being inferred from `data[ID]`, for backward compatibility
+with the previous leaf-bound behaviour – but that inference itself bypasses the
+key codec, so pass `key` explicitly wherever the caller already knows it.
 
 ### *class* mongodol.base.MongoClientReader(host=None, port=None, document_class=<class 'dict'>, tz_aware=None, connect=None, type_registry=None, \*\*kwargs)
 
@@ -2216,16 +2230,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-09-15 13:34 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/d5502c083d05b25aee8edad95f6a57e5d3c6ff4e"><code>d5502c0</code></a> on branch <code>master</code>, for **mongodol 0.1.5** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-22 13:32 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>3680460</code></a> on branch <code>master</code>, for **mongodol 0.1.6** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.1.6) is behind the latest release on PyPI (0.1.7): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/d5502c083d05b25aee8edad95f6a57e5d3c6ff4e"><code>d5502c083d05b25aee8edad95f6a57e5d3c6ff4e</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/36804609d4f4213c17e951742fad26bc9b839bb2"><code>36804609d4f4213c17e951742fad26bc9b839bb2</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2236,9 +2252,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/34975694579">34975694579</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/35733883379">35733883379</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>d5502c083d05b25aee8edad95f6a57e5d3c6ff4e</code> (in the history of the built commit) |
+| Event commit | <code>36804609d4f4213c17e951742fad26bc9b839bb2</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -2263,13 +2279,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.5/">0.1.5</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.7/">0.1.7</a>, newer than the documented version (0.1.6).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout d5502c083d05b25aee8edad95f6a57e5d3c6ff4e
+git checkout 36804609d4f4213c17e951742fad26bc9b839bb2
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

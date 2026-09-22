@@ -10,6 +10,8 @@
 
 <link rel="alternate" type="text/markdown" href="mongodol.base.html.md">
 <link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="mongodol.base.html.md">
+<link rel="describedby" href="llms.txt">
     <title>mongodol.base &#8212; mongodol</title>
   
   
@@ -42,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=59fadc99"></script>
+    <script src="../_static/documentation_options.js?v=6e0256f3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +57,7 @@
     <link rel="prev" title="mongodol.add_ons" href="mongodol.add_ons.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
+  <meta name="docsearch:version" content="0.1.6" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -459,6 +461,18 @@ and because code may call <code class="docutils literal notranslate"><span class
 <dd><p>Bulk-read all values, transforming each with <code class="docutils literal notranslate"><span class="pre">_obj_of_data</span></code>.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="mongodol.base.MongoBaseStore.persist_data">
+<span class="sig-name descname"><span class="pre">persist_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/base.html#MongoBaseStore.persist_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.base.MongoBaseStore.persist_data" title="Link to this definition">#</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">data</span></code> under <code class="docutils literal notranslate"><span class="pre">key</span></code>, through this wrapper’s own <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code>.</p>
+<p>Unlike the leaf’s <code class="docutils literal notranslate"><span class="pre">persist_data</span></code> (a thin <code class="docutils literal notranslate"><span class="pre">{ID:</span> <span class="pre">data[ID]}</span> <span class="pre">-&gt;</span> <span class="pre">data</span></code> shortcut),
+this routes through <code class="docutils literal notranslate"><span class="pre">self[key]</span> <span class="pre">=</span> <span class="pre">data</span></code>, so it applies <code class="docutils literal notranslate"><span class="pre">_id_of_key</span></code>/
+<code class="docutils literal notranslate"><span class="pre">_data_of_obj</span></code> instead of bypassing them (see i2mint/mongodol#11).</p>
+<p><code class="docutils literal notranslate"><span class="pre">key</span></code> defaults to being inferred from <code class="docutils literal notranslate"><span class="pre">data[ID]</span></code>, for backward compatibility
+with the previous leaf-bound behaviour – but that inference itself bypasses the
+key codec, so pass <code class="docutils literal notranslate"><span class="pre">key</span></code> explicitly wherever the caller already knows it.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -831,6 +845,7 @@ Use custom classes here, and/or partials (curried functions) thereof, to fix any
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.extend"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.extend()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.iter_items"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.iter_items()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.iter_values"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.iter_values()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoBaseStore.persist_data"><code class="docutils literal notranslate"><span class="pre">MongoBaseStore.persist_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.base.MongoClientReader"><code class="docutils literal notranslate"><span class="pre">MongoClientReader</span></code></a></li>
