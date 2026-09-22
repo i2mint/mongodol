@@ -204,7 +204,7 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
         ), (
             f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         )
-        self.mgc.delete_many(self._merge_with_filt(k))
+        self.mgc.delete_many(self._write_filter_for_key(k))
         # A Mapping is itself a Collection, so it must be tested for first, or a single
         # doc would be "iterated" into its field names.
         docs = [v] if isinstance(v, Mapping) else list(v)

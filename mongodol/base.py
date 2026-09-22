@@ -25,6 +25,26 @@ from mongodol.views import (
 )
 
 
+def operator_field_names(obj) -> list:
+    """The ``$``-prefixed field names found anywhere in ``obj`` (mappings and lists).
+
+    >>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
+    ['$gt']
+    >>> operator_field_names({'a': 1})
+    []
+    """
+    found = []
+    if isinstance(obj, Mapping):
+        for field, value in obj.items():
+            if isinstance(field, str) and field.startswith("$"):
+                found.append(field)
+            found.extend(operator_field_names(value))
+    elif isinstance(obj, (list, tuple)):
+        for value in obj:
+            found.extend(operator_field_names(value))
+    return found
+
+
 # TODO: mgc type annotation
 #  See https://stackoverflow.com/questions/66464191/referencing-a-python-class-within-its-definition-but-outside-a-method
 class MongoCollectionCollection(DolCollection):
@@ -402,7 +422,16 @@ class MongoCollectionPersister(MongoCollectionReader):
     {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
     {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 
+    Writes stay inside the store's scope: a key or value that contradicts a field
+    of the write filter (``on_write_filter``, else ``filter``) raises
+    ``ValueError``, and keys used to replace or delete docs may not contain
+    ``$``-operators (pass ``allow_operators_in_write_keys=True`` to allow them).
+    Reads (``s[k]``, ``k in s``) still accept query keys, always within the scope.
+
     """
+
+    #: Whether keys given to write/delete operations may contain ``$``-operators.
+    allow_operators_in_write_keys = False
 
     def __init__(
         self,
@@ -411,6 +440,8 @@ class MongoCollectionPersister(MongoCollectionReader):
         on_write_filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
+        *,
+        allow_operators_in_write_keys: bool = False,
         **mgc_find_kwargs,
     ):
         super().__init__(
@@ -421,13 +452,14 @@ class MongoCollectionPersister(MongoCollectionReader):
             **mgc_find_kwargs,
         )
         self._on_write_filter = on_write_filter
+        self.allow_operators_in_write_keys = allow_operators_in_write_keys
 
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(v, Mapping), (
             f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
         )
         return self.mgc.replace_one(
-            filter=self._merge_with_filt(k),
+            filter=self._write_filter_for_key(k),
             replacement=self._build_doc(k, v),
             upsert=True,
         )
@@ -437,9 +469,24 @@ class MongoCollectionPersister(MongoCollectionReader):
             f"k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}"
         )
         if len(k) > 0:
-            return self.mgc.delete_one(self._merge_with_filt(k))
+            return self.mgc.delete_one(self._write_filter_for_key(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
+
+    def _write_filter_for_key(self, k: Mapping) -> dict:
+        """The query selecting the doc(s) that a write/delete of key ``k`` targets.
+
+        Refuses ``$``-operators in ``k`` (unless ``allow_operators_in_write_keys``),
+        since a query-shaped key would select arbitrary docs of the scope.
+        """
+        if not self.allow_operators_in_write_keys:
+            operators = operator_field_names(k)
+            if operators:
+                raise ValueError(
+                    f"Keys used to write or delete may not contain query operators "
+                    f"({', '.join(sorted(set(operators)))}). Key was: {k}"
+                )
+        return self._merge_with_filt(k)
 
     def append(self, v):
         """Insert a single doc ``v``, merged with ``on_write_filter`` if set, else this store's filter."""
@@ -458,13 +505,20 @@ class MongoCollectionPersister(MongoCollectionReader):
 
     def _build_doc(self, *args):
         def merge_doc_elements_with_filter():
-            d = self._on_write_filter or self.filter
+            scope = self._on_write_filter or self.filter
+            d = dict(scope)
             for v in args:
                 if v is None:
                     v = {}
                 assert isinstance(v, Mapping), (
                     f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
                 )
+                for field, value in v.items():
+                    if field in scope and value != scope[field]:
+                        raise ValueError(
+                            f"Field {field!r} is {value!r}, which contradicts this "
+                            f"store's write scope ({field!r}: {scope[field]!r})."
+                        )
                 d = dict(d, **v)
             return d
 
