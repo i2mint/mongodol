@@ -565,9 +565,10 @@ class MongoCollectionPersister(MongoCollectionReader):
                     f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
                 )
                 for field, value in v.items():
-                    if field in scope and _satisfies_scope_value(
-                        value, scope[field]
-                    ) is False:
+                    if (
+                        field in scope
+                        and _satisfies_scope_value(value, scope[field]) is False
+                    ):
                         raise ValueError(
                             f"Field {field!r} is {value!r}, which contradicts this "
                             f"store's write scope ({field!r}: {scope[field]!r})."
