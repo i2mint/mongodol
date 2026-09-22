@@ -614,3 +614,18 @@ class MongoBaseStore(Store):
     def extend(self, values):
         """Forward ``extend`` to the wrapped store, transforming each value first."""
         return self.store.extend(list(map(self._data_of_obj, values)))
+
+    def persist_data(self, data, key=None):
+        """Write ``data`` under ``key``, through this wrapper's own ``__setitem__``.
+
+        Unlike the leaf's ``persist_data`` (a thin ``{ID: data[ID]} -> data`` shortcut),
+        this routes through ``self[key] = data``, so it applies ``_id_of_key``/
+        ``_data_of_obj`` instead of bypassing them (see i2mint/mongodol#11).
+
+        ``key`` defaults to being inferred from ``data[ID]``, for backward compatibility
+        with the previous leaf-bound behaviour -- but that inference itself bypasses the
+        key codec, so pass ``key`` explicitly wherever the caller already knows it.
+        """
+        if key is None:
+            key = self._key_of_id({ID: self._data_of_obj(data)[ID]})
+        return self.__setitem__(key, data)
