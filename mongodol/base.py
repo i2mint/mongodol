@@ -459,8 +459,9 @@ class MongoCollectionPersister(MongoCollectionReader):
 
     Writes stay inside the store's scope: a key or value that contradicts a field
     of the write filter (``on_write_filter``, else ``filter``) raises
-    ``ValueError`` (fields scoped with operators other than ``$eq``/``$in`` can't be
-    checked: give such stores an ``on_write_filter``). Keys used to replace or
+    ``ValueError``. Fields scoped with operators other than ``$eq``/``$in`` (such
+    as ``$ne``, ``$gt``) are NOT checked and such writes are let through: give
+    those stores an ``on_write_filter`` with plain values. Keys used to replace or
     delete docs may not contain ``$``-operators or regexes (pass
     ``allow_operators_in_write_keys=True``, or set it as a class attribute, to allow
     them), and those queries are confined by ``filter`` and ``on_write_filter``.
