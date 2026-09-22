@@ -270,12 +270,12 @@ class MongoBulkWritesMixin(TrackableMixin):
             if func_name == "__setitem__":
                 k = _kwargs.get("k", {})
                 return pymongo.ReplaceOne(
-                    filter=self._merge_with_filt(k),
+                    filter=self._write_filter_for_key(k),
                     replacement=self._build_doc(k, v),
                     upsert=True,
                 )
             elif func_name == "__delitem__":
-                return pymongo.DeleteOne(filter=self._merge_with_filt(k))
+                return pymongo.DeleteOne(filter=self._write_filter_for_key(k))
             elif func_name == "append":
                 return pymongo.InsertOne(document=self._build_doc(v))
             elif func_name == "extend":

@@ -1,11 +1,14 @@
 """Base mongoDB data object layers"""
 
+import re
 from functools import wraps, cached_property
 from typing import Optional, Union
 from collections.abc import Mapping
 from collections import ChainMap
 from dol.base import Store
 
+import bson
+from bson.regex import Regex as BsonRegex
 from pymongo import MongoClient
 
 from dol import KvReader, Collection as DolCollection
@@ -23,6 +26,58 @@ from mongodol.views import (
     bulk_items,
     bulk_values,
 )
+
+
+_QUERY_VALUE_TYPES = (re.Pattern, BsonRegex)
+
+
+def operator_field_names(obj) -> list:
+    """The parts of ``obj`` that make it act as a query rather than an exact match.
+
+    That is: ``$``-prefixed field names and regular-expression values, found at any
+    depth (in mappings and lists). Regexes are reported by their ``repr``.
+
+    >>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
+    ['$gt']
+    >>> operator_field_names({'a': re.compile('x')})
+    ["re.compile('x')"]
+    >>> operator_field_names({'a': 1})
+    []
+    """
+    found = []
+    if isinstance(obj, _QUERY_VALUE_TYPES):
+        found.append(repr(obj))
+    elif isinstance(obj, Mapping):
+        for field, value in obj.items():
+            if isinstance(field, str) and field.startswith("$"):
+                found.append(field)
+            found.extend(operator_field_names(value))
+    elif isinstance(obj, (list, tuple)):
+        for value in obj:
+            found.extend(operator_field_names(value))
+    return found
+
+
+def _is_operator_expression(value) -> bool:
+    return isinstance(value, Mapping) and any(
+        isinstance(f, str) and f.startswith("$") for f in value
+    )
+
+
+def _same_bson_value(a, b) -> bool:
+    """Equality as MongoDB sees it (type- and field-order-sensitive), not Python's."""
+    return bson.encode({"v": a}) == bson.encode({"v": b})
+
+
+def _satisfies_scope_value(value, scope_value) -> Optional[bool]:
+    """Whether ``value`` satisfies ``scope_value``; ``None`` if that can't be decided here."""
+    if not _is_operator_expression(scope_value):
+        return _same_bson_value(value, scope_value)
+    if set(scope_value) == {"$eq"}:
+        return _same_bson_value(value, scope_value["$eq"])
+    if set(scope_value) == {"$in"}:
+        return any(_same_bson_value(value, x) for x in scope_value["$in"])
+    return None  # other operators: not checked (use on_write_filter for such scopes)
 
 
 # TODO: mgc type annotation
@@ -402,7 +457,20 @@ class MongoCollectionPersister(MongoCollectionReader):
     {'first': 'Guido', 'last': 'van Rossum'} --> {'yob': 1956, 'proj': 'python', 'bdfl': False}
     {'first': 'Vitalik', 'last': 'Buterin'} --> {'yob': 1994, 'proj': 'ethereum', 'bdfl': True}
 
+    Writes stay inside the store's scope: a key or value that contradicts a field
+    of the write filter (``on_write_filter``, else ``filter``) raises
+    ``ValueError``. Fields scoped with operators other than ``$eq``/``$in`` (such
+    as ``$ne``, ``$gt``) are NOT checked and such writes are let through: give
+    those stores an ``on_write_filter`` with plain values. Keys used to replace or
+    delete docs may not contain ``$``-operators or regexes (pass
+    ``allow_operators_in_write_keys=True``, or set it as a class attribute, to allow
+    them), and those queries are confined by ``filter`` and ``on_write_filter``.
+    Reads (``s[k]``, ``k in s``) still accept query keys, always within ``filter``.
+
     """
+
+    #: Whether keys given to write/delete operations may contain ``$``-operators.
+    allow_operators_in_write_keys = False
 
     def __init__(
         self,
@@ -411,6 +479,8 @@ class MongoCollectionPersister(MongoCollectionReader):
         on_write_filter: dict | None = None,
         iter_projection: ProjectionSpec = (ID,),
         getitem_projection: ProjectionSpec = None,
+        *,
+        allow_operators_in_write_keys: Optional[bool] = None,
         **mgc_find_kwargs,
     ):
         super().__init__(
@@ -421,13 +491,15 @@ class MongoCollectionPersister(MongoCollectionReader):
             **mgc_find_kwargs,
         )
         self._on_write_filter = on_write_filter
+        if allow_operators_in_write_keys is not None:
+            self.allow_operators_in_write_keys = allow_operators_in_write_keys
 
     def __setitem__(self, k, v):
         assert isinstance(k, Mapping) and isinstance(v, Mapping), (
             f"k (key) and v (value) must both be mappings (often dictionaries). Were:\n\tk={k}\n\tv={v}"
         )
         return self.mgc.replace_one(
-            filter=self._merge_with_filt(k),
+            filter=self._write_filter_for_key(k),
             replacement=self._build_doc(k, v),
             upsert=True,
         )
@@ -437,9 +509,29 @@ class MongoCollectionPersister(MongoCollectionReader):
             f"k (key) must be a mapping (most often a dictionary). Were:\n\tk={k}"
         )
         if len(k) > 0:
-            return self.mgc.delete_one(self._merge_with_filt(k))
+            return self.mgc.delete_one(self._write_filter_for_key(k))
         else:
             raise KeyError(f"You can't remove that key: {k}")
+
+    def _write_filter_for_key(self, k: Mapping) -> dict:
+        """The query selecting the doc(s) that a write/delete of key ``k`` targets.
+
+        Refuses query-shaped keys (``$``-operators, regexes) unless
+        ``allow_operators_in_write_keys``, since such a key would select arbitrary
+        docs of the scope. The query is confined by ``filter`` and, when set,
+        ``on_write_filter``.
+        """
+        if not self.allow_operators_in_write_keys:
+            operators = operator_field_names(k)
+            if operators:
+                raise ValueError(
+                    f"Keys used to write or delete may not contain query operators "
+                    f"or patterns ({', '.join(sorted(set(operators)))}). Key was: {k}"
+                )
+        on_write_filter = getattr(self, "_on_write_filter", None)
+        if on_write_filter:
+            return {"$and": [self.filter, on_write_filter, k]}
+        return self._merge_with_filt(k)
 
     def append(self, v):
         """Insert a single doc ``v``, merged with ``on_write_filter`` if set, else this store's filter."""
@@ -458,13 +550,28 @@ class MongoCollectionPersister(MongoCollectionReader):
 
     def _build_doc(self, *args):
         def merge_doc_elements_with_filter():
-            d = self._on_write_filter or self.filter
+            scope = self._on_write_filter or self.filter
+            dotted = [f for f in scope if isinstance(f, str) and "." in f]
+            if dotted:
+                raise ValueError(
+                    f"Can't write through a scope with dotted fields {dotted}: "
+                    "give an on_write_filter with nested documents instead."
+                )
+            d = dict(scope)
             for v in args:
                 if v is None:
                     v = {}
                 assert isinstance(v, Mapping), (
                     f" v (value) must be a mapping (often a dictionary). Were:\n\tv={v}"
                 )
+                for field, value in v.items():
+                    if field in scope and _satisfies_scope_value(
+                        value, scope[field]
+                    ) is False:
+                        raise ValueError(
+                            f"Field {field!r} is {value!r}, which contradicts this "
+                            f"store's write scope ({field!r}: {scope[field]!r})."
+                        )
                 d = dict(d, **v)
             return d
 
