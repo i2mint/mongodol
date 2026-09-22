@@ -204,11 +204,14 @@ class MongoCollectionMultipleDocsPersister(MongoCollectionPersisterWithResultMap
         ), (
             f"v (value) must be mappings (often dictionaries) or a collection of mappings. Were:\n\tk={k}\n\tv={v}"
         )
-        self.mgc.delete_many(self._write_filter_for_key(k))
         # A Mapping is itself a Collection, so it must be tested for first, or a single
         # doc would be "iterated" into its field names.
         docs = [v] if isinstance(v, Mapping) else list(v)
-        return self.mgc.insert_many([self._build_doc(k, doc) for doc in docs])
+        # Validate everything before deleting anything, so a refused write loses no data.
+        delete_filter = self._write_filter_for_key(k)
+        new_docs = [self._build_doc(k, doc) for doc in docs]
+        self.mgc.delete_many(delete_filter)
+        return self.mgc.insert_many(new_docs)
 
 
 class MongoStore(Store):
