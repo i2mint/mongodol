@@ -1,7 +1,7 @@
 """Writes stay within a store's scope filter; write/delete keys can't carry operators.
 
 These tests use a recording stand-in for the pymongo collection, so they need no
-server (but live under ``tests/``, which conftest deselects without one).
+server (conftest lists this module as MongoDB-free, so it runs everywhere).
 """
 
 import re
