@@ -8,6 +8,8 @@ from collections import ChainMap
 from dol.base import Store
 
 import bson
+from bson.codec_options import CodecOptions
+from bson.binary import UuidRepresentation
 from bson.regex import Regex as BsonRegex
 from pymongo import MongoClient
 
@@ -15,6 +17,7 @@ from dol import KvReader, Collection as DolCollection
 
 from mongodol.constants import ID, PyMongoCollectionSpec, end_of_cursor, DFLT_TEST_DB
 from mongodol.util import (
+    mk_client,
     ProjectionSpec,
     normalize_projection,
     projection_union,
@@ -58,15 +61,27 @@ def operator_field_names(obj) -> list:
     return found
 
 
+#: The projection that returns only ``_id``: what an existence check wants. Spelled out
+#: because pymongo 3 read ``()`` as this and pymongo 4 reads it as "no projection".
+_ID_ONLY = {ID: True}
+
+
 def _is_operator_expression(value) -> bool:
     return isinstance(value, Mapping) and any(
         isinstance(f, str) and f.startswith("$") for f in value
     )
 
 
+#: Only used to compare two values encoded the same way, so any UUID layout will do;
+#: the default one (pymongo 4) refuses a ``uuid.UUID`` outright.
+_COMPARISON_CODEC = CodecOptions(uuid_representation=UuidRepresentation.STANDARD)
+
+
 def _same_bson_value(a, b) -> bool:
     """Equality as MongoDB sees it (type- and field-order-sensitive), not Python's."""
-    return bson.encode({"v": a}) == bson.encode({"v": b})
+    return bson.encode({"v": a}, codec_options=_COMPARISON_CODEC) == bson.encode(
+        {"v": b}, codec_options=_COMPARISON_CODEC
+    )
 
 
 def _satisfies_scope_value(value, scope_value) -> Optional[bool]:
@@ -124,7 +139,7 @@ class MongoCollectionCollection(DolCollection):
         return self.mgc.count_documents(**self._count_kwargs)
 
     def __contains__(self, k: dict):
-        cursor = self.mgc.find(self._merge_with_filt(k), projection=())
+        cursor = self.mgc.find(self._merge_with_filt(k), projection=_ID_ONLY)
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     @cached_property
@@ -238,6 +253,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     ):
         if iter_projection is not None and not isinstance(iter_projection, dict):
             iter_projection = {k: True for k in iter_projection}
+        if iter_projection == {}:  # pymongo 4 reads {} as "whole documents"
+            iter_projection = dict(_ID_ONLY)
         super().__init__(
             mgc=mgc,
             filter=filter,
@@ -258,7 +275,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     def contains_value(self, v):
         """Bulk-read counterpart of ``__contains__`` for values: is there a doc matching ``v``?"""
         cursor = self.mgc.find(
-            filter=self._merge_with_filt(v), projection=(), **self._mgc_find_kwargs
+            filter=self._merge_with_filt(v), projection=_ID_ONLY, **self._mgc_find_kwargs
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
 
@@ -276,7 +293,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         # TODO: How do we have cursor return no data (here still has _id)
         cursor = self.mgc.find(
             filter=dict(v, **self._merge_with_filt(k)),
-            projection=(),
+            projection=_ID_ONLY,
             **self._mgc_find_kwargs,
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
@@ -342,9 +359,9 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     ):
         """Make an instance from db/collection names and connection params, instead of a live mongo collection object."""
         if mongo_client is None:
-            mongo_client = MongoClient()
+            mongo_client = mk_client()
         elif isinstance(mongo_client, dict):
-            mongo_client = MongoClient(**mongo_client)
+            mongo_client = mk_client(**mongo_client)
 
         return cls(
             mgc=mongo_client[db_name][collection_name],
@@ -628,7 +645,7 @@ class MongoClientReader(KvReader):
 
     @wraps(MongoClient.__init__)
     def __init__(self, *mongo_client_args, **mongo_client_kwargs):
-        self._mongo_client = MongoClient(*mongo_client_args, **mongo_client_kwargs)
+        self._mongo_client = mk_client(*mongo_client_args, **mongo_client_kwargs)
 
     def __iter__(self):
         yield from self._mongo_client.list_database_names()
@@ -668,9 +685,9 @@ class MongoDbReader(KvReader):
         **mongo_client_kwargs,
     ):
         if mongo_client is None:
-            self._mongo_client = MongoClient(**mongo_client_kwargs)
+            self._mongo_client = mk_client(**mongo_client_kwargs)
         elif isinstance(mongo_client, dict):
-            self._mongo_client = MongoClient(**mongo_client)
+            self._mongo_client = mk_client(**mongo_client)
         else:
             self._mongo_client = mongo_client
         self._db_name = db_name

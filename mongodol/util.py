@@ -14,14 +14,30 @@ from linkup import key_aligned_val_op_with_forced_defaults
 from mongodol.constants import (
     ID,
     DFLT_MONGO_CLIENT_ARGS,
+    DFLT_UUID_REPRESENTATION,
     DFLT_TEST_DB,
     DFLT_TEST_COLLECTION,
 )
 
 
+def mk_client(*args, **kwargs):
+    """Make a ``pymongo.MongoClient``, keeping pymongo 3's UUID codec unless told otherwise.
+
+    >>> mk_client(connect=False).codec_options.uuid_representation
+    3
+    >>> mk_client(connect=False, uuidRepresentation="standard").codec_options.uuid_representation
+    4
+
+    A connection string that names a ``uuidRepresentation`` is left to say it.
+    """
+    if not any(isinstance(a, str) and "uuidrepresentation" in a.lower() for a in args):
+        kwargs.setdefault("uuidRepresentation", DFLT_UUID_REPRESENTATION)
+    return MongoClient(*args, **kwargs)
+
+
 def mk_dflt_client():
     """Make a ``pymongo.MongoClient`` with the default client args."""
-    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)
+    return mk_client(*DFLT_MONGO_CLIENT_ARGS)
 
 
 def mk_dflt_mgc():
@@ -34,7 +50,7 @@ def mk_dflt_mgc():
     ('mongodol_test', 'mongodol')
 
     """
-    return MongoClient(*DFLT_MONGO_CLIENT_ARGS)[DFLT_TEST_DB][DFLT_TEST_COLLECTION]
+    return mk_dflt_client()[DFLT_TEST_DB][DFLT_TEST_COLLECTION]
 
 
 class KeyNotUniqueError(RuntimeError):
@@ -152,7 +168,9 @@ def normalize_projection(projection: Iterable | None):
         if isinstance(projection, str):
             projection = (projection,)
         elif isinstance(projection, Iterable) and len(projection) == 0:
-            return projection  # it's probably the empty projection
+            # The empty projection. pymongo 3 sent it as "only _id"; pymongo 4 sends
+            # no projection at all (whole documents), so say what is meant.
+            return {ID: True}
         elif projection is None:
             projection = None
         projection = dict({field: True for field in projection})
