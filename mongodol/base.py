@@ -72,26 +72,40 @@ def _is_operator_expression(value) -> bool:
     )
 
 
-#: Only used to compare two values encoded the same way, so any UUID layout will do;
-#: the default one (pymongo 4) refuses a ``uuid.UUID`` outright.
+#: For a collection whose codec names no UUID layout: pymongo 4's default for that
+#: refuses a ``uuid.UUID`` outright, and two values encoded alike compare under any.
 _COMPARISON_CODEC = CodecOptions(uuid_representation=UuidRepresentation.STANDARD)
 
 
-def _same_bson_value(a, b) -> bool:
+def _codec_for_comparison(mgc) -> CodecOptions:
+    """The collection's own codec (so a UUID compares as the server will see it), unless
+    it has no UUID layout, which pymongo 4 cannot encode a ``uuid.UUID`` with."""
+    codec = getattr(mgc, "codec_options", None)
+    if (
+        not isinstance(codec, CodecOptions)
+        or codec.uuid_representation == UuidRepresentation.UNSPECIFIED
+    ):
+        return _COMPARISON_CODEC
+    return codec
+
+
+def _same_bson_value(a, b, codec_options: CodecOptions = _COMPARISON_CODEC) -> bool:
     """Equality as MongoDB sees it (type- and field-order-sensitive), not Python's."""
-    return bson.encode({"v": a}, codec_options=_COMPARISON_CODEC) == bson.encode(
-        {"v": b}, codec_options=_COMPARISON_CODEC
+    return bson.encode({"v": a}, codec_options=codec_options) == bson.encode(
+        {"v": b}, codec_options=codec_options
     )
 
 
-def _satisfies_scope_value(value, scope_value) -> Optional[bool]:
+def _satisfies_scope_value(
+    value, scope_value, codec_options: CodecOptions = _COMPARISON_CODEC
+) -> Optional[bool]:
     """Whether ``value`` satisfies ``scope_value``; ``None`` if that can't be decided here."""
     if not _is_operator_expression(scope_value):
-        return _same_bson_value(value, scope_value)
+        return _same_bson_value(value, scope_value, codec_options)
     if set(scope_value) == {"$eq"}:
-        return _same_bson_value(value, scope_value["$eq"])
+        return _same_bson_value(value, scope_value["$eq"], codec_options)
     if set(scope_value) == {"$in"}:
-        return any(_same_bson_value(value, x) for x in scope_value["$in"])
+        return any(_same_bson_value(value, x, codec_options) for x in scope_value["$in"])
     return None  # other operators: not checked (use on_write_filter for such scopes)
 
 
@@ -261,6 +275,8 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
             iter_projection=iter_projection,
             **mgc_find_kwargs,
         )
+        if getitem_projection is not None and len(getitem_projection) == 0:
+            getitem_projection = dict(_ID_ONLY)  # pymongo 4 reads empty as "everything"
         self._getitem_projection = getitem_projection
 
     def __getitem__(self, k):
@@ -575,6 +591,7 @@ class MongoCollectionPersister(MongoCollectionReader):
                     "give an on_write_filter with nested documents instead."
                 )
             d = dict(scope)
+            codec = _codec_for_comparison(self.mgc)
             for v in args:
                 if v is None:
                     v = {}
@@ -584,7 +601,7 @@ class MongoCollectionPersister(MongoCollectionReader):
                 for field, value in v.items():
                     if (
                         field in scope
-                        and _satisfies_scope_value(value, scope[field]) is False
+                        and _satisfies_scope_value(value, scope[field], codec) is False
                     ):
                         raise ValueError(
                             f"Field {field!r} is {value!r}, which contradicts this "

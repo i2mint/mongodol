@@ -6,10 +6,12 @@ recording stand-in for the collection, so they run in CI and without Mongo alike
 
 import uuid
 
-from bson.binary import UuidRepresentation
+import pytest
+
+from bson.binary import Binary, UuidRepresentation
 from pymongo import MongoClient
 
-from mongodol.base import MongoCollectionReader, _same_bson_value
+from mongodol.base import MongoCollectionPersister, MongoCollectionReader, _same_bson_value
 from mongodol.constants import ID
 from mongodol.util import mk_client, normalize_projection
 
@@ -60,3 +62,34 @@ def test_clients_mongodol_makes_keep_pymongo_3s_uuid_layout():
     assert standard.codec_options.uuid_representation == UuidRepresentation.STANDARD
     uri = mk_client("mongodb://localhost:1/?uuidRepresentation=standard", connect=False)
     assert uri.codec_options.uuid_representation == UuidRepresentation.STANDARD
+
+
+def test_a_connection_string_or_option_that_chooses_a_layout_is_respected():
+    standard = UuidRepresentation.STANDARD
+    uri = "mongodb://localhost:1/?uuidRepresentation=standard"
+    for args, kwargs in [
+        ((uri,), {}),
+        ((), {"host": uri}),
+        (([uri],), {}),
+        ((), {"host": [uri]}),
+        ((), {"uuidrepresentation": "standard"}),
+    ]:
+        client = mk_client(*args, connect=False, **kwargs)
+        assert client.codec_options.uuid_representation == standard, (args, kwargs)
+
+
+def test_a_uuid_in_a_write_scope_is_compared_as_the_server_will_see_it():
+    u = uuid.uuid4()
+    unconnected = mk_client("mongodb://localhost:1", connect=False)["db"]["c"]
+    store = MongoCollectionPersister(unconnected, filter={"owner": u})
+    legacy = Binary(u.bytes, 3)  # what the legacy layout writes for u
+    assert store._build_doc({"owner": legacy})["owner"] == legacy
+    with pytest.raises(ValueError, match="contradicts"):
+        store._build_doc({"owner": Binary(u.bytes, 4)})  # a doc the filter never finds
+
+
+def test_an_empty_getitem_projection_means_the_id_only_too():
+    for empty in ((), [], {}):
+        reader = _reader(getitem_projection=empty)
+        reader.iter_values()
+        assert reader.mgc.projections == [{ID: True}], empty

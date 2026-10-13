@@ -20,6 +20,22 @@ from mongodol.constants import (
 )
 
 
+def _names_uuid_representation(args, kwargs) -> bool:
+    """Whether the caller already chose a UUID layout: as an option (pymongo matches
+    option names case-insensitively) or inside a connection string (``host=``, a list
+    of hosts, or the first positional argument)."""
+    if any(str(k).lower() == "uuidrepresentation" for k in kwargs):
+        return True
+    hosts = list(args[:1]) + [kwargs.get("host")]
+    flat = [
+        h
+        for host in hosts
+        for h in (host if isinstance(host, (list, tuple)) else [host])
+        if isinstance(h, str)
+    ]
+    return any("uuidrepresentation" in h.lower() for h in flat)
+
+
 def mk_client(*args, **kwargs):
     """Make a ``pymongo.MongoClient``, keeping pymongo 3's UUID codec unless told otherwise.
 
@@ -28,10 +44,11 @@ def mk_client(*args, **kwargs):
     >>> mk_client(connect=False, uuidRepresentation="standard").codec_options.uuid_representation
     4
 
-    A connection string that names a ``uuidRepresentation`` is left to say it.
+    A connection string (or a lower-cased option) that names a ``uuidRepresentation``
+    is left to say it.
     """
-    if not any(isinstance(a, str) and "uuidrepresentation" in a.lower() for a in args):
-        kwargs.setdefault("uuidRepresentation", DFLT_UUID_REPRESENTATION)
+    if not _names_uuid_representation(args, kwargs):
+        kwargs["uuidRepresentation"] = DFLT_UUID_REPRESENTATION
     return MongoClient(*args, **kwargs)
 
 
@@ -160,6 +177,13 @@ def normalize_projection(projection: Iterable | None):
 
     >>> normalize_projection('name.last')
     {'name.last': True, '_id': False}
+
+    The empty projection is the one exception to "``_id`` is set to False unless named":
+    it means "only ``_id``" (what pymongo 3 sent it as; pymongo 4 would send nothing,
+    i.e. whole documents):
+
+    >>> normalize_projection(())
+    {'_id': True}
 
     """
     if projection is None:
