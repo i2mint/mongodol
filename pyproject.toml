@@ -33,7 +33,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "pymongo[srv]==3.12.1",
+    "pymongo[srv]>=4",
     "dol",
     "i2",
     "linkup",

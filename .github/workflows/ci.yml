@@ -10,8 +10,9 @@ on: [push, pull_request]
 # at the same service, so its deselection gate sees the server and RUNS (rather
 # than deselects) the MongoDB-dependent tests + doctests.
 #
-# pymongo is pinned ==3.12.1, which supports MongoDB up to 5.0 — the service
-# uses `image: mongo:5.0` (NOT mongo:latest/7+, which pymongo 3.12 can't handle).
+# pymongo is `>=4` (i2mint/mongodol#16: the old ==3.12.1 pin made mongodol
+# uninstallable next to email-validator, via dnspython). The service stays on
+# `image: mongo:5.0`, which every pymongo 4.x supports.
 env:
   PROJECT_NAME: mongodol
   MONGODOL_MONGO_PROBE_HOST: mongodb://localhost:27017
@@ -73,7 +74,7 @@ jobs:
     # service container. Its 27017 port is published to localhost:27017, exactly
     # where mongodol connects by default (DFLT_TEST_HOST). The health check gates
     # the job's steps until Mongo answers a ping, so tests never race the server.
-    # mongo:5.0 is the newest server pymongo 3.12.1 (the pinned client) supports.
+    # mongo:5.0 is supported by every pymongo 4.x.
     services:
       mongo:
         image: mongo:5.0
