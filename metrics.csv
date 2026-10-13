@@ -1,8 +1,10 @@
 metric,value
 schema_version,1.0
-timestamp,2026-10-13T22:31:18.370146Z
-commit_sha,f279af30cb17e99ee6326991cdf83f92b76dde4a
-commit_message,Merge 70ba4a0d4302d8c8bb4922219aa3a64ad7ee8004 into 6e8633bc5fff98416c84d76806297282f6544eb2
+timestamp,2026-10-13T22:31:23.462915Z
+commit_sha,70ba4a0d4302d8c8bb4922219aa3a64ad7ee8004
+commit_message,"pymongo 4 review round 2: UUID scope check uses the collection's codec, mk_client respects host=/lowercase options, empty getitem_projection (#16)
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 python_version,3.10
 metrics.umpyre_stats.num_functions,10989
 metrics.umpyre_stats.num_classes,2419
@@ -33,4 +35,4 @@ metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,2.8797965049743652
+collection_duration_seconds,4.037581920623779
