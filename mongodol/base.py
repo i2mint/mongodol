@@ -105,7 +105,9 @@ def _satisfies_scope_value(
     if set(scope_value) == {"$eq"}:
         return _same_bson_value(value, scope_value["$eq"], codec_options)
     if set(scope_value) == {"$in"}:
-        return any(_same_bson_value(value, x, codec_options) for x in scope_value["$in"])
+        return any(
+            _same_bson_value(value, x, codec_options) for x in scope_value["$in"]
+        )
     return None  # other operators: not checked (use on_write_filter for such scopes)
 
 
@@ -291,7 +293,9 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
     def contains_value(self, v):
         """Bulk-read counterpart of ``__contains__`` for values: is there a doc matching ``v``?"""
         cursor = self.mgc.find(
-            filter=self._merge_with_filt(v), projection=_ID_ONLY, **self._mgc_find_kwargs
+            filter=self._merge_with_filt(v),
+            projection=_ID_ONLY,
+            **self._mgc_find_kwargs,
         )
         return next(cursor, end_of_cursor) is not end_of_cursor
 
