@@ -8,6 +8,7 @@ Util functions
 |-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [`get_key_value_specs`](#mongodol.util.get_key_value_specs)(key_fields, data_fields) | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
 | [`get_mongo_collection_pymongo_obj`](#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...]) | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
+| [`mk_client`](#mongodol.util.mk_client)(\*args, \*\*kwargs)                | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
 | [`mk_dflt_client`](#mongodol.util.mk_dflt_client)()                             | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
 | [`mk_dflt_mgc`](#mongodol.util.mk_dflt_mgc)()                                | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
 | [`normalize_projection`](#mongodol.util.normalize_projection)(projection)             | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
@@ -87,6 +88,20 @@ attribute returned directly:
 True
 ```
 
+### mongodol.util.mk_client(\*args, \*\*kwargs)
+
+Make a `pymongo.MongoClient`, keeping pymongo 3’s UUID codec unless told otherwise.
+
+```pycon
+>>> mk_client(connect=False).codec_options.uuid_representation
+3
+>>> mk_client(connect=False, uuidRepresentation="standard").codec_options.uuid_representation
+4
+```
+
+A connection string (or a lower-cased option) that names a `uuidRepresentation`
+is left to say it.
+
 ### mongodol.util.mk_dflt_client()
 
 Make a `pymongo.MongoClient` with the default client args.
@@ -144,6 +159,15 @@ Also, if you specify a string, it will think of this as a tuple containing just 
 ```pycon
 >>> normalize_projection('name.last')
 {'name.last': True, '_id': False}
+```
+
+The empty projection is the one exception to “`_id` is set to False unless named”:
+it means “only `_id`” (what pymongo 3 sent it as; pymongo 4 would send nothing,
+i.e. whole documents):
+
+```pycon
+>>> normalize_projection(())
+{'_id': True}
 ```
 
 ### mongodol.util.projection_union(projection_1, projection_2, already_flattened=False)

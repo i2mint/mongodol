@@ -4,3 +4,9 @@ mongodol.constants
 .. automodule:: mongodol.constants
 
    
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DFLT_UUID_REPRESENTATION
+   

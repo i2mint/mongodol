@@ -67,7 +67,7 @@ this routes through `self[key] = data`, so it applies `_id_of_key`/
 with the previous leaf-bound behaviour – but that inference itself bypasses the
 key codec, so pass `key` explicitly wherever the caller already knows it.
 
-### *class* mongodol.base.MongoClientReader(host=None, port=None, document_class=<class 'dict'>, tz_aware=None, connect=None, type_registry=None, \*\*kwargs)
+### *class* mongodol.base.MongoClientReader(host=None, port=None, document_class=None, tz_aware=None, connect=None, type_registry=None, \*\*kwargs)
 
 Bases: `KvReader`
 

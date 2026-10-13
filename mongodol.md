@@ -1,4 +1,4 @@
-> built 2026-09-22 16:30 UTC from 21cec5b (master) · mongodol 0.1.7. Details: build_info.json
+> built 2026-10-13 22:38 UTC from 658e4dc (master) · mongodol 0.1.8. Details: build_info.json
 
 # index.html.md
 
@@ -266,7 +266,7 @@ this routes through `self[key] = data`, so it applies `_id_of_key`/
 with the previous leaf-bound behaviour – but that inference itself bypasses the
 key codec, so pass `key` explicitly wherever the caller already knows it.
 
-### *class* mongodol.base.MongoClientReader(host=None, port=None, document_class=<class 'dict'>, tz_aware=None, connect=None, type_registry=None, \*\*kwargs)
+### *class* mongodol.base.MongoClientReader(host=None, port=None, document_class=None, tz_aware=None, connect=None, type_registry=None, \*\*kwargs)
 
 Bases: `KvReader`
 
@@ -594,6 +594,18 @@ depth (in mappings and lists). Regexes are reported by their `repr`.
 Module to centralize constants used throughout project.
 
 This includes enums, aliases, defaults, types, etc.
+
+### Module Attributes
+
+| [`DFLT_UUID_REPRESENTATION`](_autosummary/mongodol.constants.html.md#mongodol.constants.DFLT_UUID_REPRESENTATION)   | The UUID codec of the clients mongodol makes.   |
+|-----------------------------------------------------------------------------|-------------------------------------------------|
+
+### mongodol.constants.DFLT_UUID_REPRESENTATION *= 'pythonLegacy'*
+
+The UUID codec of the clients mongodol makes. pymongo 3 defaulted to the legacy
+Python layout (BSON subtype 3); pymongo 4 defaults to “unspecified”, which cannot
+encode a `uuid.UUID` and reads old ones back as `Binary`. Keeping the 3.x
+layout means data written before the upgrade still reads back as `uuid.UUID`.
 
 
 # _autosummary/mongodol.errors.html.md
@@ -1798,6 +1810,7 @@ Util functions
 |-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [`get_key_value_specs`](_autosummary/mongodol.util.html.md#mongodol.util.get_key_value_specs)(key_fields, data_fields) | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
 | [`get_mongo_collection_pymongo_obj`](_autosummary/mongodol.util.html.md#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...]) | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
+| [`mk_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_client)(\*args, \*\*kwargs)                | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
 | [`mk_dflt_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_client)()                             | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
 | [`mk_dflt_mgc`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_mgc)()                                | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
 | [`normalize_projection`](_autosummary/mongodol.util.html.md#mongodol.util.normalize_projection)(projection)             | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
@@ -1877,6 +1890,20 @@ attribute returned directly:
 True
 ```
 
+### mongodol.util.mk_client(\*args, \*\*kwargs)
+
+Make a `pymongo.MongoClient`, keeping pymongo 3’s UUID codec unless told otherwise.
+
+```pycon
+>>> mk_client(connect=False).codec_options.uuid_representation
+3
+>>> mk_client(connect=False, uuidRepresentation="standard").codec_options.uuid_representation
+4
+```
+
+A connection string (or a lower-cased option) that names a `uuidRepresentation`
+is left to say it.
+
 ### mongodol.util.mk_dflt_client()
 
 Make a `pymongo.MongoClient` with the default client args.
@@ -1934,6 +1961,15 @@ Also, if you specify a string, it will think of this as a tuple containing just 
 ```pycon
 >>> normalize_projection('name.last')
 {'name.last': True, '_id': False}
+```
+
+The empty projection is the one exception to “`_id` is set to False unless named”:
+it means “only `_id`” (what pymongo 3 sent it as; pymongo 4 would send nothing,
+i.e. whole documents):
+
+```pycon
+>>> normalize_projection(())
+{'_id': True}
 ```
 
 ### mongodol.util.projection_union(projection_1, projection_2, already_flattened=False)
@@ -2292,18 +2328,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-09-22 16:30 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5b</code></a> on branch <code>master</code>, for **mongodol 0.1.7** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-13 22:38 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4"><code>658e4dc</code></a> on branch <code>master</code>, for **mongodol 0.1.8** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.7) is behind the latest release on PyPI (0.1.8): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.8) is behind the latest release on PyPI (0.1.9): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/21cec5ba681f37d29a47e7679554bac1a4db8168"><code>21cec5ba681f37d29a47e7679554bac1a4db8168</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4"><code>658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2314,18 +2350,18 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/35754287660">35754287660</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/38478929877">38478929877</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>21cec5ba681f37d29a47e7679554bac1a4db8168</code> (in the history of the built commit) |
+| Event commit | <code>658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -2341,14 +2377,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.8/">0.1.8</a>, newer than the documented version (0.1.7).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.9/">0.1.9</a>, newer than the documented version (0.1.8).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 21cec5ba681f37d29a47e7679554bac1a4db8168
-pip install "epythet==0.2.12"
+git checkout 658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
