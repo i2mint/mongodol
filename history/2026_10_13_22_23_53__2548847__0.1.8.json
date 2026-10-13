@@ -1,0 +1,47 @@
+{
+  "collection_duration_seconds": 4.841165065765381,
+  "commit_message": "Merge affd34cc640acda6bfd0ff50b61b3364bfdf6aad into 6e8633bc5fff98416c84d76806297282f6544eb2",
+  "commit_sha": "254884787024d2bae325c733da0941aa58a3a142",
+  "metrics": {
+    "coverage": {
+      "branch_coverage": 0.0,
+      "error": "No coverage file found",
+      "line_coverage": 0.0,
+      "statements_covered": 0,
+      "statements_total": 0
+    },
+    "umpyre_stats": {
+      "comment_lines": 21915,
+      "comment_lines_ratio": 0.061305843847036114,
+      "docs_lines": 53116,
+      "empty_lines": 49045,
+      "empty_lines_ratio": 0.1372003245027555,
+      "files_analyzed": 877,
+      "function_lines": 172302,
+      "function_lines_ratio": 0.4820040842588189,
+      "mean_lines_per_function": 15.683779355543418,
+      "num_classes": 2419,
+      "num_functions": 10986,
+      "pypi_version": "0.1.8",
+      "total_lines": 357470
+    },
+    "wily": {
+      "cyclomatic_avg": 0.0,
+      "error": "wily report failed: Usage: wily report [OPTIONS] FILE [METRICS]...\nTry 'wily report --help' for help.\n\nError: Invalid value for '-f' / '--format': 'json' is not one of 'CONSOLE', 'HTML'.\n",
+      "files_analyzed": 0,
+      "maintainability_index": 0.0,
+      "total_loc": 0
+    },
+    "workflow_status": {
+      "last_run_status": "success",
+      "last_success_timestamp": "2026-09-22T16:32:09Z",
+      "recent_failure_count": 0,
+      "run_url": "https://github.com/i2mint/mongodol/actions/runs/35754550506",
+      "total_runs_analyzed": 10
+    }
+  },
+  "python_version": "3.10",
+  "schema_version": "1.0",
+  "timestamp": "2026-10-13T22:23:53.434274Z",
+  "workflow_status": {}
+}

@@ -1,12 +1,8 @@
 metric,value
 schema_version,1.0
-timestamp,2026-10-13T22:23:43.604634Z
-commit_sha,affd34cc640acda6bfd0ff50b61b3364bfdf6aad
-commit_message,"Relax pymongo[srv]==3.12.1 to >=4 (#16)
-
-The fleet runs mongodol on pymongo 4.x; the exact pin was never enforced. CI keeps the mongo:5.0 service, which every 4.x supports.
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
+timestamp,2026-10-13T22:23:53.434274Z
+commit_sha,254884787024d2bae325c733da0941aa58a3a142
+commit_message,Merge affd34cc640acda6bfd0ff50b61b3364bfdf6aad into 6e8633bc5fff98416c84d76806297282f6544eb2
 python_version,3.10
 metrics.umpyre_stats.num_functions,10986
 metrics.umpyre_stats.num_classes,2419
@@ -40,4 +36,4 @@ metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,4.8388776779174805
+collection_duration_seconds,4.841165065765381
