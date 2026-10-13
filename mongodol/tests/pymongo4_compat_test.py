@@ -93,3 +93,8 @@ def test_an_empty_getitem_projection_means_the_id_only_too():
         reader = _reader(getitem_projection=empty)
         reader.iter_values()
         assert reader.mgc.projections == [{ID: True}], empty
+
+
+def test_only_the_options_of_a_connection_string_count_as_choosing_a_layout():
+    client = mk_client("mongodb://localhost:1/uuidRepresentationDB", connect=False)
+    assert client.codec_options.uuid_representation == UuidRepresentation.PYTHON_LEGACY

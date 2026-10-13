@@ -33,7 +33,7 @@ def _names_uuid_representation(args, kwargs) -> bool:
         for h in (host if isinstance(host, (list, tuple)) else [host])
         if isinstance(h, str)
     ]
-    return any("uuidrepresentation" in h.lower() for h in flat)
+    return any("uuidrepresentation" in h.lower().partition("?")[2] for h in flat)
 
 
 def mk_client(*args, **kwargs):
