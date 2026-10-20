@@ -375,9 +375,6 @@ The parts of `obj` that make it act as a query rather than an exact match.
 That is: `$`-prefixed field names and regular-expression values, found at any
 depth (in mappings and lists). Regexes are reported by their `repr`.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
-
 ```pycon
 >>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
 ['$gt']
@@ -386,3 +383,6 @@ depth (in mappings and lists). Regexes are reported by their `repr`.
 >>> operator_field_names({'a': 1})
 []
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)

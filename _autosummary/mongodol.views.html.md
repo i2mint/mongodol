@@ -238,9 +238,6 @@ The chain ends at the first non-`Store` – the actual backend. Note that
 `dol` is free to insert pass-through `Store` layers of its own, so never
 assume one `wrap_kvs` call means exactly one layer.
 
-* **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)
-
 ```pycon
 >>> from dol import wrap_kvs
 >>> layers = list(store_layers(wrap_kvs({'a': 1}, obj_of_data=str)))
@@ -249,3 +246,6 @@ assume one `wrap_kvs` call means exactly one layer.
 >>> all(isinstance(x, Store) for x in layers[:-1])
 True
 ```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)

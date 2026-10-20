@@ -8,9 +8,11 @@ mongodol.util
 
    .. autosummary::
    
+      ensure_unique_index
       flatten_dict_items
       get_key_value_specs
       get_mongo_collection_pymongo_obj
+      has_unique_index
       mk_client
       mk_dflt_client
       mk_dflt_mgc
@@ -22,4 +24,5 @@ mongodol.util
    .. autosummary::
    
       KeyNotUniqueError
+      MissingUniqueIndexError
    

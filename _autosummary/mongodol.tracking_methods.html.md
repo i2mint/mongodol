@@ -201,9 +201,9 @@ Wrapping objects (classes or instances) so that specific method calls are tracke
 
 * **Parameters:**
   * **obj**
-  * **tracked_methods** – Method name or iterable of method names to track
-  * **tracking_mixin** – The mixin class to use to inject the \_tracks attribute, and other tracking utils (flush…)
-  * **calls_tracker** – The method decorator that implements the actual tracking
+  * **tracked_methods** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Method name or iterable of method names to track
+  * **tracking_mixin** ([`type`](https://docs.python.org/3/builtins/functions.html#type)) – The mixin class to use to inject the \_tracks attribute, and other tracking utils (flush…)
+  * **calls_tracker** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)) – The method decorator that implements the actual tracking
 * **Returns:**
   A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking
 

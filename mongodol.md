@@ -1,4 +1,4 @@
-> built 2026-10-13 22:38 UTC from 658e4dc (master) · mongodol 0.1.8. Details: build_info.json
+> built 2026-10-20 03:46 UTC from 18896e1 (master) · mongodol 0.1.9. Details: build_info.json
 
 # index.html.md
 
@@ -574,9 +574,6 @@ The parts of `obj` that make it act as a query rather than an exact match.
 That is: `$`-prefixed field names and regular-expression values, found at any
 depth (in mappings and lists). Regexes are reported by their `repr`.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
-
 ```pycon
 >>> operator_field_names({'a': 1, 'b': {'c': [{'$gt': 2}]}})
 ['$gt']
@@ -585,6 +582,9 @@ depth (in mappings and lists). Regexes are reported by their `repr`.
 >>> operator_field_names({'a': 1})
 []
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 
 # _autosummary/mongodol.constants.html.md
@@ -1467,9 +1467,9 @@ Wrapping objects (classes or instances) so that specific method calls are tracke
 
 * **Parameters:**
   * **obj**
-  * **tracked_methods** – Method name or iterable of method names to track
-  * **tracking_mixin** – The mixin class to use to inject the \_tracks attribute, and other tracking utils (flush…)
-  * **calls_tracker** – The method decorator that implements the actual tracking
+  * **tracked_methods** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Method name or iterable of method names to track
+  * **tracking_mixin** ([`type`](https://docs.python.org/3/builtins/functions.html#type)) – The mixin class to use to inject the \_tracks attribute, and other tracking utils (flush…)
+  * **calls_tracker** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)) – The method decorator that implements the actual tracking
 * **Returns:**
   A decorated class (of obj is a type) or instance (if obj is an instance) that implements method tracking
 
@@ -1806,20 +1806,23 @@ Util functions
 
 ### Functions
 
-| [`flatten_dict_items`](_autosummary/mongodol.util.html.md#mongodol.util.flatten_dict_items)(d[, prefix])              | Computes a "flat" dict from a nested one.                                                                                                                                                                                                       |
-|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`get_key_value_specs`](_autosummary/mongodol.util.html.md#mongodol.util.get_key_value_specs)(key_fields, data_fields) | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
-| [`get_mongo_collection_pymongo_obj`](_autosummary/mongodol.util.html.md#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...]) | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
-| [`mk_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_client)(\*args, \*\*kwargs)                | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
-| [`mk_dflt_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_client)()                             | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
-| [`mk_dflt_mgc`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_mgc)()                                | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
-| [`normalize_projection`](_autosummary/mongodol.util.html.md#mongodol.util.normalize_projection)(projection)             | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
-| [`projection_union`](_autosummary/mongodol.util.html.md#mongodol.util.projection_union)(projection_1, projection_2) | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
+| [`ensure_unique_index`](_autosummary/mongodol.util.html.md#mongodol.util.ensure_unique_index)(collection, key_fields, \*)   | Make sure mongo guarantees the unicity of `key_fields` in `collection`.                                                                                                                                                                         |
+|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`flatten_dict_items`](_autosummary/mongodol.util.html.md#mongodol.util.flatten_dict_items)(d[, prefix])                   | Computes a "flat" dict from a nested one.                                                                                                                                                                                                       |
+| [`get_key_value_specs`](_autosummary/mongodol.util.html.md#mongodol.util.get_key_value_specs)(key_fields, data_fields)      | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
+| [`get_mongo_collection_pymongo_obj`](_autosummary/mongodol.util.html.md#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...])      | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
+| [`has_unique_index`](_autosummary/mongodol.util.html.md#mongodol.util.has_unique_index)(collection, key_fields)          | Whether `collection` has a unique index on exactly `key_fields` (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.                                                                                         |
+| [`mk_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_client)(\*args, \*\*kwargs)                     | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
+| [`mk_dflt_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_client)()                                  | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
+| [`mk_dflt_mgc`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_mgc)()                                     | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
+| [`normalize_projection`](_autosummary/mongodol.util.html.md#mongodol.util.normalize_projection)(projection)                  | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
+| [`projection_union`](_autosummary/mongodol.util.html.md#mongodol.util.projection_union)(projection_1, projection_2)      | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
 
 ### Exceptions
 
-| [`KeyNotUniqueError`](_autosummary/mongodol.util.html.md#mongodol.util.KeyNotUniqueError)   | Raised when a key was expected to be unique, but wasn't (i.e. cursor has more than one match).   |
-|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [`KeyNotUniqueError`](_autosummary/mongodol.util.html.md#mongodol.util.KeyNotUniqueError)       | Raised when a key was expected to be unique, but wasn't (i.e. cursor has more than one match).   |
+|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [`MissingUniqueIndexError`](_autosummary/mongodol.util.html.md#mongodol.util.MissingUniqueIndexError) | Raised when a unique index was required on some fields, but there is none.                       |
 
 ### *exception* mongodol.util.KeyNotUniqueError
 
@@ -1830,6 +1833,42 @@ Raised when a key was expected to be unique, but wasn’t (i.e. cursor has more 
 #### *static* raise_error(k)
 
 Raise `KeyNotUniqueError` for the non-unique key `k`.
+
+### *exception* mongodol.util.MissingUniqueIndexError
+
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
+
+Raised when a unique index was required on some fields, but there is none.
+
+### mongodol.util.ensure_unique_index(collection, key_fields, , create=True)
+
+Make sure mongo guarantees the unicity of `key_fields` in `collection`.
+
+This is the alternative to checking, on every `s[key]`, that the cursor has a
+single match (`KeyNotUniqueError`): let the database enforce it, and then use a
+reader that doesn’t check (e.g. `MongoCollectionFirstDocReader`).
+
+* **Parameters:**
+  **create** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True (default), create the unique index if it’s missing (this
+  raises a pymongo `DuplicateKeyError` if the existing docs already violate
+  it). If False, raise `MissingUniqueIndexError` instead of creating it.
+
+```pycon
+>>> class FakeCollection:
+...     indexes = {}
+...     def index_information(self):
+...         return self.indexes
+...     def create_index(self, keys, unique=False):
+...         self.indexes['_'.join(map(str, keys))] = {'key': keys, 'unique': unique}
+>>> c = FakeCollection()
+>>> ensure_unique_index(c, 's', create=False)
+Traceback (most recent call last):
+  ...
+mongodol.util.MissingUniqueIndexError: No unique index on ('s',)
+>>> ensure_unique_index(c, 's')
+>>> has_unique_index(c, 's')
+True
+```
 
 ### mongodol.util.flatten_dict_items(d, prefix='')
 
@@ -1889,6 +1928,27 @@ attribute returned directly:
 >>> get_mongo_collection_pymongo_obj(store) is mgc
 True
 ```
+
+### mongodol.util.has_unique_index(collection, key_fields)
+
+Whether `collection` has a unique index on exactly `key_fields`
+(a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.
+
+Only uses `collection.index_information()`, so any object with that method works.
+
+```pycon
+>>> class FakeCollection:
+...     def index_information(self):
+...         return {'_id_': {'key': [('_id', 1)], 'unique': True},
+...                 's_1': {'key': [('s', 1)]}}
+>>> has_unique_index(FakeCollection(), '_id')
+True
+>>> has_unique_index(FakeCollection(), 's')  # an index, but not a unique one
+False
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### mongodol.util.mk_client(\*args, \*\*kwargs)
 
@@ -2054,7 +2114,7 @@ issubclass(type(user), LocalProxy)  # True
 ```
 
 * **Parameters:**
-  * **local** (`Union`[Local, [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The `Local` or callable that provides the
+  * **local** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[Local, [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The `Local` or callable that provides the
     proxied object.
   * **name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The attribute name to look up on a `Local`. Not
     used if a callable is given.
@@ -2309,9 +2369,6 @@ The chain ends at the first non-`Store` – the actual backend. Note that
 `dol` is free to insert pass-through `Store` layers of its own, so never
 assume one `wrap_kvs` call means exactly one layer.
 
-* **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)
-
 ```pycon
 >>> from dol import wrap_kvs
 >>> layers = list(store_layers(wrap_kvs({'a': 1}, obj_of_data=str)))
@@ -2321,6 +2378,9 @@ assume one `wrap_kvs` call means exactly one layer.
 True
 ```
 
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)
+
 
 # about-this-build.html.md
 
@@ -2328,18 +2388,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-10-13 22:38 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4"><code>658e4dc</code></a> on branch <code>master</code>, for **mongodol 0.1.8** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 03:46 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/18896e119e32d26b869d8c5210e36319a8291c66"><code>18896e1</code></a> on branch <code>master</code>, for **mongodol 0.1.9** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.8) is behind the latest release on PyPI (0.1.9): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.9) is behind the latest release on PyPI (0.1.10): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4"><code>658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/18896e119e32d26b869d8c5210e36319a8291c66"><code>18896e119e32d26b869d8c5210e36319a8291c66</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2350,16 +2410,16 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/38478929877">38478929877</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/39365851201">39365851201</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4</code> (in the history of the built commit) |
+| Event commit | <code>18896e119e32d26b869d8c5210e36319a8291c66</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.17  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.18  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
 
@@ -2377,14 +2437,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.9/">0.1.9</a>, newer than the documented version (0.1.8).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.10/">0.1.10</a>, newer than the documented version (0.1.9).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4
-pip install "epythet==0.2.17"
+git checkout 18896e119e32d26b869d8c5210e36319a8291c66
+pip install "epythet==0.2.18"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

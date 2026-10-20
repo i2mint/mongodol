@@ -45,7 +45,7 @@ issubclass(type(user), LocalProxy)  # True
 ```
 
 * **Parameters:**
-  * **local** (`Union`[Local, [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The `Local` or callable that provides the
+  * **local** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[Local, [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The `Local` or callable that provides the
     proxied object.
   * **name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The attribute name to look up on a `Local`. Not
     used if a callable is given.

@@ -31,6 +31,7 @@
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/epythet.css?v=50f4acfb" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=22607128"></script>
+    <script src="../../_static/documentation_options.js?v=8618f531"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
+  <meta name="docsearch:version" content="0.1.9" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -807,7 +808,9 @@ window.runMermaid = runMermaid;</script>
     <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">scope_value</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"$eq"</span><span class="p">}:</span>
         <span class="k">return</span> <span class="n">_same_bson_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">scope_value</span><span class="p">[</span><span class="s2">"$eq"</span><span class="p">],</span> <span class="n">codec_options</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">scope_value</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"$in"</span><span class="p">}:</span>
-        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">_same_bson_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">codec_options</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scope_value</span><span class="p">[</span><span class="s2">"$in"</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">_same_bson_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">codec_options</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scope_value</span><span class="p">[</span><span class="s2">"$in"</span><span class="p">]</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># other operators: not checked (use on_write_filter for such scopes)</span>
 
 
@@ -1000,7 +1003,9 @@ window.runMermaid = runMermaid;</script>
     <span class="k">def</span><span class="w"> </span><span class="nf">contains_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Bulk-read counterpart of ``__contains__`` for values: is there a doc matching ``v``?"""</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
-            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">_ID_ONLY</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_mgc_find_kwargs</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_with_filt</span><span class="p">(</span><span class="n">v</span><span class="p">),</span>
+            <span class="n">projection</span><span class="o">=</span><span class="n">_ID_ONLY</span><span class="p">,</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_mgc_find_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_of_cursor</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">end_of_cursor</span></div>
 

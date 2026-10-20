@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=50f4acfb" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=22607128"></script>
+    <script src="../_static/documentation_options.js?v=8618f531"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
+  <meta name="docsearch:version" content="0.1.9" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -390,14 +391,20 @@
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.flatten_dict_items" title="mongodol.util.flatten_dict_items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten_dict_items</span></code></a>(d[, prefix])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.ensure_unique_index" title="mongodol.util.ensure_unique_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_unique_index</span></code></a>(collection, key_fields, *)</p></td>
+<td><p>Make sure mongo guarantees the unicity of <code class="docutils literal notranslate"><span class="pre">key_fields</span></code> in <code class="docutils literal notranslate"><span class="pre">collection</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.flatten_dict_items" title="mongodol.util.flatten_dict_items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten_dict_items</span></code></a>(d[, prefix])</p></td>
 <td><p>Computes a &quot;flat&quot; dict from a nested one.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.get_key_value_specs" title="mongodol.util.get_key_value_specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_key_value_specs</span></code></a>(key_fields, data_fields)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.get_key_value_specs" title="mongodol.util.get_key_value_specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_key_value_specs</span></code></a>(key_fields, data_fields)</p></td>
 <td><p>Derive <code class="docutils literal notranslate"><span class="pre">key_projection</span></code> (and, when <code class="docutils literal notranslate"><span class="pre">data_fields</span></code> is None or a non-dict iterable, <code class="docutils literal notranslate"><span class="pre">items_projection</span></code>) from <code class="docutils literal notranslate"><span class="pre">key_fields</span></code>/<code class="docutils literal notranslate"><span class="pre">data_fields</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.get_mongo_collection_pymongo_obj" title="mongodol.util.get_mongo_collection_pymongo_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mongo_collection_pymongo_obj</span></code></a>([obj, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.get_mongo_collection_pymongo_obj" title="mongodol.util.get_mongo_collection_pymongo_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mongo_collection_pymongo_obj</span></code></a>([obj, ...])</p></td>
 <td><p>Get a pymongo.collection.Collection object for a mongo collection, flexibly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.has_unique_index" title="mongodol.util.has_unique_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_unique_index</span></code></a>(collection, key_fields)</p></td>
+<td><p>Whether <code class="docutils literal notranslate"><span class="pre">collection</span></code> has a unique index on exactly <code class="docutils literal notranslate"><span class="pre">key_fields</span></code> (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.mk_client" title="mongodol.util.mk_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_client</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Make a <code class="docutils literal notranslate"><span class="pre">pymongo.MongoClient</span></code>, keeping pymongo 3's UUID codec unless told otherwise.</p></td>
@@ -423,6 +430,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.KeyNotUniqueError" title="mongodol.util.KeyNotUniqueError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyNotUniqueError</span></code></a></p></td>
 <td><p>Raised when a key was expected to be unique, but wasn't (i.e. cursor has more than one match).</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.MissingUniqueIndexError" title="mongodol.util.MissingUniqueIndexError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MissingUniqueIndexError</span></code></a></p></td>
+<td><p>Raised when a unique index was required on some fields, but there is none.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -437,6 +447,45 @@
 <dd><p>Raise <code class="docutils literal notranslate"><span class="pre">KeyNotUniqueError</span></code> for the non-unique key <code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mongodol.util.MissingUniqueIndexError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">MissingUniqueIndexError</span></span><a class="reference internal" href="../_modules/mongodol/util.html#MissingUniqueIndexError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.MissingUniqueIndexError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></p>
+<p>Raised when a unique index was required on some fields, but there is none.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.util.ensure_unique_index">
+<span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">ensure_unique_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#ensure_unique_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.ensure_unique_index" title="Link to this definition">#</a></dt>
+<dd><p>Make sure mongo guarantees the unicity of <code class="docutils literal notranslate"><span class="pre">key_fields</span></code> in <code class="docutils literal notranslate"><span class="pre">collection</span></code>.</p>
+<p>This is the alternative to checking, on every <code class="docutils literal notranslate"><span class="pre">s[key]</span></code>, that the cursor has a
+single match (<code class="docutils literal notranslate"><span class="pre">KeyNotUniqueError</span></code>): let the database enforce it, and then use a
+reader that doesn’t check (e.g. <code class="docutils literal notranslate"><span class="pre">MongoCollectionFirstDocReader</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>create</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True (default), create the unique index if it’s missing (this
+raises a pymongo <code class="docutils literal notranslate"><span class="pre">DuplicateKeyError</span></code> if the existing docs already violate
+it). If False, raise <code class="docutils literal notranslate"><span class="pre">MissingUniqueIndexError</span></code> instead of creating it.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">FakeCollection</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">indexes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">index_information</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexes</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">create_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">indexes</span><span class="p">[</span><span class="s1">'_'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">keys</span><span class="p">))]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'key'</span><span class="p">:</span> <span class="n">keys</span><span class="p">,</span> <span class="s1">'unique'</span><span class="p">:</span> <span class="n">unique</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">FakeCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_unique_index</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">'s'</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">mongodol.util.MissingUniqueIndexError</span>: <span class="n">No unique index on ('s',)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_unique_index</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">'s'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">has_unique_index</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">'s'</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -503,6 +552,29 @@ attribute returned directly:</p>
 <span class="go">True</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.util.has_unique_index">
+<span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">has_unique_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_fields</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#has_unique_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.has_unique_index" title="Link to this definition">#</a></dt>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">collection</span></code> has a unique index on exactly <code class="docutils literal notranslate"><span class="pre">key_fields</span></code>
+(a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.</p>
+<p>Only uses <code class="docutils literal notranslate"><span class="pre">collection.index_information()</span></code>, so any object with that method works.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">FakeCollection</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">index_information</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">{</span><span class="s1">'_id_'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'key'</span><span class="p">:</span> <span class="p">[(</span><span class="s1">'_id'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="s1">'unique'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="s1">'s_1'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'key'</span><span class="p">:</span> <span class="p">[(</span><span class="s1">'s'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">has_unique_index</span><span class="p">(</span><span class="n">FakeCollection</span><span class="p">(),</span> <span class="s1">'_id'</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">has_unique_index</span><span class="p">(</span><span class="n">FakeCollection</span><span class="p">(),</span> <span class="s1">'s'</span><span class="p">)</span>  <span class="c1"># an index, but not a unique one</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -657,9 +729,12 @@ default of <code class="docutils literal notranslate"><span class="pre">True</sp
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.KeyNotUniqueError.raise_error"><code class="docutils literal notranslate"><span class="pre">KeyNotUniqueError.raise_error()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.MissingUniqueIndexError"><code class="docutils literal notranslate"><span class="pre">MissingUniqueIndexError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.ensure_unique_index"><code class="docutils literal notranslate"><span class="pre">ensure_unique_index()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.flatten_dict_items"><code class="docutils literal notranslate"><span class="pre">flatten_dict_items()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.get_key_value_specs"><code class="docutils literal notranslate"><span class="pre">get_key_value_specs()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.get_mongo_collection_pymongo_obj"><code class="docutils literal notranslate"><span class="pre">get_mongo_collection_pymongo_obj()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.has_unique_index"><code class="docutils literal notranslate"><span class="pre">has_unique_index()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_client"><code class="docutils literal notranslate"><span class="pre">mk_client()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_dflt_client"><code class="docutils literal notranslate"><span class="pre">mk_dflt_client()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_dflt_mgc"><code class="docutils literal notranslate"><span class="pre">mk_dflt_mgc()</span></code></a></li>

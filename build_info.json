@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-13T22:38:42Z",
+  "built_at": "2026-10-20T03:46:15Z",
   "package": {
     "name": "mongodol",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "display_name": "mongodol",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4",
-    "short_commit": "658e4dc",
+    "commit": "18896e119e32d26b869d8c5210e36319a8291c66",
+    "short_commit": "18896e1",
     "branch": "master",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/i2mint/mongodol",
-    "commit_url": "https://github.com/i2mint/mongodol/commit/658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4",
+    "commit_url": "https://github.com/i2mint/mongodol/commit/18896e119e32d26b869d8c5210e36319a8291c66",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "i2mint/mongodol",
-    "sha": "658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4",
+    "sha": "18896e119e32d26b869d8c5210e36319a8291c66",
     "sha_in_history": true,
     "ref": "refs/heads/master",
     "ref_name": "master",
-    "run_id": "38478929877",
-    "run_url": "https://github.com/i2mint/mongodol/actions/runs/38478929877",
+    "run_id": "39365851201",
+    "run_url": "https://github.com/i2mint/mongodol/actions/runs/39365851201",
     "server_url": "https://github.com"
   },
   "tools": {
-    "epythet": "0.2.17",
-    "sphinx": "9.1.0",
+    "epythet": "0.2.18",
+    "sphinx": "9.1.1",
     "docutils": "0.22.4",
     "python": "3.12.15"
   },
@@ -56,20 +56,20 @@
   },
   "site": {
     "modules_documented": 13,
-    "objects_documented": 193
+    "objects_documented": 196
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.9",
+    "latest": "0.1.10",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/i2mint/mongodol && cd mongodol\ngit checkout 658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4\npip install \"epythet==0.2.17\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/i2mint/mongodol && cd mongodol\ngit checkout 18896e119e32d26b869d8c5210e36319a8291c66\npip install \"epythet==0.2.18\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.1.8) is behind the latest release on PyPI (0.1.9): `pip install mongodol` gives newer code than these docs describe."
+      "The documented version (0.1.9) is behind the latest release on PyPI (0.1.10): `pip install mongodol` gives newer code than these docs describe."
     ]
   }
 }

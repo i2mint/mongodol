@@ -4,20 +4,23 @@ Util functions
 
 ### Functions
 
-| [`flatten_dict_items`](#mongodol.util.flatten_dict_items)(d[, prefix])              | Computes a "flat" dict from a nested one.                                                                                                                                                                                                       |
-|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`get_key_value_specs`](#mongodol.util.get_key_value_specs)(key_fields, data_fields) | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
-| [`get_mongo_collection_pymongo_obj`](#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...]) | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
-| [`mk_client`](#mongodol.util.mk_client)(\*args, \*\*kwargs)                | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
-| [`mk_dflt_client`](#mongodol.util.mk_dflt_client)()                             | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
-| [`mk_dflt_mgc`](#mongodol.util.mk_dflt_mgc)()                                | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
-| [`normalize_projection`](#mongodol.util.normalize_projection)(projection)             | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
-| [`projection_union`](#mongodol.util.projection_union)(projection_1, projection_2) | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
+| [`ensure_unique_index`](#mongodol.util.ensure_unique_index)(collection, key_fields, \*)   | Make sure mongo guarantees the unicity of `key_fields` in `collection`.                                                                                                                                                                         |
+|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`flatten_dict_items`](#mongodol.util.flatten_dict_items)(d[, prefix])                   | Computes a "flat" dict from a nested one.                                                                                                                                                                                                       |
+| [`get_key_value_specs`](#mongodol.util.get_key_value_specs)(key_fields, data_fields)      | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
+| [`get_mongo_collection_pymongo_obj`](#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...])      | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
+| [`has_unique_index`](#mongodol.util.has_unique_index)(collection, key_fields)          | Whether `collection` has a unique index on exactly `key_fields` (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.                                                                                         |
+| [`mk_client`](#mongodol.util.mk_client)(\*args, \*\*kwargs)                     | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
+| [`mk_dflt_client`](#mongodol.util.mk_dflt_client)()                                  | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
+| [`mk_dflt_mgc`](#mongodol.util.mk_dflt_mgc)()                                     | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
+| [`normalize_projection`](#mongodol.util.normalize_projection)(projection)                  | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
+| [`projection_union`](#mongodol.util.projection_union)(projection_1, projection_2)      | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
 
 ### Exceptions
 
-| [`KeyNotUniqueError`](#mongodol.util.KeyNotUniqueError)   | Raised when a key was expected to be unique, but wasn't (i.e. cursor has more than one match).   |
-|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [`KeyNotUniqueError`](#mongodol.util.KeyNotUniqueError)       | Raised when a key was expected to be unique, but wasn't (i.e. cursor has more than one match).   |
+|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [`MissingUniqueIndexError`](#mongodol.util.MissingUniqueIndexError) | Raised when a unique index was required on some fields, but there is none.                       |
 
 ### *exception* mongodol.util.KeyNotUniqueError
 
@@ -28,6 +31,42 @@ Raised when a key was expected to be unique, but wasn’t (i.e. cursor has more 
 #### *static* raise_error(k)
 
 Raise `KeyNotUniqueError` for the non-unique key `k`.
+
+### *exception* mongodol.util.MissingUniqueIndexError
+
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
+
+Raised when a unique index was required on some fields, but there is none.
+
+### mongodol.util.ensure_unique_index(collection, key_fields, , create=True)
+
+Make sure mongo guarantees the unicity of `key_fields` in `collection`.
+
+This is the alternative to checking, on every `s[key]`, that the cursor has a
+single match (`KeyNotUniqueError`): let the database enforce it, and then use a
+reader that doesn’t check (e.g. `MongoCollectionFirstDocReader`).
+
+* **Parameters:**
+  **create** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True (default), create the unique index if it’s missing (this
+  raises a pymongo `DuplicateKeyError` if the existing docs already violate
+  it). If False, raise `MissingUniqueIndexError` instead of creating it.
+
+```pycon
+>>> class FakeCollection:
+...     indexes = {}
+...     def index_information(self):
+...         return self.indexes
+...     def create_index(self, keys, unique=False):
+...         self.indexes['_'.join(map(str, keys))] = {'key': keys, 'unique': unique}
+>>> c = FakeCollection()
+>>> ensure_unique_index(c, 's', create=False)
+Traceback (most recent call last):
+  ...
+mongodol.util.MissingUniqueIndexError: No unique index on ('s',)
+>>> ensure_unique_index(c, 's')
+>>> has_unique_index(c, 's')
+True
+```
 
 ### mongodol.util.flatten_dict_items(d, prefix='')
 
@@ -87,6 +126,27 @@ attribute returned directly:
 >>> get_mongo_collection_pymongo_obj(store) is mgc
 True
 ```
+
+### mongodol.util.has_unique_index(collection, key_fields)
+
+Whether `collection` has a unique index on exactly `key_fields`
+(a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.
+
+Only uses `collection.index_information()`, so any object with that method works.
+
+```pycon
+>>> class FakeCollection:
+...     def index_information(self):
+...         return {'_id_': {'key': [('_id', 1)], 'unique': True},
+...                 's_1': {'key': [('s', 1)]}}
+>>> has_unique_index(FakeCollection(), '_id')
+True
+>>> has_unique_index(FakeCollection(), 's')  # an index, but not a unique one
+False
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### mongodol.util.mk_client(\*args, \*\*kwargs)
 
