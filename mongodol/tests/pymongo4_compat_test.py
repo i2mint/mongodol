@@ -109,5 +109,5 @@ def test_a_list_or_str_getitem_projection_is_normalized_and_unioned_for_items(sp
     store = MongoCollectionPersister(
         unconnected, iter_projection={"s": True, "_id": False}, getitem_projection=spec
     )
-    assert store._getitem_projection == {"n": True, "_id": False}
-    assert store._items_projection == {"s": True, "n": True, "_id": False}
+    assert store._getitem_projection == {"n": True}
+    assert store._items_projection == {"s": True, "n": True, "_id": True}

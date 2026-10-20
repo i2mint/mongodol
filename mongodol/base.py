@@ -280,7 +280,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         if isinstance(getitem_projection, str):
             getitem_projection = (getitem_projection,)  # a str is one field, not chars
         if getitem_projection is not None and not isinstance(getitem_projection, dict):
-            getitem_projection = normalize_projection(getitem_projection)
+            getitem_projection = {k: True for k in getitem_projection}  # mongo semantics: _id stays
         if getitem_projection is not None and len(getitem_projection) == 0:
             getitem_projection = dict(_ID_ONLY)  # pymongo 4 reads empty as "everything"
         self._getitem_projection = getitem_projection
