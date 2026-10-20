@@ -1,0 +1,47 @@
+{
+  "collection_duration_seconds": 4.919992923736572,
+  "commit_message": "Merge 676fdef227ce2ff2b59f9c634907fec0936da389 into 755b951c22d46002594ab9c0e4ada8eb5dc22c88",
+  "commit_sha": "aea1e7980b601fda1f70063a5f123acc8612c2a6",
+  "metrics": {
+    "coverage": {
+      "branch_coverage": 0.0,
+      "error": "No coverage file found",
+      "line_coverage": 0.0,
+      "statements_covered": 0,
+      "statements_total": 0
+    },
+    "umpyre_stats": {
+      "comment_lines": 21958,
+      "comment_lines_ratio": 0.06128623501895134,
+      "docs_lines": 53334,
+      "empty_lines": 49177,
+      "empty_lines_ratio": 0.13725627013056607,
+      "files_analyzed": 882,
+      "function_lines": 172875,
+      "function_lines_ratio": 0.4825055960880414,
+      "mean_lines_per_function": 15.700208882027065,
+      "num_classes": 2420,
+      "num_functions": 11011,
+      "pypi_version": "0.1.10",
+      "total_lines": 358286
+    },
+    "wily": {
+      "cyclomatic_avg": 0.0,
+      "error": "wily build failed: \u001b[31mFailed to setup archiver: 'Dirty repository, make sure you commit/stash files first'\u001b[0m\n",
+      "files_analyzed": 0,
+      "maintainability_index": 0.0,
+      "total_loc": 0
+    },
+    "workflow_status": {
+      "last_run_status": "success",
+      "last_success_timestamp": "2026-10-20T09:47:21Z",
+      "recent_failure_count": 2,
+      "run_url": "https://github.com/i2mint/mongodol/actions/runs/39403079986",
+      "total_runs_analyzed": 10
+    }
+  },
+  "python_version": "3.10",
+  "schema_version": "1.0",
+  "timestamp": "2026-10-20T09:47:29.412214Z",
+  "workflow_status": {}
+}
