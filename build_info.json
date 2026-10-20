@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-20T03:46:15Z",
+  "built_at": "2026-10-20T09:49:49Z",
   "package": {
     "name": "mongodol",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "display_name": "mongodol",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "18896e119e32d26b869d8c5210e36319a8291c66",
-    "short_commit": "18896e1",
+    "commit": "302457ab51af5f7ff04bd594473549cce916601c",
+    "short_commit": "302457a",
     "branch": "master",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/i2mint/mongodol",
-    "commit_url": "https://github.com/i2mint/mongodol/commit/18896e119e32d26b869d8c5210e36319a8291c66",
+    "commit_url": "https://github.com/i2mint/mongodol/commit/302457ab51af5f7ff04bd594473549cce916601c",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "i2mint/mongodol",
-    "sha": "18896e119e32d26b869d8c5210e36319a8291c66",
+    "sha": "302457ab51af5f7ff04bd594473549cce916601c",
     "sha_in_history": true,
     "ref": "refs/heads/master",
     "ref_name": "master",
-    "run_id": "39365851201",
-    "run_url": "https://github.com/i2mint/mongodol/actions/runs/39365851201",
+    "run_id": "39403322851",
+    "run_url": "https://github.com/i2mint/mongodol/actions/runs/39403322851",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -60,16 +60,16 @@
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.10",
+    "latest": "0.1.11",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/i2mint/mongodol && cd mongodol\ngit checkout 18896e119e32d26b869d8c5210e36319a8291c66\npip install \"epythet==0.2.18\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/i2mint/mongodol && cd mongodol\ngit checkout 302457ab51af5f7ff04bd594473549cce916601c\npip install \"epythet==0.2.18\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.1.9) is behind the latest release on PyPI (0.1.10): `pip install mongodol` gives newer code than these docs describe."
+      "The documented version (0.1.10) is behind the latest release on PyPI (0.1.11): `pip install mongodol` gives newer code than these docs describe."
     ]
   }
 }
