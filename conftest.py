@@ -29,6 +29,9 @@ _SCRAP_DIR = pathlib.Path(__file__).parent.resolve() / "mongodol" / "scrap"
 #: a module's doctests are genuinely server-free.
 _MONGO_FREE_DOCTEST_STEMS = frozenset({"util"})
 
+#: Doctest items inside an otherwise server-free module that do need a server.
+_MONGO_DOCTEST_NAMES = frozenset({"mongodol.util.get_mongo_collection_pymongo_obj"})
+
 #: Test modules under ``tests/`` that never touch a server (a never-connected client,
 #: a recording stand-in): they run everywhere, so a pymongo-version regression cannot
 #: hide behind "no MongoDB here".
@@ -75,6 +78,8 @@ def _requires_mongo(item):
     path = pathlib.Path(str(getattr(item, "path", None) or item.fspath))
     if "tests" in path.parts:
         return path.stem not in _MONGO_FREE_TEST_STEMS
+    if getattr(item, "name", None) in _MONGO_DOCTEST_NAMES:
+        return True
     return path.stem not in _MONGO_FREE_DOCTEST_STEMS
 
 
