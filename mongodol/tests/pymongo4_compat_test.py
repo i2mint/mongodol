@@ -98,3 +98,16 @@ def test_an_empty_getitem_projection_means_the_id_only_too():
 def test_only_the_options_of_a_connection_string_count_as_choosing_a_layout():
     client = mk_client("mongodb://localhost:1/uuidRepresentationDB", connect=False)
     assert client.codec_options.uuid_representation == UuidRepresentation.PYTHON_LEGACY
+
+
+@pytest.mark.parametrize("spec", [["n"], "n"])
+def test_a_list_or_str_getitem_projection_is_normalized_and_unioned_for_items(spec):
+    # i2mint/mongodol#18: a list crashed _items_projection; a str was split into chars.
+    from mongodol.base import MongoCollectionPersister
+
+    unconnected = MongoClient("mongodb://localhost:1", connect=False)["db"]["c"]
+    store = MongoCollectionPersister(
+        unconnected, iter_projection={"s": True, "_id": False}, getitem_projection=spec
+    )
+    assert store._getitem_projection == {"n": True}
+    assert store._items_projection == {"s": True, "n": True, "_id": True}

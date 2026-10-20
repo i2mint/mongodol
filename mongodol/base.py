@@ -277,6 +277,10 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
             iter_projection=iter_projection,
             **mgc_find_kwargs,
         )
+        if isinstance(getitem_projection, str):
+            getitem_projection = (getitem_projection,)  # a str is one field, not chars
+        if getitem_projection is not None and not isinstance(getitem_projection, dict):
+            getitem_projection = {k: True for k in getitem_projection}  # mongo semantics: _id stays
         if getitem_projection is not None and len(getitem_projection) == 0:
             getitem_projection = dict(_ID_ONLY)  # pymongo 4 reads empty as "everything"
         self._getitem_projection = getitem_projection
@@ -337,8 +341,10 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         getitem_projection = self._getitem_projection
         if iter_projection is None or getitem_projection is None:
             return None
-        if not isinstance(self._iter_projection, Mapping):
+        if not isinstance(iter_projection, Mapping):
             iter_projection = {k: True for k in iter_projection}
+        if not isinstance(getitem_projection, Mapping):
+            getitem_projection = {k: True for k in getitem_projection}
         return projection_union(
             iter_projection,
             getitem_projection,
