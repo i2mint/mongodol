@@ -81,6 +81,70 @@ class KeyNotUniqueError(RuntimeError):
         )
 
 
+def has_unique_index(collection, key_fields) -> bool:
+    """Whether ``collection`` has a unique index on exactly ``key_fields``
+    (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.
+
+    Only uses ``collection.index_information()``, so any object with that method works.
+
+    >>> class FakeCollection:
+    ...     def index_information(self):
+    ...         return {'_id_': {'key': [('_id', 1)], 'unique': True},
+    ...                 's_1': {'key': [('s', 1)]}}
+    >>> has_unique_index(FakeCollection(), '_id')
+    True
+    >>> has_unique_index(FakeCollection(), 's')  # an index, but not a unique one
+    False
+    """
+    if isinstance(key_fields, str):
+        key_fields = (key_fields,)
+    wanted = tuple(key_fields)
+    return any(
+        info.get("unique", False) and tuple(name for name, _ in info["key"]) == wanted
+        for info in collection.index_information().values()
+    )
+
+
+class MissingUniqueIndexError(RuntimeError):
+    """Raised when a unique index was required on some fields, but there is none."""
+
+
+def ensure_unique_index(collection, key_fields, *, create: bool = True):
+    """Make sure mongo guarantees the unicity of ``key_fields`` in ``collection``.
+
+    This is the alternative to checking, on every ``s[key]``, that the cursor has a
+    single match (``KeyNotUniqueError``): let the database enforce it, and then use a
+    reader that doesn't check (e.g. ``MongoCollectionFirstDocReader``).
+
+    :param create: If True (default), create the unique index if it's missing (this
+        raises a pymongo ``DuplicateKeyError`` if the existing docs already violate
+        it). If False, raise ``MissingUniqueIndexError`` instead of creating it.
+
+    >>> class FakeCollection:
+    ...     indexes = {}
+    ...     def index_information(self):
+    ...         return self.indexes
+    ...     def create_index(self, keys, unique=False):
+    ...         self.indexes['_'.join(map(str, keys))] = {'key': keys, 'unique': unique}
+    >>> c = FakeCollection()
+    >>> ensure_unique_index(c, 's', create=False)
+    Traceback (most recent call last):
+      ...
+    mongodol.util.MissingUniqueIndexError: No unique index on ('s',)
+    >>> ensure_unique_index(c, 's')
+    >>> has_unique_index(c, 's')
+    True
+    """
+    if isinstance(key_fields, str):
+        key_fields = (key_fields,)
+    key_fields = tuple(key_fields)
+    if has_unique_index(collection, key_fields):
+        return
+    if not create:
+        raise MissingUniqueIndexError(f"No unique index on {key_fields}")
+    collection.create_index([(name, 1) for name in key_fields], unique=True)
+
+
 ProjectionDict = dict  # TODO: Specify that keys are strings and values are boolean
 ProjectionSpec = Union[ProjectionDict, Iterable[str], None]
 
