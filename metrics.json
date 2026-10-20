@@ -1,7 +1,7 @@
 {
-  "collection_duration_seconds": 4.919992923736572,
-  "commit_message": "Merge 676fdef227ce2ff2b59f9c634907fec0936da389 into 755b951c22d46002594ab9c0e4ada8eb5dc22c88",
-  "commit_sha": "aea1e7980b601fda1f70063a5f123acc8612c2a6",
+  "collection_duration_seconds": 2.7728588581085205,
+  "commit_message": "Fix list/str getitem_projection and server-needing util doctest (#18) (#20)\n\n* Fix list/str getitem_projection and server-needing util doctest (#18)\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* Keep mongo semantics for list getitem_projection (_id stays)\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>",
+  "commit_sha": "302457ab51af5f7ff04bd594473549cce916601c",
   "metrics": {
     "coverage": {
       "branch_coverage": 0.0,
@@ -34,14 +34,14 @@
     },
     "workflow_status": {
       "last_run_status": "success",
-      "last_success_timestamp": "2026-10-20T09:47:21Z",
+      "last_success_timestamp": "2026-10-20T09:47:35Z",
       "recent_failure_count": 2,
-      "run_url": "https://github.com/i2mint/mongodol/actions/runs/39403079986",
+      "run_url": "https://github.com/i2mint/mongodol/actions/runs/39403088723",
       "total_runs_analyzed": 10
     }
   },
   "python_version": "3.10",
   "schema_version": "1.0",
-  "timestamp": "2026-10-20T09:47:29.412214Z",
+  "timestamp": "2026-10-20T09:49:17.610497Z",
   "workflow_status": {}
 }
