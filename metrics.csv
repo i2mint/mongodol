@@ -1,48 +1,28 @@
 metric,value
 schema_version,1.0
-timestamp,2026-10-13T22:38:09.107678Z
-commit_sha,658e4dcec4bfaaff9d29558a22ec05b97f3cd6d4
-commit_message,"Relax pymongo[srv]==3.12.1 to pymongo>=4; absorb the pymongo 4 changes (#16) (#17)
+timestamp,2026-10-20T03:43:41.104258Z
+commit_sha,6875af5071d7581ab3b4110930ae973d5f8efaf1
+commit_message,"Add has_unique_index / ensure_unique_index (#1)
 
-* Relax pymongo[srv]==3.12.1 to >=4 (#16)
-
-The fleet runs mongodol on pymongo 4.x; the exact pin was never enforced. CI keeps the mongo:5.0 service, which every 4.x supports.
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
-
-* pymongo 4: id-only existence checks, UUID-safe scope comparison, pymongo 3's UUID layout for clients mongodol makes; plain pymongo>=4 (#16 review)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
-
-* pymongo 4 review round 2: UUID scope check uses the collection's codec, mk_client respects host=/lowercase options, empty getitem_projection (#16)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
-
-* mk_client: only a connection string's options choose a UUID layout (#16 review)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
-
----------
-
-Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>"
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 python_version,3.10
-metrics.umpyre_stats.num_functions,10989
-metrics.umpyre_stats.num_classes,2419
-metrics.umpyre_stats.total_lines,357560
-metrics.umpyre_stats.empty_lines,49060
-metrics.umpyre_stats.comment_lines,21928
-metrics.umpyre_stats.docs_lines,53137
-metrics.umpyre_stats.function_lines,172363
-metrics.umpyre_stats.empty_lines_ratio,0.13720774135809374
-metrics.umpyre_stats.comment_lines_ratio,0.06132677033225193
-metrics.umpyre_stats.function_lines_ratio,0.4820533616735653
-metrics.umpyre_stats.mean_lines_per_function,15.685048685048685
-metrics.umpyre_stats.files_analyzed,877
+metrics.umpyre_stats.num_functions,11004
+metrics.umpyre_stats.num_classes,2420
+metrics.umpyre_stats.total_lines,358121
+metrics.umpyre_stats.empty_lines,49155
+metrics.umpyre_stats.comment_lines,21957
+metrics.umpyre_stats.docs_lines,53277
+metrics.umpyre_stats.function_lines,172715
+metrics.umpyre_stats.empty_lines_ratio,0.13725807757713177
+metrics.umpyre_stats.comment_lines_ratio,0.061311679571988235
+metrics.umpyre_stats.function_lines_ratio,0.4822811284454137
+metrics.umpyre_stats.mean_lines_per_function,15.695656125045439
+metrics.umpyre_stats.files_analyzed,882
 metrics.umpyre_stats.pypi_version,0.1.8
 metrics.workflow_status.last_run_status,success
-metrics.workflow_status.last_success_timestamp,2026-10-13T22:37:27Z
+metrics.workflow_status.last_success_timestamp,2026-10-13T22:39:19Z
 metrics.workflow_status.recent_failure_count,0
-metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/38478937418
+metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/38479180226
 metrics.workflow_status.total_runs_analyzed,10
 metrics.wily.cyclomatic_avg,0.0
 metrics.wily.maintainability_index,0.0
@@ -55,4 +35,4 @@ metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,4.278993129730225
+collection_duration_seconds,4.228187799453735
