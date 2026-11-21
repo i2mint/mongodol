@@ -70,7 +70,7 @@ def test_wrap_kvs_value_trans_reaches_values_and_items(store):
     This is the i2mint/mongodol#7 reproduction: before the fix, ``list(ss.values())``
     returned the raw, untransformed mongo documents.
     """
-    ss = wrap_kvs(store, obj_of_data=itemgetter("name", "age"))
+    ss = wrap_kvs(store, value_decoder=itemgetter("name", "age"))
 
     assert [ss[k] for k in ss] == [("Matthew", 42), ("Mark", 43)]
     assert list(ss.values()) == [("Matthew", 42), ("Mark", 43)]
@@ -85,7 +85,7 @@ def test_wrap_kvs_key_trans_reaches_items(store):
     ``getitem_projection``, ``items()`` values still differ from ``store[k]`` by the
     key fields -- see ``test_items_values_equal_getitem_values_when_no_getitem_projection``.
     """
-    ss = wrap_kvs(store, key_of_id=itemgetter("_id"), id_of_key=lambda k: {"_id": k})
+    ss = wrap_kvs(store, key_decoder=itemgetter("_id"), key_encoder=lambda k: {"_id": k})
 
     assert list(ss) == list(ss.keys()) == ["123", "456"]
     assert [k for k, _ in ss.items()] == ["123", "456"]
@@ -94,8 +94,8 @@ def test_wrap_kvs_key_trans_reaches_items(store):
 
 def test_stacked_wrappers(store):
     """Every layer of a wrapper stack must contribute to the bulk stream."""
-    ss = wrap_kvs(store, obj_of_data=itemgetter("name", "age"))
-    sss = wrap_kvs(ss, obj_of_data=lambda name_and_age: name_and_age[0].upper())
+    ss = wrap_kvs(store, value_decoder=itemgetter("name", "age"))
+    sss = wrap_kvs(ss, value_decoder=lambda name_and_age: name_and_age[0].upper())
 
     assert list(sss.values()) == ["MATTHEW", "MARK"]
     assert_mapping_view_invariants(sss)
@@ -103,7 +103,7 @@ def test_stacked_wrappers(store):
 
 def test_mongodol_wrap_kvs_still_honours_transforms(store):
     """The historical ``MongoBaseStore``-based wrapper keeps working."""
-    ss = wrap_kvs(store, wrapper=MongoBaseStore, obj_of_data=itemgetter("name", "age"))
+    ss = wrap_kvs(store, wrapper=MongoBaseStore, value_decoder=itemgetter("name", "age"))
 
     assert list(ss.values()) == [("Matthew", 42), ("Mark", 43)]
     assert_mapping_view_invariants(ss)
@@ -162,7 +162,7 @@ def test_containment_through_a_non_invertible_value_trans(store):
     Before the fix this raised a pymongo ``OperationFailure`` (a tuple was handed
     to ``find`` as a filter).
     """
-    ss = wrap_kvs(store, obj_of_data=itemgetter("name", "age"))
+    ss = wrap_kvs(store, value_decoder=itemgetter("name", "age"))
 
     assert ("Matthew", 42) in ss.values()
     assert ("Nobody", 0) not in ss.values()
@@ -174,8 +174,8 @@ def test_containment_uses_the_bulk_path_when_the_trans_is_invertible(store):
     """With both directions declared, containment stays a single mongo query."""
     ss = wrap_kvs(
         store,
-        obj_of_data=lambda d: dict(d, name=d["name"].upper()),
-        data_of_obj=lambda d: dict(d, name=d["name"].capitalize()),
+        value_decoder=lambda d: dict(d, name=d["name"].upper()),
+        value_encoder=lambda d: dict(d, name=d["name"].capitalize()),
     )
 
     assert {"_id": "123", "name": "MATTHEW", "age": 42} in ss.values()
@@ -200,7 +200,7 @@ def test_unwrapped_reader_is_its_own_bulk_source():
 
 def test_transform_only_wrapper_is_crossed_not_used_as_a_source(store):
     """A plain ``wrap_kvs`` layer is crossed on the way to the backend fast path."""
-    ss = wrap_kvs(store, obj_of_data=itemgetter("name"))
+    ss = wrap_kvs(store, value_decoder=itemgetter("name"))
 
     assert is_crossable(ss)
     assert not provides_bulk_read(ss, "iter_values")
@@ -216,7 +216,7 @@ def test_bulk_source_lookup_ignores_store_attribute_delegation(store):
     ``Store.__getattr__`` forwards to the wrapped store, so a wrapper *looks* like
     it implements the bulk protocol. This is precisely what made issue #7 silent.
     """
-    ss = wrap_kvs(store, obj_of_data=itemgetter("name"))
+    ss = wrap_kvs(store, value_decoder=itemgetter("name"))
 
     assert hasattr(ss, "iter_values")  # ...only because of delegation
     assert not provides_bulk_read(ss, "iter_values")

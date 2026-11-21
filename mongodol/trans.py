@@ -247,20 +247,20 @@ class PostGet:
         """Collect every doc matching ``k``, so ``s[k]`` is a collection of docs.
 
         The key-aware (``postget``) counterpart of :meth:`ObjOfData.all_docs_fetch`.
-        ``wrap_kvs`` calls ``obj_of_data`` with the value alone and ``postget`` with
+        ``wrap_kvs`` calls ``value_decoder`` with the value alone and ``postget`` with
         ``(key, value)``, so a store wired through ``postget`` needs this signature.
         """
         return doc_collector(cursor)
 
 
 class ObjOfData:
-    """``obj_of_data`` (value-only) transform functions for ``wrap_kvs``."""
+    """``value_decoder`` (value-only) transform functions for ``wrap_kvs``."""
 
     @staticmethod
     def all_docs_fetch(cursor, doc_collector=list):
         """Collect every doc in ``cursor`` into ``doc_collector`` (default: a list).
 
-        The value-only (``obj_of_data``) counterpart of :meth:`PostGet.all_docs_fetch`.
+        The value-only (``value_decoder``) counterpart of :meth:`PostGet.all_docs_fetch`.
         """
         # return doc_collector(map(lambda x: PersistentDict(x), cursor))
         return doc_collector(cursor)
@@ -397,8 +397,8 @@ def set_key_and_data_fields(
 
     return wrap_kvs(
         store,
-        id_of_key=id_of_key,
-        key_of_id=key_of_id,
-        obj_of_data=obj_of_data,
-        data_of_obj=data_of_obj,
+        key_encoder=id_of_key,
+        key_decoder=key_of_id,
+        value_decoder=obj_of_data,
+        value_encoder=data_of_obj,
     )

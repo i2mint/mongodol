@@ -173,10 +173,10 @@ def test_store_with_mappers(
             mgc=get_test_collection_object(collection_name=NUMBER_MGC_NAME)
         ),
         wrapper=MongoBaseStore,
-        id_of_key=key_input_mapper,
-        key_of_id=key_output_mapper,
-        data_of_obj=value_input_mapper,
-        obj_of_data=value_output_mapper,
+        key_encoder=key_input_mapper,
+        key_decoder=key_output_mapper,
+        value_encoder=value_input_mapper,
+        value_decoder=value_output_mapper,
     )
     new_doc_id = key_output_mapper(new_doc)
     new_doc_with_no_id = {k: v for k, v in new_doc.items() if k != ID}
