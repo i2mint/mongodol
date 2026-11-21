@@ -2,18 +2,18 @@
 
 # About this build
 
-This documentation was built on **2026-10-20 09:49 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/302457ab51af5f7ff04bd594473549cce916601c"><code>302457a</code></a> on branch <code>master</code>, for **mongodol 0.1.10** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-21 18:15 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d</code></a> on branch <code>master</code>, for **mongodol 0.1.11** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.10) is behind the latest release on PyPI (0.1.11): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.11) is behind the latest release on PyPI (0.1.12): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/302457ab51af5f7ff04bd594473549cce916601c"><code>302457ab51af5f7ff04bd594473549cce916601c</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -24,18 +24,18 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/39403322851">39403322851</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/44934329049">44934329049</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>302457ab51af5f7ff04bd594473549cce916601c</code> (in the history of the built commit) |
+| Event commit | <code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.18  |
+| epythet  | 0.2.23  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.15 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -51,14 +51,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.11/">0.1.11</a>, newer than the documented version (0.1.10).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.12/">0.1.12</a>, newer than the documented version (0.1.11).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 302457ab51af5f7ff04bd594473549cce916601c
-pip install "epythet==0.2.18"
+git checkout b2e7e1d7da916218fbf58d647eb8d6ead93c2251
+pip install "epythet==0.2.23"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

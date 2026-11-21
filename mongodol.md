@@ -1,4 +1,4 @@
-> built 2026-10-20 09:49 UTC from 302457a (master) · mongodol 0.1.10. Details: build_info.json
+> built 2026-11-21 18:15 UTC from b2e7e1d (master) · mongodol 0.1.11. Details: build_info.json
 
 # index.html.md
 
@@ -1591,7 +1591,7 @@ Transformative functionality
 
 ### Classes
 
-| [`ObjOfData`](_autosummary/mongodol.trans.html.md#mongodol.trans.ObjOfData)()                             | `obj_of_data` (value-only) transform functions for `wrap_kvs`.                                                            |
+| [`ObjOfData`](_autosummary/mongodol.trans.html.md#mongodol.trans.ObjOfData)()                             | `value_decoder` (value-only) transform functions for `wrap_kvs`.                                                          |
 |------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | [`PersistentDict`](_autosummary/mongodol.trans.html.md#mongodol.trans.PersistentDict)(container, wrapped_dict) | Extension of a dict wich triggers an event to notify the object that contains the dict that a modification has been made. |
 | [`PersistentList`](_autosummary/mongodol.trans.html.md#mongodol.trans.PersistentList)(container, iterable)     | Extension of a list wich triggers an event to notify the object that contains the list that a modification has been made. |
@@ -1603,13 +1603,13 @@ Transformative functionality
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-`obj_of_data` (value-only) transform functions for `wrap_kvs`.
+`value_decoder` (value-only) transform functions for `wrap_kvs`.
 
 #### *static* all_docs_fetch(cursor, doc_collector=<class 'list'>)
 
 Collect every doc in `cursor` into `doc_collector` (default: a list).
 
-The value-only (`obj_of_data`) counterpart of [`PostGet.all_docs_fetch()`](_autosummary/mongodol.trans.html.md#mongodol.trans.PostGet.all_docs_fetch).
+The value-only (`value_decoder`) counterpart of [`PostGet.all_docs_fetch()`](_autosummary/mongodol.trans.html.md#mongodol.trans.PostGet.all_docs_fetch).
 
 ### *class* mongodol.trans.PersistentDict(container, wrapped_dict)
 
@@ -1757,7 +1757,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 Collect every doc matching `k`, so `s[k]` is a collection of docs.
 
 The key-aware (`postget`) counterpart of [`ObjOfData.all_docs_fetch()`](_autosummary/mongodol.trans.html.md#mongodol.trans.ObjOfData.all_docs_fetch).
-`wrap_kvs` calls `obj_of_data` with the value alone and `postget` with
+`wrap_kvs` calls `value_decoder` with the value alone and `postget` with
 `(key, value)`, so a store wired through `postget` needs this signature.
 
 #### *static* single_value_fetch_with_unicity_validation(store, k, cursor)
@@ -2180,7 +2180,7 @@ Known limitation. [`MongoCollectionReader`](_autosummary/mongodol.base.html.md#m
 already yields *documents* – one per key. The two only line up once a single-doc
 layer (`MongoCollectionFirstDocReader` and friends) has turned cursors into
 docs, which is why those are the stores you are meant to wrap. Hanging an
-`obj_of_data` that expects a cursor directly off the raw reader is outside the
+`value_decoder` that expects a cursor directly off the raw reader is outside the
 protocol: such a transform cannot be pushed onto a doc-level bulk stream, and is
 not detectable from here.
 
@@ -2371,7 +2371,7 @@ assume one `wrap_kvs` call means exactly one layer.
 
 ```pycon
 >>> from dol import wrap_kvs
->>> layers = list(store_layers(wrap_kvs({'a': 1}, obj_of_data=str)))
+>>> layers = list(store_layers(wrap_kvs({'a': 1}, value_decoder=str)))
 >>> type(layers[0]).__name__, type(layers[-1]).__name__
 ('Store', 'dict')
 >>> all(isinstance(x, Store) for x in layers[:-1])
@@ -2388,18 +2388,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-10-20 09:49 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/302457ab51af5f7ff04bd594473549cce916601c"><code>302457a</code></a> on branch <code>master</code>, for **mongodol 0.1.10** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-21 18:15 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d</code></a> on branch <code>master</code>, for **mongodol 0.1.11** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.10) is behind the latest release on PyPI (0.1.11): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.11) is behind the latest release on PyPI (0.1.12): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/302457ab51af5f7ff04bd594473549cce916601c"><code>302457ab51af5f7ff04bd594473549cce916601c</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2410,18 +2410,18 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/39403322851">39403322851</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/44934329049">44934329049</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>302457ab51af5f7ff04bd594473549cce916601c</code> (in the history of the built commit) |
+| Event commit | <code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.18  |
+| epythet  | 0.2.23  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.15 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -2437,14 +2437,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.11/">0.1.11</a>, newer than the documented version (0.1.10).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.12/">0.1.12</a>, newer than the documented version (0.1.11).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout 302457ab51af5f7ff04bd594473549cce916601c
-pip install "epythet==0.2.18"
+git checkout b2e7e1d7da916218fbf58d647eb8d6ead93c2251
+pip install "epythet==0.2.23"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

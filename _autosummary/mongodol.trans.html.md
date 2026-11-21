@@ -11,7 +11,7 @@ Transformative functionality
 
 ### Classes
 
-| [`ObjOfData`](#mongodol.trans.ObjOfData)()                             | `obj_of_data` (value-only) transform functions for `wrap_kvs`.                                                            |
+| [`ObjOfData`](#mongodol.trans.ObjOfData)()                             | `value_decoder` (value-only) transform functions for `wrap_kvs`.                                                          |
 |------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | [`PersistentDict`](#mongodol.trans.PersistentDict)(container, wrapped_dict) | Extension of a dict wich triggers an event to notify the object that contains the dict that a modification has been made. |
 | [`PersistentList`](#mongodol.trans.PersistentList)(container, iterable)     | Extension of a list wich triggers an event to notify the object that contains the list that a modification has been made. |
@@ -23,13 +23,13 @@ Transformative functionality
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-`obj_of_data` (value-only) transform functions for `wrap_kvs`.
+`value_decoder` (value-only) transform functions for `wrap_kvs`.
 
 #### *static* all_docs_fetch(cursor, doc_collector=<class 'list'>)
 
 Collect every doc in `cursor` into `doc_collector` (default: a list).
 
-The value-only (`obj_of_data`) counterpart of [`PostGet.all_docs_fetch()`](#mongodol.trans.PostGet.all_docs_fetch).
+The value-only (`value_decoder`) counterpart of [`PostGet.all_docs_fetch()`](#mongodol.trans.PostGet.all_docs_fetch).
 
 ### *class* mongodol.trans.PersistentDict(container, wrapped_dict)
 
@@ -177,7 +177,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 Collect every doc matching `k`, so `s[k]` is a collection of docs.
 
 The key-aware (`postget`) counterpart of [`ObjOfData.all_docs_fetch()`](#mongodol.trans.ObjOfData.all_docs_fetch).
-`wrap_kvs` calls `obj_of_data` with the value alone and `postget` with
+`wrap_kvs` calls `value_decoder` with the value alone and `postget` with
 `(key, value)`, so a store wired through `postget` needs this signature.
 
 #### *static* single_value_fetch_with_unicity_validation(store, k, cursor)

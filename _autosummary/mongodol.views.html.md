@@ -49,7 +49,7 @@ Known limitation. [`MongoCollectionReader`](mongodol.base.html.md#mongodol.base.
 already yields *documents* – one per key. The two only line up once a single-doc
 layer (`MongoCollectionFirstDocReader` and friends) has turned cursors into
 docs, which is why those are the stores you are meant to wrap. Hanging an
-`obj_of_data` that expects a cursor directly off the raw reader is outside the
+`value_decoder` that expects a cursor directly off the raw reader is outside the
 protocol: such a transform cannot be pushed onto a doc-level bulk stream, and is
 not detectable from here.
 
@@ -240,7 +240,7 @@ assume one `wrap_kvs` call means exactly one layer.
 
 ```pycon
 >>> from dol import wrap_kvs
->>> layers = list(store_layers(wrap_kvs({'a': 1}, obj_of_data=str)))
+>>> layers = list(store_layers(wrap_kvs({'a': 1}, value_decoder=str)))
 >>> type(layers[0]).__name__, type(layers[-1]).__name__
 ('Store', 'dict')
 >>> all(isinstance(x, Store) for x in layers[:-1])
