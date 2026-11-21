@@ -1,8 +1,8 @@
 metric,value
 schema_version,1.0
-timestamp,2026-11-21T18:12:59.742812Z
-commit_sha,3def1aefa7daa77a2d7da5240b6198a3586d2e8d
-commit_message,Merge fb4d0a326180010f8bb65895e4e6e30914756d72 into 6b9a705b86d6fa12287e66ab22a63384283985c5
+timestamp,2026-11-21T18:14:57.956441Z
+commit_sha,b2e7e1d7da916218fbf58d647eb8d6ead93c2251
+commit_message,Use the encoder/decoder keywords of wrap_kvs (dol 0.4 deprecates X_of_Y) (#21)
 python_version,3.10
 metrics.umpyre_stats.num_functions,11255
 metrics.umpyre_stats.num_classes,2444
@@ -18,9 +18,9 @@ metrics.umpyre_stats.mean_lines_per_function,15.713727232341181
 metrics.umpyre_stats.files_analyzed,896
 metrics.umpyre_stats.pypi_version,0.1.11
 metrics.workflow_status.last_run_status,success
-metrics.workflow_status.last_success_timestamp,2026-10-20T09:50:25Z
+metrics.workflow_status.last_success_timestamp,2026-11-21T18:13:10Z
 metrics.workflow_status.recent_failure_count,2
-metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/39403550738
+metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/44934151620
 metrics.workflow_status.total_runs_analyzed,10
 metrics.wily.cyclomatic_avg,0.0
 metrics.wily.maintainability_index,0.0
@@ -36,4 +36,4 @@ metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,4.18061375617981
+collection_duration_seconds,5.603732585906982
