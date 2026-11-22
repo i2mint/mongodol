@@ -13,10 +13,13 @@ mongodol.util
       get_key_value_specs
       get_mongo_collection_pymongo_obj
       has_unique_index
+      is_exclusion_projection
       mk_client
       mk_dflt_client
       mk_dflt_mgc
       normalize_projection
+      projection_leaves
+      projection_returns_field
       projection_union
    
    .. rubric:: Exceptions

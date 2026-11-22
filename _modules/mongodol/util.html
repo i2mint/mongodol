@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../../_static/documentation_options.js?v=297ad043"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1033,6 +1033,90 @@ window.runMermaid = runMermaid;</script>
         <span class="n">projection_1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">projection_1</span><span class="p">))</span>
         <span class="n">projection_2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">flatten_dict_items</span><span class="p">(</span><span class="n">projection_2</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">merge_projection_dicts</span><span class="p">(</span><span class="n">projection_1</span><span class="p">,</span> <span class="n">projection_2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="projection_leaves">
+<a class="viewcode-back" href="../../_autosummary/mongodol.util.html#mongodol.util.projection_leaves">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">projection_leaves</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""``(dot.path, value)`` for every field of a projection, where a dict of ``$``</span>
+<span class="sd">    operators (``{'$slice': 1}``, ``{'$elemMatch': ...}``) is a leaf, not a sub-path."""</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">projection</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"$"</span><span class="p">)</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">v</span>
+        <span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">projection_leaves</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_inclusion_flag</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether a projection value is a plain include/exclude flag (not an operator or</span>
+<span class="sd">    an expression, which do not decide the projection's mode)."""</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="is_exclusion_projection">
+<a class="viewcode-back" href="../../_autosummary/mongodol.util.html#mongodol.util.is_exclusion_projection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_exclusion_projection</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">ProjectionDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether mongo reads ``projection`` as an *exclusion* projection ("everything but").</span>
+
+<span class="sd">    Mongo decides the mode from the include/exclude flags of the fields other than</span>
+<span class="sd">    ``_id``: any truthy one makes it an inclusion projection, otherwise it excludes.</span>
+<span class="sd">    With ``_id`` alone, its own value decides. Operators (``$slice``...) do not count.</span>
+
+<span class="sd">    &gt;&gt;&gt; is_exclusion_projection({'_id': False})</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; is_exclusion_projection({'b': False})</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; is_exclusion_projection({'a': True, '_id': False})</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; is_exclusion_projection({'_id': True})</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; is_exclusion_projection({'arr': {'$slice': 1}, 'b': 0})</span>
+<span class="sd">    True</span>
+<span class="sd">    """</span>
+    <span class="n">flat</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">projection_leaves</span><span class="p">(</span><span class="n">projection</span><span class="p">))</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">flat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">ID</span> <span class="ow">and</span> <span class="n">_is_inclusion_flag</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">flags</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="n">ID</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">flat</span><span class="p">):</span>  <span class="c1"># only operators/expressions: they include</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">flat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="projection_returns_field">
+<a class="viewcode-back" href="../../_autosummary/mongodol.util.html#mongodol.util.projection_returns_field">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">projection_returns_field</span><span class="p">(</span><span class="n">projection</span><span class="p">:</span> <span class="n">ProjectionDict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether a ``find`` with ``projection`` returns the top-level ``field`` of a</span>
+<span class="sd">    document (in full or in part).</span>
+
+<span class="sd">    &gt;&gt;&gt; projection_returns_field(None, '_id')  # no projection: the whole document</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; projection_returns_field({'a': True}, '_id')  # mongo keeps _id unless told not to</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; projection_returns_field({'a': True, '_id': False}, '_id')</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; projection_returns_field({'a': True}, 'b')</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; projection_returns_field({'_id': False}, 'b')  # exclusion: everything else stays</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; projection_returns_field({'a.x': True}, 'a')  # part of it</span>
+<span class="sd">    True</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">flat</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">projection_leaves</span><span class="p">(</span><span class="n">projection</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">flat</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">_is_inclusion_flag</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">else</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">is_exclusion_projection</span><span class="p">(</span><span class="n">flat</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">field</span> <span class="o">==</span> <span class="n">ID</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">flat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span>
+    <span class="p">)</span></div>
 
 
 

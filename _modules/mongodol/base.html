@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../../_static/documentation_options.js?v=297ad043"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -721,6 +721,9 @@ window.runMermaid = runMermaid;</script>
     <span class="n">ProjectionSpec</span><span class="p">,</span>
     <span class="n">normalize_projection</span><span class="p">,</span>
     <span class="n">projection_union</span><span class="p">,</span>
+    <span class="n">is_exclusion_projection</span><span class="p">,</span>
+    <span class="n">projection_returns_field</span><span class="p">,</span>
+    <span class="n">projection_leaves</span><span class="p">,</span>
     <span class="n">get_mongo_collection_pymongo_obj</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mongodol.views</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -885,6 +888,26 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_without_paths</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A copy of ``doc`` without the given dot-paths (copying only the dicts on them).</span>
+
+<span class="sd">    &gt;&gt;&gt; _without_paths({'a': {'x': 1, 'c': 2}, 'b': 3}, ['a.c'])</span>
+<span class="sd">    {'a': {'x': 1}, 'b': 3}</span>
+<span class="sd">    """</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="o">*</span><span class="n">parents</span><span class="p">,</span> <span class="n">leaf</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">doc</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">node</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">leaf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">doc</span>
+
+
 <div class="viewcode-block" id="MongoCollectionReader">
 <a class="viewcode-back" href="../../_autosummary/mongodol.base.html#mongodol.base.MongoCollectionReader">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MongoCollectionReader</span><span class="p">(</span><span class="n">MongoCollectionCollection</span><span class="p">,</span> <span class="n">KvReader</span><span class="p">):</span>
@@ -1044,25 +1067,74 @@ window.runMermaid = runMermaid;</script>
 <div class="viewcode-block" id="MongoCollectionReader.iter_items">
 <a class="viewcode-back" href="../../_autosummary/mongodol.base.html#mongodol.base.MongoCollectionReader.iter_items">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">iter_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Bulk-read all ``(key, value)`` pairs in a single ``find`` query, splitting each doc into</span>
-<span class="sd">        its key fields and the rest.</span>
+<span class="w">        </span><span class="sd">"""Bulk-read all ``(key, value)`` pairs in a single ``find`` query: the key is the</span>
+<span class="sd">        doc's key fields, the value is the doc as ``getitem_projection`` returns it (so key</span>
+<span class="sd">        fields that projection returns stay in the value, the others are stripped).</span>
 <span class="sd">        """</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mgc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
             <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">,</span>
             <span class="n">projection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_items_projection</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_mgc_find_kwargs</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="n">key_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fields</span>
+        <span class="n">not_in_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_fields_not_in_values</span>
+        <span class="n">excluded_inside_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclusions_inside_key_fields</span>
         <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fields</span><span class="p">}</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">not_in_values</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">doc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">excluded_inside_keys</span><span class="p">:</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">_without_paths</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">excluded_inside_keys</span><span class="p">)</span>
             <span class="k">yield</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
 
 
     <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_exclusions_inside_key_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Sub-paths of key fields an exclusion ``getitem_projection`` drops: the read</span>
+<span class="sd">        keeps them (the key needs them), so ``iter_items`` drops them from the value."""</span>
+        <span class="n">gp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getitem_projection</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_exclusion_projection</span><span class="p">(</span><span class="n">gp</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">()</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">path</span>
+            <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">projection_leaves</span><span class="p">(</span><span class="n">gp</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span>
+            <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fields</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_key_fields_not_in_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The key fields ``__getitem__`` does not return, so ``items()`` strips them from</span>
+<span class="sd">        its values -- and only those, so that ``dict(items())[k] == self[k]`` (see #9).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">field</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fields</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">projection_returns_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getitem_projection</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_items_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The one projection ``iter_items`` reads with: the key fields plus whatever</span>
+<span class="sd">        ``__getitem__`` would return.</span>
+<span class="sd">        """</span>
         <span class="n">iter_projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter_projection</span>
         <span class="n">getitem_projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getitem_projection</span>
         <span class="k">if</span> <span class="n">iter_projection</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">getitem_projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">getitem_projection</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_exclusion_projection</span><span class="p">(</span>
+            <span class="n">getitem_projection</span>
+        <span class="p">):</span>
+            <span class="c1"># "Everything but": stop excluding the key fields, so they come back too.</span>
+            <span class="c1"># (A union would OR the exclusions into inclusions and invert the projection.)</span>
+            <span class="n">kept_exclusions</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">path</span><span class="p">:</span> <span class="n">value</span>
+                <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">projection_leaves</span><span class="p">(</span><span class="n">getitem_projection</span><span class="p">))</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+                    <span class="n">path</span> <span class="o">==</span> <span class="n">key</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fields</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">kept_exclusions</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iter_projection</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
             <span class="n">iter_projection</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">iter_projection</span><span class="p">}</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">getitem_projection</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>

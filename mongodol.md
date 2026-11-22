@@ -1,4 +1,4 @@
-> built 2026-11-21 18:15 UTC from b2e7e1d (master) · mongodol 0.1.11. Details: build_info.json
+> built 2026-11-22 23:03 UTC from 3394111 (master) · mongodol 0.1.12. Details: build_info.json
 
 # index.html.md
 
@@ -523,8 +523,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -806,8 +807,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -885,8 +887,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -973,8 +976,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -1043,8 +1047,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -1149,8 +1154,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -1232,8 +1238,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -1812,10 +1819,13 @@ Util functions
 | [`get_key_value_specs`](_autosummary/mongodol.util.html.md#mongodol.util.get_key_value_specs)(key_fields, data_fields)      | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
 | [`get_mongo_collection_pymongo_obj`](_autosummary/mongodol.util.html.md#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...])      | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
 | [`has_unique_index`](_autosummary/mongodol.util.html.md#mongodol.util.has_unique_index)(collection, key_fields)          | Whether `collection` has a unique index on exactly `key_fields` (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.                                                                                         |
+| [`is_exclusion_projection`](_autosummary/mongodol.util.html.md#mongodol.util.is_exclusion_projection)(projection)               | Whether mongo reads `projection` as an *exclusion* projection ("everything but").                                                                                                                                                               |
 | [`mk_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_client)(\*args, \*\*kwargs)                     | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
 | [`mk_dflt_client`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_client)()                                  | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
 | [`mk_dflt_mgc`](_autosummary/mongodol.util.html.md#mongodol.util.mk_dflt_mgc)()                                     | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
 | [`normalize_projection`](_autosummary/mongodol.util.html.md#mongodol.util.normalize_projection)(projection)                  | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
+| [`projection_leaves`](_autosummary/mongodol.util.html.md#mongodol.util.projection_leaves)(projection[, prefix])           | `(dot.path, value)` for every field of a projection, where a dict of `$` operators (`{'$slice': 1}`, `{'$elemMatch': ...}`) is a leaf, not a sub-path.                                                                                          |
+| [`projection_returns_field`](_autosummary/mongodol.util.html.md#mongodol.util.projection_returns_field)(projection, field)       | Whether a `find` with `projection` returns the top-level `field` of a document (in full or in part).                                                                                                                                            |
 | [`projection_union`](_autosummary/mongodol.util.html.md#mongodol.util.projection_union)(projection_1, projection_2)      | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
 
 ### Exceptions
@@ -1950,6 +1960,30 @@ False
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+### mongodol.util.is_exclusion_projection(projection)
+
+Whether mongo reads `projection` as an *exclusion* projection (“everything but”).
+
+Mongo decides the mode from the include/exclude flags of the fields other than
+`_id`: any truthy one makes it an inclusion projection, otherwise it excludes.
+With `_id` alone, its own value decides. Operators (`$slice`…) do not count.
+
+```pycon
+>>> is_exclusion_projection({'_id': False})
+True
+>>> is_exclusion_projection({'b': False})
+True
+>>> is_exclusion_projection({'a': True, '_id': False})
+False
+>>> is_exclusion_projection({'_id': True})
+False
+>>> is_exclusion_projection({'arr': {'$slice': 1}, 'b': 0})
+True
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 ### mongodol.util.mk_client(\*args, \*\*kwargs)
 
 Make a `pymongo.MongoClient`, keeping pymongo 3’s UUID codec unless told otherwise.
@@ -2031,6 +2065,34 @@ i.e. whole documents):
 >>> normalize_projection(())
 {'_id': True}
 ```
+
+### mongodol.util.projection_leaves(projection, prefix='')
+
+`(dot.path, value)` for every field of a projection, where a dict of `$`
+operators (`{'$slice': 1}`, `{'$elemMatch': ...}`) is a leaf, not a sub-path.
+
+### mongodol.util.projection_returns_field(projection, field)
+
+Whether a `find` with `projection` returns the top-level `field` of a
+document (in full or in part).
+
+```pycon
+>>> projection_returns_field(None, '_id')  # no projection: the whole document
+True
+>>> projection_returns_field({'a': True}, '_id')  # mongo keeps _id unless told not to
+True
+>>> projection_returns_field({'a': True, '_id': False}, '_id')
+False
+>>> projection_returns_field({'a': True}, 'b')
+False
+>>> projection_returns_field({'_id': False}, 'b')  # exclusion: everything else stays
+True
+>>> projection_returns_field({'a.x': True}, 'a')  # part of it
+True
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### mongodol.util.projection_union(projection_1, projection_2, already_flattened=False)
 
@@ -2388,18 +2450,18 @@ True
 
 # About this build
 
-This documentation was built on **2026-11-21 18:15 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d</code></a> on branch <code>master</code>, for **mongodol 0.1.11** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-22 23:03 UTC** from commit <a href="https://github.com/i2mint/mongodol/commit/339411114acdcb9724bdfb24685b5553bbaf0a9a"><code>3394111</code></a> on branch <code>master</code>, for **mongodol 0.1.12** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.11) is behind the latest release on PyPI (0.1.12): `pip install mongodol` gives newer code than these docs describe.
+- The documented version (0.1.12) is behind the latest release on PyPI (0.1.13): `pip install mongodol` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/i2mint/mongodol/commit/b2e7e1d7da916218fbf58d647eb8d6ead93c2251"><code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code></a> |
+| Commit              | <a href="https://github.com/i2mint/mongodol/commit/339411114acdcb9724bdfb24685b5553bbaf0a9a"><code>339411114acdcb9724bdfb24685b5553bbaf0a9a</code></a> |
 | Branch              | <code>master</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                   |
 | Working tree        | clean                                                                                                                                                  |
@@ -2410,9 +2472,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>i2mint/mongodol</code>                                                               |
-| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/44934329049">44934329049</a>      |
+| Run          | <a href="https://github.com/i2mint/mongodol/actions/runs/45080946370">45080946370</a>      |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>b2e7e1d7da916218fbf58d647eb8d6ead93c2251</code> (in the history of the built commit) |
+| Event commit | <code>339411114acdcb9724bdfb24685b5553bbaf0a9a</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -2437,13 +2499,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/mongodol/0.1.12/">0.1.12</a>, newer than the documented version (0.1.11).
+Latest release: <a href="https://pypi.org/project/mongodol/0.1.13/">0.1.13</a>, newer than the documented version (0.1.12).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/mongodol && cd mongodol
-git checkout b2e7e1d7da916218fbf58d647eb8d6ead93c2251
+git checkout 339411114acdcb9724bdfb24685b5553bbaf0a9a
 pip install "epythet==0.2.23"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

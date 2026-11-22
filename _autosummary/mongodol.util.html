@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../_static/documentation_options.js?v=297ad043"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -406,19 +406,28 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.has_unique_index" title="mongodol.util.has_unique_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_unique_index</span></code></a>(collection, key_fields)</p></td>
 <td><p>Whether <code class="docutils literal notranslate"><span class="pre">collection</span></code> has a unique index on exactly <code class="docutils literal notranslate"><span class="pre">key_fields</span></code> (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.mk_client" title="mongodol.util.mk_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_client</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.is_exclusion_projection" title="mongodol.util.is_exclusion_projection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_exclusion_projection</span></code></a>(projection)</p></td>
+<td><p>Whether mongo reads <code class="docutils literal notranslate"><span class="pre">projection</span></code> as an <em>exclusion</em> projection (&quot;everything but&quot;).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.mk_client" title="mongodol.util.mk_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_client</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Make a <code class="docutils literal notranslate"><span class="pre">pymongo.MongoClient</span></code>, keeping pymongo 3's UUID codec unless told otherwise.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.mk_dflt_client" title="mongodol.util.mk_dflt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_dflt_client</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.mk_dflt_client" title="mongodol.util.mk_dflt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_dflt_client</span></code></a>()</p></td>
 <td><p>Make a <code class="docutils literal notranslate"><span class="pre">pymongo.MongoClient</span></code> with the default client args.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.mk_dflt_mgc" title="mongodol.util.mk_dflt_mgc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_dflt_mgc</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.mk_dflt_mgc" title="mongodol.util.mk_dflt_mgc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mk_dflt_mgc</span></code></a>()</p></td>
 <td><p>Make a default <code class="docutils literal notranslate"><span class="pre">pymongo.collection.Collection</span></code>, connecting with default client args to the default test database and collection.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.normalize_projection" title="mongodol.util.normalize_projection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_projection</span></code></a>(projection)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.normalize_projection" title="mongodol.util.normalize_projection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_projection</span></code></a>(projection)</p></td>
 <td><p>Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.projection_union" title="mongodol.util.projection_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projection_union</span></code></a>(projection_1, projection_2)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.projection_leaves" title="mongodol.util.projection_leaves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projection_leaves</span></code></a>(projection[, prefix])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(dot.path,</span> <span class="pre">value)</span></code> for every field of a projection, where a dict of <code class="docutils literal notranslate"><span class="pre">$</span></code> operators (<code class="docutils literal notranslate"><span class="pre">{'$slice':</span> <span class="pre">1}</span></code>, <code class="docutils literal notranslate"><span class="pre">{'$elemMatch':</span> <span class="pre">...}</span></code>) is a leaf, not a sub-path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mongodol.util.projection_returns_field" title="mongodol.util.projection_returns_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projection_returns_field</span></code></a>(projection, field)</p></td>
+<td><p>Whether a <code class="docutils literal notranslate"><span class="pre">find</span></code> with <code class="docutils literal notranslate"><span class="pre">projection</span></code> returns the top-level <code class="docutils literal notranslate"><span class="pre">field</span></code> of a document (in full or in part).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mongodol.util.projection_union" title="mongodol.util.projection_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">projection_union</span></code></a>(projection_1, projection_2)</p></td>
 <td><p>Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of <code class="docutils literal notranslate"><span class="pre">True</span></code> -- so a field appearing in only one of the two dicts (or with a <code class="docutils literal notranslate"><span class="pre">False</span></code> value) still comes out <code class="docutils literal notranslate"><span class="pre">True</span></code> unless both dicts agree it's <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
 </tr>
 </tbody>
@@ -578,6 +587,32 @@ attribute returned directly:</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mongodol.util.is_exclusion_projection">
+<span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">is_exclusion_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#is_exclusion_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.is_exclusion_projection" title="Link to this definition">#</a></dt>
+<dd><p>Whether mongo reads <code class="docutils literal notranslate"><span class="pre">projection</span></code> as an <em>exclusion</em> projection (“everything but”).</p>
+<p>Mongo decides the mode from the include/exclude flags of the fields other than
+<code class="docutils literal notranslate"><span class="pre">_id</span></code>: any truthy one makes it an inclusion projection, otherwise it excludes.
+With <code class="docutils literal notranslate"><span class="pre">_id</span></code> alone, its own value decides. Operators (<code class="docutils literal notranslate"><span class="pre">$slice</span></code>…) do not count.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_exclusion_projection</span><span class="p">({</span><span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_exclusion_projection</span><span class="p">({</span><span class="s1">'b'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_exclusion_projection</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_exclusion_projection</span><span class="p">({</span><span class="s1">'_id'</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_exclusion_projection</span><span class="p">({</span><span class="s1">'arr'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'$slice'</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="s1">'b'</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mongodol.util.mk_client">
 <span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">mk_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#mk_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.mk_client" title="Link to this definition">#</a></dt>
 <dd><p>Make a <code class="docutils literal notranslate"><span class="pre">pymongo.MongoClient</span></code>, keeping pymongo 3’s UUID codec unless told otherwise.</p>
@@ -650,6 +685,41 @@ i.e. whole documents):</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.util.projection_leaves">
+<span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">projection_leaves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#projection_leaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.projection_leaves" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(dot.path,</span> <span class="pre">value)</span></code> for every field of a projection, where a dict of <code class="docutils literal notranslate"><span class="pre">$</span></code>
+operators (<code class="docutils literal notranslate"><span class="pre">{'$slice':</span> <span class="pre">1}</span></code>, <code class="docutils literal notranslate"><span class="pre">{'$elemMatch':</span> <span class="pre">...}</span></code>) is a leaf, not a sub-path.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mongodol.util.projection_returns_field">
+<span class="sig-prename descclassname"><span class="pre">mongodol.util.</span></span><span class="sig-name descname"><span class="pre">projection_returns_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mongodol/util.html#projection_returns_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mongodol.util.projection_returns_field" title="Link to this definition">#</a></dt>
+<dd><p>Whether a <code class="docutils literal notranslate"><span class="pre">find</span></code> with <code class="docutils literal notranslate"><span class="pre">projection</span></code> returns the top-level <code class="docutils literal notranslate"><span class="pre">field</span></code> of a
+document (in full or in part).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">'_id'</span><span class="p">)</span>  <span class="c1"># no projection: the whole document</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s1">'_id'</span><span class="p">)</span>  <span class="c1"># mongo keeps _id unless told not to</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="s1">'_id'</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s1">'b'</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">({</span><span class="s1">'_id'</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="s1">'b'</span><span class="p">)</span>  <span class="c1"># exclusion: everything else stays</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">projection_returns_field</span><span class="p">({</span><span class="s1">'a.x'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s1">'a'</span><span class="p">)</span>  <span class="c1"># part of it</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -735,10 +805,13 @@ default of <code class="docutils literal notranslate"><span class="pre">True</sp
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.get_key_value_specs"><code class="docutils literal notranslate"><span class="pre">get_key_value_specs()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.get_mongo_collection_pymongo_obj"><code class="docutils literal notranslate"><span class="pre">get_mongo_collection_pymongo_obj()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.has_unique_index"><code class="docutils literal notranslate"><span class="pre">has_unique_index()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.is_exclusion_projection"><code class="docutils literal notranslate"><span class="pre">is_exclusion_projection()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_client"><code class="docutils literal notranslate"><span class="pre">mk_client()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_dflt_client"><code class="docutils literal notranslate"><span class="pre">mk_dflt_client()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.mk_dflt_mgc"><code class="docutils literal notranslate"><span class="pre">mk_dflt_mgc()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.normalize_projection"><code class="docutils literal notranslate"><span class="pre">normalize_projection()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.projection_leaves"><code class="docutils literal notranslate"><span class="pre">projection_leaves()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.projection_returns_field"><code class="docutils literal notranslate"><span class="pre">projection_returns_field()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mongodol.util.projection_union"><code class="docutils literal notranslate"><span class="pre">projection_union()</span></code></a></li>
 </ul>
   </nav></div>

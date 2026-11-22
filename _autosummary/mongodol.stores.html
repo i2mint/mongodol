@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../_static/documentation_options.js?v=297ad043"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -502,8 +502,9 @@ The class bool is a subclass of the class int, and cannot be subclassed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionFirstDocPersister.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionFirstDocPersister.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -606,8 +607,9 @@ doesn’t raise; it just returns the first match found:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionFirstDocReader.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionFirstDocReader.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -723,8 +725,9 @@ The class bool is a subclass of the class int, and cannot be subclassed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionMultipleDocsPersister.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionMultipleDocsPersister.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -821,8 +824,9 @@ If no docs match, will return an empty list.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionMultipleDocsReader.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionMultipleDocsReader.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -964,8 +968,9 @@ The class bool is a subclass of the class int, and cannot be subclassed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionUniqueDocPersister.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionUniqueDocPersister.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1071,8 +1076,9 @@ so though getting the value for {‘s’: ‘a’} won’t be a problem:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mongodol.stores.MongoCollectionUniqueDocReader.iter_items">
 <span class="sig-name descname"><span class="pre">iter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mongodol.stores.MongoCollectionUniqueDocReader.iter_items" title="Link to this definition">#</a></dt>
-<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query, splitting each doc into
-its key fields and the rest.</p>
+<dd><p>Bulk-read all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs in a single <code class="docutils literal notranslate"><span class="pre">find</span></code> query: the key is the
+doc’s key fields, the value is the doc as <code class="docutils literal notranslate"><span class="pre">getitem_projection</span></code> returns it (so key
+fields that projection returns stay in the value, the others are stripped).</p>
 </dd></dl>
 
 <dl class="py method">

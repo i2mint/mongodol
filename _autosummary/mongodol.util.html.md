@@ -10,10 +10,13 @@ Util functions
 | [`get_key_value_specs`](#mongodol.util.get_key_value_specs)(key_fields, data_fields)      | Derive `key_projection` (and, when `data_fields` is None or a non-dict iterable, `items_projection`) from `key_fields`/`data_fields`.                                                                                                           |
 | [`get_mongo_collection_pymongo_obj`](#mongodol.util.get_mongo_collection_pymongo_obj)([obj, ...])      | Get a pymongo.collection.Collection object for a mongo collection, flexibly.                                                                                                                                                                    |
 | [`has_unique_index`](#mongodol.util.has_unique_index)(collection, key_fields)          | Whether `collection` has a unique index on exactly `key_fields` (a field name or a sequence of them), i.e. whether mongo itself guarantees key unicity.                                                                                         |
+| [`is_exclusion_projection`](#mongodol.util.is_exclusion_projection)(projection)               | Whether mongo reads `projection` as an *exclusion* projection ("everything but").                                                                                                                                                               |
 | [`mk_client`](#mongodol.util.mk_client)(\*args, \*\*kwargs)                     | Make a `pymongo.MongoClient`, keeping pymongo 3's UUID codec unless told otherwise.                                                                                                                                                             |
 | [`mk_dflt_client`](#mongodol.util.mk_dflt_client)()                                  | Make a `pymongo.MongoClient` with the default client args.                                                                                                                                                                                      |
 | [`mk_dflt_mgc`](#mongodol.util.mk_dflt_mgc)()                                     | Make a default `pymongo.collection.Collection`, connecting with default client args to the default test database and collection.                                                                                                                |
 | [`normalize_projection`](#mongodol.util.normalize_projection)(projection)                  | Normalize projection specification to be an explicit list of flattened dict of {path.to.key: True/False,.                                                                                                                                       |
+| [`projection_leaves`](#mongodol.util.projection_leaves)(projection[, prefix])           | `(dot.path, value)` for every field of a projection, where a dict of `$` operators (`{'$slice': 1}`, `{'$elemMatch': ...}`) is a leaf, not a sub-path.                                                                                          |
+| [`projection_returns_field`](#mongodol.util.projection_returns_field)(projection, field)       | Whether a `find` with `projection` returns the top-level `field` of a document (in full or in part).                                                                                                                                            |
 | [`projection_union`](#mongodol.util.projection_union)(projection_1, projection_2)      | Flatten and merge two mongo projection dicts, OR-ing every field against a forced default of `True` -- so a field appearing in only one of the two dicts (or with a `False` value) still comes out `True` unless both dicts agree it's `False`. |
 
 ### Exceptions
@@ -148,6 +151,30 @@ False
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+### mongodol.util.is_exclusion_projection(projection)
+
+Whether mongo reads `projection` as an *exclusion* projection (“everything but”).
+
+Mongo decides the mode from the include/exclude flags of the fields other than
+`_id`: any truthy one makes it an inclusion projection, otherwise it excludes.
+With `_id` alone, its own value decides. Operators (`$slice`…) do not count.
+
+```pycon
+>>> is_exclusion_projection({'_id': False})
+True
+>>> is_exclusion_projection({'b': False})
+True
+>>> is_exclusion_projection({'a': True, '_id': False})
+False
+>>> is_exclusion_projection({'_id': True})
+False
+>>> is_exclusion_projection({'arr': {'$slice': 1}, 'b': 0})
+True
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 ### mongodol.util.mk_client(\*args, \*\*kwargs)
 
 Make a `pymongo.MongoClient`, keeping pymongo 3’s UUID codec unless told otherwise.
@@ -229,6 +256,34 @@ i.e. whole documents):
 >>> normalize_projection(())
 {'_id': True}
 ```
+
+### mongodol.util.projection_leaves(projection, prefix='')
+
+`(dot.path, value)` for every field of a projection, where a dict of `$`
+operators (`{'$slice': 1}`, `{'$elemMatch': ...}`) is a leaf, not a sub-path.
+
+### mongodol.util.projection_returns_field(projection, field)
+
+Whether a `find` with `projection` returns the top-level `field` of a
+document (in full or in part).
+
+```pycon
+>>> projection_returns_field(None, '_id')  # no projection: the whole document
+True
+>>> projection_returns_field({'a': True}, '_id')  # mongo keeps _id unless told not to
+True
+>>> projection_returns_field({'a': True, '_id': False}, '_id')
+False
+>>> projection_returns_field({'a': True}, 'b')
+False
+>>> projection_returns_field({'_id': False}, 'b')  # exclusion: everything else stays
+True
+>>> projection_returns_field({'a.x': True}, 'a')  # part of it
+True
+```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### mongodol.util.projection_union(projection_1, projection_2, already_flattened=False)
 

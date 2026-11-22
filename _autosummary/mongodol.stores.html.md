@@ -83,8 +83,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -162,8 +163,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -250,8 +252,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -320,8 +323,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -426,8 +430,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
@@ -509,8 +514,9 @@ Make an instance from db/collection names and connection params, instead of a li
 
 #### iter_items()
 
-Bulk-read all `(key, value)` pairs in a single `find` query, splitting each doc into
-its key fields and the rest.
+Bulk-read all `(key, value)` pairs in a single `find` query: the key is the
+doc’s key fields, the value is the doc as `getitem_projection` returns it (so key
+fields that projection returns stay in the value, the others are stripped).
 
 #### iter_values()
 
