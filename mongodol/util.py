@@ -304,8 +304,10 @@ def projection_leaves(projection: Mapping, prefix=""):
     """``(dot.path, value)`` for every field of a projection, where a dict of ``$``
     operators (``{'$slice': 1}``, ``{'$elemMatch': ...}``) is a leaf, not a sub-path."""
     for k, v in projection.items():
-        if isinstance(v, Mapping) and v and not any(
-            str(kk).startswith("$") for kk in v
+        if (
+            isinstance(v, Mapping)
+            and v
+            and not any(str(kk).startswith("$") for kk in v)
         ):
             yield from projection_leaves(v, prefix + k + ".")
         else:

@@ -378,8 +378,7 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         return tuple(
             path
             for path, value in projection_leaves(gp)
-            if not value
-            and any(path.startswith(key + ".") for key in self.key_fields)
+            if not value and any(path.startswith(key + ".") for key in self.key_fields)
         )
 
     @cached_property
