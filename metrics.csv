@@ -1,39 +1,55 @@
 metric,value
 schema_version,1.0
-timestamp,2026-11-21T18:14:57.956441Z
-commit_sha,b2e7e1d7da916218fbf58d647eb8d6ead93c2251
-commit_message,Use the encoder/decoder keywords of wrap_kvs (dol 0.4 deprecates X_of_Y) (#21)
+timestamp,2026-11-22T22:54:54.289658Z
+commit_sha,32b3a626eb811028a48928a03621cd94372f9254
+commit_message,"fix: items() values agree with __getitem__/values() across projections
+
+iter_items stripped every key field from each value, so with the default
+getitem_projection=None items() values lacked _id while store[k] and values()
+had it. It now strips only the key fields getitem_projection does not return.
+
+Exclusion getitem projections ({'_id': False}, {'b': False}) were OR-ed into
+an inclusion projection by _items_projection, inverting them: items() returned
+{} or only the excluded fields. They now stay exclusions; exclusions inside a
+key field are applied to the value only, so the key stays whole.
+
+Behaviour change: with getitem_projection=None (the default), items() values
+now include the key fields (e.g. _id), as values() always did.
+Inclusion projections with expressions or paths inside a key field still go
+through projection_union, unchanged.
+
+Adds is_exclusion_projection, projection_returns_field and projection_leaves
+to mongodol.util.
+
+Closes #9"
 python_version,3.10
-metrics.umpyre_stats.num_functions,11255
+metrics.umpyre_stats.num_functions,11264
 metrics.umpyre_stats.num_classes,2444
-metrics.umpyre_stats.total_lines,364049
-metrics.umpyre_stats.empty_lines,50028
-metrics.umpyre_stats.comment_lines,22241
-metrics.umpyre_stats.docs_lines,54775
-metrics.umpyre_stats.function_lines,176858
-metrics.umpyre_stats.empty_lines_ratio,0.13742106145051902
-metrics.umpyre_stats.comment_lines_ratio,0.06109342423684724
-metrics.umpyre_stats.function_lines_ratio,0.48580822911201516
-metrics.umpyre_stats.mean_lines_per_function,15.713727232341181
+metrics.umpyre_stats.total_lines,364257
+metrics.umpyre_stats.empty_lines,50053
+metrics.umpyre_stats.comment_lines,22243
+metrics.umpyre_stats.docs_lines,54847
+metrics.umpyre_stats.function_lines,177038
+metrics.umpyre_stats.empty_lines_ratio,0.13741122339447148
+metrics.umpyre_stats.comment_lines_ratio,0.061064028968557914
+metrics.umpyre_stats.function_lines_ratio,0.4860249768707259
+metrics.umpyre_stats.mean_lines_per_function,15.717151988636363
 metrics.umpyre_stats.files_analyzed,896
-metrics.umpyre_stats.pypi_version,0.1.11
+metrics.umpyre_stats.pypi_version,0.1.12
 metrics.workflow_status.last_run_status,success
-metrics.workflow_status.last_success_timestamp,2026-11-21T18:13:10Z
-metrics.workflow_status.recent_failure_count,2
-metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/44934151620
+metrics.workflow_status.last_success_timestamp,2026-11-21T18:15:59Z
+metrics.workflow_status.recent_failure_count,0
+metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/44934529438
 metrics.workflow_status.total_runs_analyzed,10
 metrics.wily.cyclomatic_avg,0.0
 metrics.wily.maintainability_index,0.0
 metrics.wily.total_loc,0
 metrics.wily.files_analyzed,0
-metrics.wily.error,"wily report failed: Usage: wily report [OPTIONS] FILE [METRICS]...
-Try 'wily report --help' for help.
-
-Error: Invalid value for '-f' / '--format': 'json' is not one of 'CONSOLE', 'HTML'.
+metrics.wily.error,"wily build failed: [31mFailed to setup archiver: 'Dirty repository, make sure you commit/stash files first'[0m
 "
 metrics.coverage.line_coverage,0.0
 metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,5.603732585906982
+collection_duration_seconds,3.5833680629730225
