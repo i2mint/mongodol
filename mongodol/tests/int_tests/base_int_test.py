@@ -191,7 +191,7 @@ def test_store_with_mappers(
     assert list(store.items()) == [
         (
             key_output_mapper({ID: n[ID]}),
-            value_output_mapper({k: v for k, v in n.items() if k != ID}),
+            value_output_mapper(n),  # whole doc, as store[k] returns it (#9)
         )
         for n in nums_and_lans
     ]

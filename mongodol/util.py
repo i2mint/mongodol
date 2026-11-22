@@ -300,6 +300,81 @@ def projection_union(
     return merge_projection_dicts(projection_1, projection_2)
 
 
+def projection_leaves(projection: Mapping, prefix=""):
+    """``(dot.path, value)`` for every field of a projection, where a dict of ``$``
+    operators (``{'$slice': 1}``, ``{'$elemMatch': ...}``) is a leaf, not a sub-path."""
+    for k, v in projection.items():
+        if isinstance(v, Mapping) and v and not any(
+            str(kk).startswith("$") for kk in v
+        ):
+            yield from projection_leaves(v, prefix + k + ".")
+        else:
+            yield prefix + k, v
+
+
+def _is_inclusion_flag(value) -> bool:
+    """Whether a projection value is a plain include/exclude flag (not an operator or
+    an expression, which do not decide the projection's mode)."""
+    return isinstance(value, (bool, int))
+
+
+def is_exclusion_projection(projection: ProjectionDict) -> bool:
+    """Whether mongo reads ``projection`` as an *exclusion* projection ("everything but").
+
+    Mongo decides the mode from the include/exclude flags of the fields other than
+    ``_id``: any truthy one makes it an inclusion projection, otherwise it excludes.
+    With ``_id`` alone, its own value decides. Operators (``$slice``...) do not count.
+
+    >>> is_exclusion_projection({'_id': False})
+    True
+    >>> is_exclusion_projection({'b': False})
+    True
+    >>> is_exclusion_projection({'a': True, '_id': False})
+    False
+    >>> is_exclusion_projection({'_id': True})
+    False
+    >>> is_exclusion_projection({'arr': {'$slice': 1}, 'b': 0})
+    True
+    """
+    flat = dict(projection_leaves(projection))
+    flags = [v for k, v in flat.items() if k != ID and _is_inclusion_flag(v)]
+    if flags:
+        return not any(flags)
+    if any(k != ID for k in flat):  # only operators/expressions: they include
+        return False
+    return not flat.get(ID, True)
+
+
+def projection_returns_field(projection: ProjectionDict | None, field: str) -> bool:
+    """Whether a ``find`` with ``projection`` returns the top-level ``field`` of a
+    document (in full or in part).
+
+    >>> projection_returns_field(None, '_id')  # no projection: the whole document
+    True
+    >>> projection_returns_field({'a': True}, '_id')  # mongo keeps _id unless told not to
+    True
+    >>> projection_returns_field({'a': True, '_id': False}, '_id')
+    False
+    >>> projection_returns_field({'a': True}, 'b')
+    False
+    >>> projection_returns_field({'_id': False}, 'b')  # exclusion: everything else stays
+    True
+    >>> projection_returns_field({'a.x': True}, 'a')  # part of it
+    True
+    """
+    if projection is None:
+        return True
+    flat = dict(projection_leaves(projection))
+    if field in flat:
+        value = flat[field]
+        return bool(value) if _is_inclusion_flag(value) else True
+    if is_exclusion_projection(flat):
+        return True
+    return field == ID or any(
+        path.startswith(field + ".") for path, v in flat.items() if v
+    )
+
+
 def get_mongo_collection_pymongo_obj(obj=None, client_factory=mk_dflt_client):
     """Get a pymongo.collection.Collection object for a mongo collection, flexibly.
 
