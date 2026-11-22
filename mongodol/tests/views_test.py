@@ -85,7 +85,9 @@ def test_wrap_kvs_key_trans_reaches_items(store):
     ``getitem_projection``, ``items()`` values still differ from ``store[k]`` by the
     key fields -- see ``test_items_values_equal_getitem_values_when_no_getitem_projection``.
     """
-    ss = wrap_kvs(store, key_decoder=itemgetter("_id"), key_encoder=lambda k: {"_id": k})
+    ss = wrap_kvs(
+        store, key_decoder=itemgetter("_id"), key_encoder=lambda k: {"_id": k}
+    )
 
     assert list(ss) == list(ss.keys()) == ["123", "456"]
     assert [k for k, _ in ss.items()] == ["123", "456"]
@@ -103,7 +105,9 @@ def test_stacked_wrappers(store):
 
 def test_mongodol_wrap_kvs_still_honours_transforms(store):
     """The historical ``MongoBaseStore``-based wrapper keeps working."""
-    ss = wrap_kvs(store, wrapper=MongoBaseStore, value_decoder=itemgetter("name", "age"))
+    ss = wrap_kvs(
+        store, wrapper=MongoBaseStore, value_decoder=itemgetter("name", "age")
+    )
 
     assert list(ss.values()) == [("Matthew", 42), ("Mark", 43)]
     assert_mapping_view_invariants(ss)
@@ -222,15 +226,65 @@ def test_bulk_source_lookup_ignores_store_attribute_delegation(store):
     assert not provides_bulk_read(ss, "iter_values")
 
 
-@pytest.mark.xfail(
-    reason=(
-        "Separate, pre-existing bug: MongoCollectionReader.iter_items pops the key "
-        "fields out of the value even when getitem_projection is None, so items() "
-        "values lack '_id' while store[k] has it. Fixing it changes behaviour that "
-        "tests/int_tests/base_int_test.py explicitly encodes."
-    ),
-    strict=True,
-)
 def test_items_values_equal_getitem_values_when_no_getitem_projection(store):
     """``items()`` values must equal ``store[k]``, key fields included."""
     assert list(store.items()) == [(k, store[k]) for k in store]
+
+
+@pytest.mark.parametrize(
+    "getitem_projection",
+    [
+        None,
+        {"_id": False},
+        ("name",),
+        {"name": True},
+        {"name": True, "_id": False},
+        {"age": False},
+        {"age": False, "_id": False},
+    ],
+)
+def test_items_values_equal_getitem_values_for_any_getitem_projection(
+    store, getitem_projection
+):
+    """The Mapping contract holds for inclusion, exclusion and no projection (#9).
+
+    Exclusion projections used to be OR-ed into an inclusion one by ``items()``, which
+    then returned the excluded fields only (or ``{}`` for ``{'_id': False}``).
+    """
+    s = MongoCollectionFirstDocPersister(
+        store.mgc, getitem_projection=getitem_projection
+    )
+    assert list(s.items()) == [(k, s[k]) for k in s]
+
+
+@pytest.mark.parametrize(
+    "getitem_projection",
+    [None, {"b": True}, {"a.c": False}, {"a": {"c": False}}, {"b": False}],
+)
+def test_items_contract_with_a_nested_non_id_key(getitem_projection):
+    """A key field other than ``_id``, and exclusions inside it, keep the key whole."""
+    mgc = get_test_collection_object(collection_name=TEST_COLLECTION_NAME + "_nested")
+    mgc.delete_many({})
+    mgc.insert_many(
+        [
+            {"_id": 1, "a": {"x": 1, "c": 2}, "b": 3},
+            {"_id": 2, "a": {"x": 4, "c": 5}, "b": 6},
+        ]
+    )
+    try:
+        s = MongoCollectionFirstDocPersister(
+            mgc,
+            iter_projection={"a": True, "_id": False},
+            getitem_projection=getitem_projection,
+        )
+        assert (
+            [k for k, _ in s.items()]
+            == list(s)
+            == [
+                {"a": {"x": 1, "c": 2}},
+                {"a": {"x": 4, "c": 5}},
+            ]
+        )
+        assert list(s.items()) == [(k, s[k]) for k in s]
+    finally:
+        mgc.drop()

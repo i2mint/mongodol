@@ -21,6 +21,9 @@ from mongodol.util import (
     ProjectionSpec,
     normalize_projection,
     projection_union,
+    is_exclusion_projection,
+    projection_returns_field,
+    projection_leaves,
     get_mongo_collection_pymongo_obj,
 )
 from mongodol.views import (
@@ -179,6 +182,26 @@ class MongoCollectionCollection(DolCollection):
         )
 
 
+def _without_paths(doc: dict, paths) -> dict:
+    """A copy of ``doc`` without the given dot-paths (copying only the dicts on them).
+
+    >>> _without_paths({'a': {'x': 1, 'c': 2}, 'b': 3}, ['a.c'])
+    {'a': {'x': 1}, 'b': 3}
+    """
+    doc = dict(doc)
+    for path in paths:
+        *parents, leaf = path.split(".")
+        node = doc
+        for name in parents:
+            child = node.get(name)
+            if not isinstance(child, Mapping):
+                break
+            node[name] = node = dict(child)
+        else:
+            node.pop(leaf, None)
+    return doc
+
+
 class MongoCollectionReader(MongoCollectionCollection, KvReader):
     """A base class to read from a mongo collection, or subset thereof, with the Mapping
     (i.e. dict-like) interface.
@@ -325,24 +348,73 @@ class MongoCollectionReader(MongoCollectionCollection, KvReader):
         return next(cursor, end_of_cursor) is not end_of_cursor
 
     def iter_items(self):
-        """Bulk-read all ``(key, value)`` pairs in a single ``find`` query, splitting each doc into
-        its key fields and the rest.
+        """Bulk-read all ``(key, value)`` pairs in a single ``find`` query: the key is the
+        doc's key fields, the value is the doc as ``getitem_projection`` returns it (so key
+        fields that projection returns stay in the value, the others are stripped).
         """
         cursor = self.mgc.find(
             filter=self.filter,
             projection=self._items_projection,
             **self._mgc_find_kwargs,
         )
+        key_fields = self.key_fields
+        not_in_values = self._key_fields_not_in_values
+        excluded_inside_keys = self._exclusions_inside_key_fields
         for doc in cursor:
-            key = {k: doc.pop(k) for k in self.key_fields}
+            key = {k: doc[k] for k in key_fields}
+            for k in not_in_values:
+                del doc[k]
+            if excluded_inside_keys:
+                doc = _without_paths(doc, excluded_inside_keys)
             yield (key, doc)
 
     @cached_property
+    def _exclusions_inside_key_fields(self):
+        """Sub-paths of key fields an exclusion ``getitem_projection`` drops: the read
+        keeps them (the key needs them), so ``iter_items`` drops them from the value."""
+        gp = self._getitem_projection
+        if not isinstance(gp, Mapping) or not is_exclusion_projection(gp):
+            return ()
+        return tuple(
+            path
+            for path, value in projection_leaves(gp)
+            if not value
+            and any(path.startswith(key + ".") for key in self.key_fields)
+        )
+
+    @cached_property
+    def _key_fields_not_in_values(self):
+        """The key fields ``__getitem__`` does not return, so ``items()`` strips them from
+        its values -- and only those, so that ``dict(items())[k] == self[k]`` (see #9).
+        """
+        return tuple(
+            field
+            for field in self.key_fields
+            if not projection_returns_field(self._getitem_projection, field)
+        )
+
+    @cached_property
     def _items_projection(self):
+        """The one projection ``iter_items`` reads with: the key fields plus whatever
+        ``__getitem__`` would return.
+        """
         iter_projection = self._iter_projection
         getitem_projection = self._getitem_projection
         if iter_projection is None or getitem_projection is None:
             return None
+        if isinstance(getitem_projection, Mapping) and is_exclusion_projection(
+            getitem_projection
+        ):
+            # "Everything but": stop excluding the key fields, so they come back too.
+            # (A union would OR the exclusions into inclusions and invert the projection.)
+            kept_exclusions = {
+                path: value
+                for path, value in dict(projection_leaves(getitem_projection)).items()
+                if not any(
+                    path == key or path.startswith(key + ".") for key in self.key_fields
+                )
+            }
+            return kept_exclusions or None
         if not isinstance(iter_projection, Mapping):
             iter_projection = {k: True for k in iter_projection}
         if not isinstance(getitem_projection, Mapping):
