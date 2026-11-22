@@ -1,8 +1,27 @@
 metric,value
 schema_version,1.0
-timestamp,2026-11-22T22:55:04.767881Z
-commit_sha,aa211370b726bb12387d9c1f8a2ff19c03e0c358
-commit_message,Merge 32b3a626eb811028a48928a03621cd94372f9254 into bb38d7de4e882a706e797658ad80271e282a9eb3
+timestamp,2026-11-22T23:03:07.212834Z
+commit_sha,339411114acdcb9724bdfb24685b5553bbaf0a9a
+commit_message,"fix: items() values agree with __getitem__/values() across projections (#22)
+
+iter_items stripped every key field from each value, so with the default
+getitem_projection=None items() values lacked _id while store[k] and values()
+had it. It now strips only the key fields getitem_projection does not return.
+
+Exclusion getitem projections ({'_id': False}, {'b': False}) were OR-ed into
+an inclusion projection by _items_projection, inverting them: items() returned
+{} or only the excluded fields. They now stay exclusions; exclusions inside a
+key field are applied to the value only, so the key stays whole.
+
+Behaviour change: with getitem_projection=None (the default), items() values
+now include the key fields (e.g. _id), as values() always did.
+Inclusion projections with expressions or paths inside a key field still go
+through projection_union, unchanged.
+
+Adds is_exclusion_projection, projection_returns_field and projection_leaves
+to mongodol.util.
+
+Closes #9"
 python_version,3.10
 metrics.umpyre_stats.num_functions,11264
 metrics.umpyre_stats.num_classes,2444
@@ -18,9 +37,9 @@ metrics.umpyre_stats.mean_lines_per_function,15.717151988636363
 metrics.umpyre_stats.files_analyzed,896
 metrics.umpyre_stats.pypi_version,0.1.12
 metrics.workflow_status.last_run_status,success
-metrics.workflow_status.last_success_timestamp,2026-11-21T18:15:59Z
+metrics.workflow_status.last_success_timestamp,2026-11-22T22:55:13Z
 metrics.workflow_status.recent_failure_count,0
-metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/44934529438
+metrics.workflow_status.run_url,https://github.com/i2mint/mongodol/actions/runs/45080245052
 metrics.workflow_status.total_runs_analyzed,10
 metrics.wily.cyclomatic_avg,0.0
 metrics.wily.maintainability_index,0.0
@@ -33,4 +52,4 @@ metrics.coverage.branch_coverage,0.0
 metrics.coverage.statements_covered,0
 metrics.coverage.statements_total,0
 metrics.coverage.error,No coverage file found
-collection_duration_seconds,3.862912654876709
+collection_duration_seconds,4.008584976196289
